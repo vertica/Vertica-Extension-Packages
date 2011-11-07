@@ -1,0 +1,2 @@
+
+DROP LIBRARY WebPackage CASCADE;
