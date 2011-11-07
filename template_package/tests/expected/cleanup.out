@@ -1,0 +1,11 @@
+\! rm -f $TMPDIR/CompatLibFunctions.vpkg  
+select version();
+             version              
+----------------------------------
+ Vertica Analytic Database v5.0.4
+(1 row)
+
+--clean up tables
+drop table company;
+--clean up library
+DROP LIBRARY CompatLibFunctions CASCADE;

@@ -1,0 +1,1 @@
+DROP LIBRARY XXXTemplatePackage CASCADE;

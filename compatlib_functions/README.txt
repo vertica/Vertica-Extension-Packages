@@ -1,5 +1,10 @@
 **************
 ** Oracle Compatibility Functions
+*
+* Oracle compability functions:
+*
+* CONNECT_BY
+* TRANSPOSE
 **************
 
 1) To build, run:
