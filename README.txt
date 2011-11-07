@@ -19,7 +19,6 @@ script should have sample input, and sample queries that demonstrate
 how to use your function.
 
 
-
 *******************
 Current packages
 *******************
@@ -34,7 +33,6 @@ web_functions
 
 compatlib_functions: 
   Description: Oracle compatibility functions (such as CONNECT_BY, TRANSPOSE)
-  Status: incomplete
 
 template_package: 
   Description: template for new packages

@@ -1,10 +1,10 @@
 **************
-** Oracle Compatibility Functions
+* Oracle Compatibility Functions
 *
-* Oracle compability functions:
+* These implementations might be incomplete. Please help by updating them!
 *
-* CONNECT_BY
-* TRANSPOSE
+* CONNECT_BY (http://psoug.org/reference/connectby.html)
+* TRANSPOSE  (http://www.orafaq.com/node/1871)
 **************
 
 1) To build, run:
