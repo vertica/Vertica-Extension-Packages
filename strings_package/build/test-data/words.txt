@@ -1,0 +1,8 @@
+word:string,compare:string
+This,This
+this,This
+Thus,This
+The,This
+There,This
+To,This
+Three,This
