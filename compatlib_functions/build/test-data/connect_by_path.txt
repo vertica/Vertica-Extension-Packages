@@ -1,0 +1,7 @@
+supervisorid:vint,id:vint,name:string,sep:string
+1,0,Patrick,--
+2,1,Jim,--
+3,1,Sandy,--
+4,1,Brian,--
+4,3,Otto,--
+

@@ -1,0 +1,4 @@
+
+\o /dev/null
+DROP LIBRARY CompatLibFunctions CASCADE;
+\o

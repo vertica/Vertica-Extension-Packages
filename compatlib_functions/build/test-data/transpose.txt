@@ -1,0 +1,5 @@
+id:string,alias:string,sep:string
+1,Andrew,-
+1,Bob,-
+1,Andre,-
+1,Bozo,-
