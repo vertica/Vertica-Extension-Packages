@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if (($# != 6))
+then
+    echo >&2 \
+	 "Usage: $0 -d <package-directory> -o <output-file-name> -s <vertica-sdk-directory>"
+    exit 1
+fi
+
+PACKAGE_DIR=
+OUTPUT=
+while getopts d:o:s: opt
+do
+    case "$opt" in
+      d)  PACKAGE_DIR="$OPTARG";;
+      o)  OUTPUT="$OPTARG";;
+      s)  SDK="$OPTARG";;
+      \?)		# unknown flag
+      	  echo >&2 \
+	  "Usage: $0 -d <package-directory> -o <output-file-name> -s <vertica-sdk-directory>"
+	  exit 1;;
+    esac
+done
+shift `expr $OPTIND - 1`
+
+cd $PACKAGE_DIR
+cd build
+export SDK
+make
+cd ..
+zip -r $OUTPUT src lib bin examples install.sh readme.txt -x "*.svn*"
+mv $OUTPUT ..
+cd ..
+
+
+
+

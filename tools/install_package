@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if (($# != 2))
+then
+    echo >&2 \
+	 "Usage: $0 -p <package-file-name>"
+    exit 1
+fi
+
+PACKAGE=
+while getopts p: opt
+do
+    case "$opt" in
+      p)  PACKAGE="$OPTARG";;
+      \?)		# unknown flag
+      	  echo >&2 \
+	  "Usage: $0 -p <package-file-name>"
+	  exit 1;;
+    esac
+done
+shift `expr $OPTIND - 1`
+
+if [ "X$VSQL_COMMAND" = "X" ]; then 
+    VSQL_COMMAND="/opt/vertica/bin/vsql"
+fi
+
+if [ "X$TMPDIR" = "X" ]; then 
+    TMPDIR="/tmp"
+fi
+
+PACKAGE_NAME=`basename $PACKAGE`
+PACKAGE_NAME=${PACKAGE_NAME}.extract
+
+unzip -o -d $TMPDIR/$PACKAGE_NAME $PACKAGE
+
+cd $TMPDIR/$PACKAGE_NAME
+./install.sh
+cd $TMPDIR
+rm -rf $TMPDIR/$PACKAGE_NAME
+
