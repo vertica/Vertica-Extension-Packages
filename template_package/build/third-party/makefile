@@ -2,3 +2,4 @@
 # that are required for this libary. See other packages for examples.
 
 all:
+	mkdir -p install/lib
