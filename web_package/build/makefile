@@ -23,7 +23,8 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY_INSTALL)/include
 DEBUG_DATA_PATH = $(shell pwd)/test-data
 
 PACKAGE_FUNCTIONS = WebPackage.so
-PACKAGE_FUNCTIONS_TARGET = $(BUILD_PATH)/../lib/$(PACKAGE_FUNCTIONS)
+PACKAGE_FUNCTIONS_LIB = $(BUILD_PATH)/../lib
+PACKAGE_FUNCTIONS_TARGET = $(PACKAGE_FUNCTIONS_LIB)/$(PACKAGE_FUNCTIONS)
 
 CXX=g++
 CXXFLAGS=  -D HAVE_LONG_LONG_INT_64  -I$(VERTICA_SDK_INCLUDE) -I$(THIRD_PARTY_INCLUDE) -g -Wall -Wno-unused-value -shared -fPIC -std=c++0x -O3 -DNDEBUG   
@@ -49,6 +50,7 @@ third_party:
 
 # build package functions
 $(PACKAGE_FUNCTIONS_TARGET): src/*.cpp
+	mkdir -p $(PACKAGE_FUNCTIONS_LIB)
 	$(CXX) $(CXXFLAGS) $(CXXINCFLAGS) $(CXXLIBFLAGS) -o $@ src/*.cpp $(VERTICA_SDK_INCLUDE)/Vertica.cpp $(LDFLAGS)
 
 # Run the simulator against the functons
