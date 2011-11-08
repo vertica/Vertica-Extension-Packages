@@ -23,7 +23,8 @@ contents of template_package as a guide.
 
 3) REQUIRED: SQL example/tests showing your function in action. This
 script should have sample input, and sample queries that demonstrate
-how to use your function.
+how to use your function. The examples should be placed in
+package_dir/examples
 
 
 *******************

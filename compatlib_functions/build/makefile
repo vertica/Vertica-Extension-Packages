@@ -26,7 +26,8 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY_INSTALL)/include
 DEBUG_DATA_PATH = $(shell pwd)/test-data
 
 COMPATLIB_FUNCTIONS = CompatLibFunctions.so
-COMPATLIB_FUNCTIONS_TARGET = $(BUILD_PATH)/../lib/$(COMPATLIB_FUNCTIONS)
+COMPATLIB_FUNCTIONS_LIB = $(BUILD_PATH)/../lib
+COMPATLIB_FUNCTIONS_TARGET = $(COMPATLIB_FUNCTIONS_LIB)/$(COMPATLIB_FUNCTIONS)
 
 CXX=g++
 CXXFLAGS= -Wl,-rpath $(THIRD_PARTY_LIB) -D HAVE_LONG_LONG_INT_64  -I$(VERTICA_SDK_INCLUDE) -I$(THIRD_PARTY_INCLUDE) -g -Wall -Wno-unused-value -shared -fPIC -std=c++0x -O3 -DNDEBUG
@@ -45,12 +46,11 @@ export PATH := $(THIRD_PARTY_LIB):$(PATH)
 #all: third_party $(STANDARD_FUNCTIONS_TARGET)
 all: $(COMPATLIB_FUNCTIONS_TARGET)
 
-#build third-party libraries
-third_party:
-	(cd $(THIRD_PARTY); $(MAKE) all )
 
 #build hive functions
 $(COMPATLIB_FUNCTIONS_TARGET):
+	(cd $(THIRD_PARTY); $(MAKE) all )
+	mkdir -p $(COMPATLIB_FUNCTIONS_LIB)
 	$(CXX) $(CXXFLAGS) $(CXXINCFLAGS) $(CXXLIBFLAGS) -o $@ src/*.cpp $(VERTICA_SDK_INCLUDE)/Vertica.cpp
 
 # Run the simulator against scalar functions and transform functions
@@ -64,7 +64,7 @@ simulator:
 	ln -f -s $(SIMULATOR_PATH)/vsim 
 
 clean:
-	rm -f $(COMPATLIB_FUNCTIONS_TARGET)
+	rm -rf $(COMPATLIB_FUNCTIONS_TARGET)
 	rm -f ./*.so
 	rm -f ./src/*.o
 
