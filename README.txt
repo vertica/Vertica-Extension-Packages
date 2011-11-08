@@ -37,13 +37,16 @@ compatlib_functions:
 template_package: 
   Description: template for new packages
 
+tools:
+  scripts to create and install packages (in process)
+  Example: ./install_package -p <pkg_name>
+
+*******************
+Future packages that need their build system cleaned up
+*******************
+
 hive_functions: 
   Description: Partial implementation of UDTs that are shipped with apache Hiv
   Examples: get_json_object, xpathint, etc.
   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF
   Status: significant usefulness
-
-tools:
-  scripts to create and install packages (in process)
-  Example: ./install_package -p <pkg_name>
-
