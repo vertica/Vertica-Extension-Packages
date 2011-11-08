@@ -1,4 +1,11 @@
-Vertica Extension Packages repository. 
+Vertica Extension Packages
+Copyright 2011 Vertica, an HP Company
+
+This repository contains extension code (UDx) code to extend the
+processing capabilities of the Vertica Analytic Database. 
+
+You need the Vertica SDK to compile these programs and you need the
+Vertica Analytic Database to run them.
 
 *******************
 Submission guidelines:
