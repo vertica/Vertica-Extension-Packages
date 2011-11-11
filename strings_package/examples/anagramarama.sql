@@ -1,6 +1,6 @@
 drop table if exists words cascade;
 create table words(word varchar(8));
-copy words from '/home/chuck/Downloads/anagramarama-0.4/i18n/en_GB/wordlist.txt';
+copy words from '/home/chuck/git/Vertica-Extension-Packages/strings_package/build/test-data/wordlist.txt';
 
 -- How many words total?  This is the number of puzzles there are.
 select count(*) from words;
@@ -10,8 +10,7 @@ select count(*) from words;
 select count(*) from words where length(word) = 7;
 
 -- Load the UDX
-\set libfile '\''`echo $TMPDIR`'/AnagramLib.so\'';
-create library AnagramLib as :libfile;
+create library AnagramLib as '/home/chuck/git/Vertica-Extension-Packages/strings_package/lib/StringsPackage.so';
 create transform function gen_anagram as language 'C++'
   name 'AnagramFactory'
   library AnagramLib not fenced;
