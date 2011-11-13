@@ -19,7 +19,6 @@ SIMULATOR_PATH = $(SDK)/simulator
 BUILD_PATH = .
 THIRD_PARTY = $(shell pwd)/third-party
 THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
-THIRD_PARTY_BUILD = $(THIRD_PARTY)/build
 THIRD_PARTY_OBJS = rijndael.o my_aes.o
 DEBUG_DATA_PATH = $(shell pwd)/test-data
 
@@ -77,5 +76,5 @@ clean:
 	rm -f ./*.so
 	rm -f ./functions/*.o
 	rm -f vsim*
-	rm -f third-party/build/*.o
+	rm -f third-party/src/*.o
 

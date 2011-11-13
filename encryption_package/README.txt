@@ -53,6 +53,13 @@ I plan to further extend this package to include:
 
 No promises on when.
 
+One thing that might be nice within Vertica is to be able to
+put ACLs on virtual tables. This would allow an administrator to
+embed a key inside a call to AESDecrypt that's contained within a 
+view without compromising the key itself. You can obviously do
+this today, but the key would be exposed with a simple
+'select ..from views'.
+
 -------------------------------
 BUILDING
 -------------------------------
