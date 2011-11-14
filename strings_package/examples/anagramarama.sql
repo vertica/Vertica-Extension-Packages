@@ -2,9 +2,11 @@ drop table if exists words cascade;
 create table words(word varchar(8));
 copy words from '/home/chuck/git/Vertica-Extension-Packages/strings_package/build/test-data/wordlist.txt';
 
--- How many words total?  This is the number of puzzles there are.
+-- How many words total?
 select count(*) from words;
 -- How many words have 7 letters?  This is the number of puzzles there are.
+--  (Actually there are less, as 7-letter words may be anagrams of each
+--   other.  More on this later.)
 -- There are 13699 ways to arrange the letters in a 7-letter word
 --  (not taking duplicates into account, but including shorter words).
 select count(*) from words where length(word) = 7;
@@ -17,6 +19,7 @@ create transform function gen_anagram as language 'C++'
 
 -- A simple test - the first puzzle
 select word from words where length(word) = 7 order by word limit 1;
+
 
 -- What are the real words that are in this puzzle?
 select anagram from
@@ -158,6 +161,38 @@ select count(*) from words where word not in
   and length(anagram) = 6
 )
 and length(word) = 7;
+\timing
+
+-- How many distinct puzzles are there?
+-- We find the number of 7-letter words whose 7-letter anagram that
+--  is first alphabetically is equal to the word.  (If not, some other
+--  word generates the same puzzle.)
+\timing
+select count(*)
+from
+(
+  select word, anagram
+  from
+  (
+    select word, anagram, row_number() over(partition by word order by anagram) rn
+    from
+    (
+      select word, anagram
+      from
+      (
+        select word, gen_anagram(word) over (partition by word)
+        from 
+        (
+          select word from words where length(word) = 7
+        ) puzzles
+      ) sq2
+      where length(anagram) = 7 
+      and anagram in (select word from words)
+    ) l7
+  ) sq3
+  where rn = 1
+) sq
+where word = anagram;
 \timing
 
 drop library AnagramLib cascade;
