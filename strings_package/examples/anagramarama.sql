@@ -112,7 +112,7 @@ limit 10;
 
 -- Are all 6-letter words covered by an anagram of a 7-letter word?
 \timing
-select word from words where word not in
+select count(word) from words where word not in
 (
    select anagram from
    (
@@ -122,8 +122,7 @@ select word from words where word not in
    where anagram in (select word from words)
    and length(anagram) < 7
 )
-and length(word) = 6
-order by word;
+and length(word) = 6;
 \timing
 
 -- Which word appears in the most puzzles?
