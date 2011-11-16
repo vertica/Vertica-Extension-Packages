@@ -51,6 +51,7 @@ sim_test: all simulator
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) EditDistanceFactory $(DEBUG_DATA_PATH)/words.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) StringTokenizerFactory $(DEBUG_DATA_PATH)/strings.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) StringTokenizerDelimFactory $(DEBUG_DATA_PATH)/strings-delim.txt
+	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) PorterStemmerFactory $(DEBUG_DATA_PATH)/words-porter.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
