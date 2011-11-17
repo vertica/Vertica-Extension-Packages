@@ -16,6 +16,8 @@
 *
 * NGrams:  find all 2,3,4 and 5 word sequences in sentences
 *          (http://en.wikipedia.org/wiki/N-gram).
+* 
+* WordCount: Counts the number of words that appear in a sentence
 *
 ***************
 

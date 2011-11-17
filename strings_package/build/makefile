@@ -64,6 +64,7 @@ sim_test: all simulator
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) ThreeGramsFactory $(DEBUG_DATA_PATH)/strings.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) FourGramsFactory $(DEBUG_DATA_PATH)/strings.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) FiveGramsFactory $(DEBUG_DATA_PATH)/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) WordCountFactory $(DEBUG_DATA_PATH)/strings.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
