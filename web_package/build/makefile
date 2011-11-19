@@ -57,6 +57,7 @@ $(PACKAGE_FUNCTIONS_TARGET): src/*.cpp
 sim_test: all simulator
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) ApacheParserFactory $(DEBUG_DATA_PATH)/apache.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) UriExtractorFactory $(DEBUG_DATA_PATH)/urls.txt
+	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) w3cLogParserFactory $(DEBUG_DATA_PATH)/w3c.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
