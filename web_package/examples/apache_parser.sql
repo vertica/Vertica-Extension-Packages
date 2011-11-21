@@ -1,7 +1,4 @@
-
 /*** Apache Log Parser Example 3 ***/
-create transform function ApacheParser 
-as language 'C++' name 'ApacheParserFactory' library TransformFunctions;
 
 CREATE TABLE raw_logs (data VARCHAR(4000));
 COPY raw_logs FROM STDIN;

@@ -1,8 +1,13 @@
--- W3C Parser
-create transform function w3cLogParser
-as language 'C++' name 'w3cLogParserFactory' library w3cLogParser;
+-- Note the use of an AUTO_INCREMENT column to preserve the log line
+-- order (so we see the field definition lines (#Field) before the log
+-- lines that use it)
+CREATE TABLE raw_w3c_logs (
+  id AUTO_INCREMENT, 
+  data VARCHAR(4096), 
+  filename VARCHAR(1024)
+);
 
-CREATE TABLE raw_w3c_logs (id AUTO_INCREMENT, data VARCHAR(4096), filename VARCHAR(1024));
+
 COPY raw_w3c_logs (
    data,
    filename as 'w3c.log'
