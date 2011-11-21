@@ -27,12 +27,14 @@ PACKAGE_FUNCTIONS_LIB = $(BUILD_PATH)/../lib
 PACKAGE_FUNCTIONS_TARGET = $(PACKAGE_FUNCTIONS_LIB)/$(PACKAGE_FUNCTIONS)
 
 CXX=g++
-CXXFLAGS=  -D HAVE_LONG_LONG_INT_64  -I$(VERTICA_SDK_INCLUDE) -I$(THIRD_PARTY_INCLUDE) -g -Wall -Wno-unused-value -shared -fPIC -std=c++0x -O3 -DNDEBUG   
+CXXFLAGS=-D HAVE_LONG_LONG_INT_64  -I$(VERTICA_SDK_INCLUDE) -I$(THIRD_PARTY_INCLUDE) -g -Wall -Wno-unused-value -shared -fPIC -std=c++0x
+
+# if run with make DEBUG=true then we don't optimize
+ifndef DEBUG
+CXXFLAGS+=-O3 -DNDEBUG
+endif
 
 LDFLAGS=-L $(THIRD_PARTY_LIB) -Wl,-Bstatic -luriparser -Wl,-Bdynamic
-
-
-
 
 #for third party libs 
 CXXINCFLAGS =  
@@ -49,7 +51,7 @@ third_party:
 	 $(MAKE) -C $(THIRD_PARTY)
 
 # build package functions
-$(PACKAGE_FUNCTIONS_TARGET): src/*.cpp
+$(PACKAGE_FUNCTIONS_TARGET): src/*.cpp makefile
 	mkdir -p $(PACKAGE_FUNCTIONS_LIB)
 	$(CXX) $(CXXFLAGS) $(CXXINCFLAGS) $(CXXLIBFLAGS) -o $@ src/*.cpp $(VERTICA_SDK_INCLUDE)/Vertica.cpp $(LDFLAGS)
 
@@ -57,7 +59,7 @@ $(PACKAGE_FUNCTIONS_TARGET): src/*.cpp
 sim_test: all simulator
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) ApacheParserFactory $(DEBUG_DATA_PATH)/apache.txt
 	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) UriExtractorFactory $(DEBUG_DATA_PATH)/urls.txt
-	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) w3cLogParserFactory $(DEBUG_DATA_PATH)/w3c.txt
+	$(VALGRIND) ./vsim $(PACKAGE_FUNCTIONS_TARGET) w3cLogParserFactory $(DEBUG_DATA_PATH)/iis.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
