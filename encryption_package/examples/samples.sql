@@ -22,3 +22,5 @@ UPDATE t1 SET ssn=AESDecrypt(ssn,'passphrase');
 UPDATE t1 SET ssn=AESEncrypt(ssn,CONCAT('passphrase',firstname));
 SELECT * FROM t1 WHERE lastname='Coyote';
 
+DROP TABLE T1;
+

@@ -1,6 +1,6 @@
 select version();
 
-\set libfile '\''`pwd`'/build/Encryption.so\'';
+\set libfile '\''`pwd`'/lib/Encryption.so\'';
 
 CREATE LIBRARY Encryption as :libfile;
 CREATE FUNCTION AESEncrypt as language 'C++' name 'AESEncryptFactory' library Encryption;

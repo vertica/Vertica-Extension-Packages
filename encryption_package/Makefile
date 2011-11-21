@@ -28,7 +28,7 @@ BUILD_FILES      = build/Vertica.o \
 		   $(addprefix build/,rijndael.o my_aes.o) \
 		   $(addprefix build/,AESEncrypt.o AESDecrypt.o) 
 
-PACKAGE_LIBNAME   = build/Encryption.so
+PACKAGE_LIBNAME   = lib/Encryption.so
 
 CXX=g++
 CXXFLAGS=-D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
@@ -48,7 +48,7 @@ all: $(PACKAGE_LIBNAME)
 
 # build package functions
 $(PACKAGE_LIBNAME): $(BUILD_FILES) 
-	mkdir -p build
+	mkdir -p lib
 	$(CXX) $(LDFLAGS) -o $@ $(BUILD_FILES) 
 
 # rule to make build/XXX.so from src/XXX.so
@@ -70,6 +70,10 @@ install: $(PACKAGE_LIBNAME) ddl/install.sql
 uninstall: ddl/uninstall.sql
 	$(VSQL) -f ddl/uninstall.sql
 
+# run examples
+test:
+	$(VSQL) -f examples/samples.sql
+
 
 # Run the simulator against the functons
 sim_test: all simulator
@@ -82,5 +86,6 @@ simulator:
 
 clean:
 	rm -rf build
+	rm -rf lib
 	rm -f vsim*
 
