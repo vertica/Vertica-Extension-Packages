@@ -2,8 +2,7 @@
 INTRODUCTION
 -------------------------------
 
-This package is meant to be the beginnings of a library containing
-encryption functions for Vertica.
+This package contains encryption functions for Vertica.
 
 To that end, my contribution consists of a pair of AES
 encryption/decryption functions. This enables field-level encryption
