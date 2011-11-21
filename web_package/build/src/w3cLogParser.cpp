@@ -242,8 +242,8 @@ class w3cLogParser : public TransformFunction
       // Now that we have the field list, we need to create a map of incoming fields to positions
       // in the output record.
       log("Assign offset values");
-
       vector<string>::iterator it;
+      offsets.clear();
 
       for ( it=fields.begin() ; it < fields.end(); it++ ) {
          map<string, int>::iterator mip;
