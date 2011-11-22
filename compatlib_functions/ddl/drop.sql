@@ -1,1 +1,0 @@
-DROP LIBRARY CompatLibFunctions CASCADE;
