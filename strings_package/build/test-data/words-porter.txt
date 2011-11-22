@@ -1,0 +1,6 @@
+words:string
+light
+lights
+possibly
+possible
+possibility

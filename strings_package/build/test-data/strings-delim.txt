@@ -1,0 +1,5 @@
+word:string,delim:string
+This is an input text file, 
+this-is-different, 
+this-is-different,-
+
