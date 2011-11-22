@@ -42,6 +42,9 @@ web_functions
 compatlib_functions: 
   Description: Oracle compatibility functions (such as CONNECT_BY, TRANSPOSE)
 
+encryption_package: 
+  Description: Field level encryption functions
+
 template_package: 
   Description: template for new packages
 
