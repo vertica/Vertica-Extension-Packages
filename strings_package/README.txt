@@ -1,25 +1,24 @@
 ***************
-** Example Vertica UDF Strings package
-**
-** This library contains commonly used string manipulation functions
-**
-** StringTokenizer: Tokenizes strings on spaces into single words (example transform)
-**
-** EditDistance: Contributed by UbiSoft:
-**
-** Notes: I implemented the edit distance function as a Vertica UDF:
-** http://en.wikipedia.org/wiki/Levenshtein_distance. On a 4-node
-** cluster, it achieved an impressive performance of 100M rows a second
-** (about 15 seconds to go through 1.5B rows).
-**
-***************
-
-***************
-** Other Functions we would like to see implemented:
-**
-** A Stemmer (http://en.wikipedia.org/wiki/Stemming) 
-**   -- likely the famous Porter Stemmer (http://tartarus.org/~martin/PorterStemmer/)
-**
+* Vertica UDF Strings package
+*
+* This library contains commonly used string manipulation functions
+* for use in text search and natural language processing applications
+*
+* StringTokenizer: Tokenizes strings on spaces into single words
+*
+* EditDistance: How many characters words differ by (http://en.wikipedia.org/wiki/Levenshtein_distance)
+*   Contributed by UbiSoft who says: "On a 4-node cluster, it achieved
+*   an impressive performance of 100M rows a second (about 15 seconds
+*   to go through 1.5B rows)."
+*
+*
+* Stemmer: the famous Porter Stemmer (http://en.wikipedia.org/wiki/Stemming)
+*
+* NGrams:  find all 2,3,4 and 5 word sequences in sentences
+*          (http://en.wikipedia.org/wiki/N-gram).
+* 
+* WordCount: Counts the number of words that appear in a sentence
+*
 ***************
 
 1) To build, run:
