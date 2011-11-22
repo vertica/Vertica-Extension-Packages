@@ -17,7 +17,7 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o)
+		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o AnagramLib.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/StringsLib.so
@@ -72,29 +72,34 @@ test:
 	$(VSQL) -f examples/ngrams.sql
 	$(VSQL) -f examples/string_delim_tokenizer.sql
 	$(VSQL) -f examples/word_count.sql
+	$(VSQL) -f examples/gen_anagram.sql
 
 clean:
 	rm -rf build
 	rm -rf lib
 	rm -f vsim*
-
+	rm -f test-data/wordlist_header.txt
 ##############
 # Advanced upsage: use simulator to debug and test
 ##############
 
-DEBUG_DATA_PATH = $(shell pwd)/test-data
+# rule to make anagram data file with appropriate header for simulator
+test-data/wordlist_header.txt:
+	echo "word:string" > test-data/wordlist_header.txt
+	head test-data/wordlist.txt >> test-data/wordlist_header.txt
 
 # Run the simulator against the functons
-sim_test: all simulator
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) EditDistanceFactory $(DEBUG_DATA_PATH)/words.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) StringTokenizerFactory $(DEBUG_DATA_PATH)/strings.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) StringTokenizerDelimFactory $(DEBUG_DATA_PATH)/strings-delim.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) PorterStemmerFactory $(DEBUG_DATA_PATH)/words-porter.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) TwoGramsFactory $(DEBUG_DATA_PATH)/strings.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) ThreeGramsFactory $(DEBUG_DATA_PATH)/strings.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FourGramsFactory $(DEBUG_DATA_PATH)/strings.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FiveGramsFactory $(DEBUG_DATA_PATH)/strings.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) WordCountFactory $(DEBUG_DATA_PATH)/strings.txt
+sim_test: all simulator test-data/wordlist_header.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) EditDistanceFactory         test-data/words.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) StringTokenizerFactory      test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) StringTokenizerDelimFactory test-data/strings-delim.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) PorterStemmerFactory        test-data/words-porter.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) TwoGramsFactory             test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) ThreeGramsFactory           test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FourGramsFactory            test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FiveGramsFactory            test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) WordCountFactory            test-data/strings.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) AnagramFactory              test-data/wordlist_header.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:

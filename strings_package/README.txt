@@ -18,6 +18,9 @@ NGrams: find all 2,3,4 and 5 word sequences in sentences
  
 WordCount: Counts the number of words that appear in a sentence
 
+GenAnagram: For each input string, it produces many output strings, one for each
+permutation of every subset of letters. (doc/Anagramarama.pdf)
+
 -------------------------------
 BUILDING
 -------------------------------
