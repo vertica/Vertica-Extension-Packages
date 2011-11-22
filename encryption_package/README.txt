@@ -65,7 +65,6 @@ BUILDING
 
 To build:
 
-$ cd src
 $ make
 
 By default, there's a set key-length of 128 bits. This isn't the
@@ -76,12 +75,13 @@ inclined. I kept the 128 bit default to be the same as MySQL for
 compatibility.
 
 -------------------------------
-INSTALLING
+INSTALLING / UNINSTALLING
 -------------------------------
 
 Assuming you can run vsql, just do:
 
 $ make install
+$ make uninstall
 
 Alternately, you can find the DDL that 'make install' uses in:
  src/ddl/install.sql 
