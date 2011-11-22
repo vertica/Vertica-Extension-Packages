@@ -1,19 +1,54 @@
-***************
-** Example Vertica UDF package
-**
-** Please edit this file to include information about your actual package functions
-***************
+-------------------------------
+INTRODUCTION
+-------------------------------
 
-1) To build, run:
+This is a template designed to assist creating packages of extensions
+to the Vertica Analytic Database.
 
-  cd build
-  make
+You should fill out this section with a high level summary of the
+package and the functionality it provides.
 
-2) to install, run:
+-------------------------------
+BUILDING
+-------------------------------
 
-./install.sh
+To build:
 
-3) to uninstall, execute the following sql:
+$ make
 
-./uninstall.sh
 
+-------------------------------
+INSTALLING / UNINSTALLING
+-------------------------------
+
+Assuming vsql is in your path, just do:
+
+$ make install
+$ make uninstall
+
+Alternately, you can find the DDL that 'make install' uses in:
+ src/ddl/install.sql 
+and
+ src/ddl/uninstall.sql
+
+-------------------------------
+USAGE
+-------------------------------
+
+This section should contain instructions on usage of the functions
+contained within the package. All functions should be accompanied with
+an example of use in the examples directory.
+
+-------------------------------
+PERFORMANCE
+-------------------------------
+
+This section should contain any performance metrics you may have
+measured for your package. Please include what hardware and data size
+your measurements were performed on.
+
+-------------------------------
+LICENSE
+-------------------------------
+
+Please see LICENSE.txt
