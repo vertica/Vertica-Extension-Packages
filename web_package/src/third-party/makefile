@@ -20,7 +20,7 @@ URIPARSER_TGZ = $(URIPARSER_DIR)/uriparser-0.7.5.tar.gz
 URIPARSER_SRC = $(URIPARSER_DIR)/uriparser-0.7.5
 
 THIRD_PARTY = $(shell pwd)
-INSTALL_DIR = $(THIRD_PARTY)/install
+INSTALL_DIR = $(THIRD_PARTY)/../../build
 
 uriparser:    $(URIPARSER_DIR)/.done
 
