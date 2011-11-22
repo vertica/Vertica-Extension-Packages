@@ -1,6 +1,6 @@
 select version();
 
-\set libfile '\''`pwd`'/lib/StringsPackage.so\'';
+\set libfile '\''`pwd`'/lib/StringsLib.so\'';
 CREATE LIBRARY StringsLib AS :libfile;
 
 CREATE FUNCTION EditDistance                   AS LANGUAGE 'C++' NAME 'EditDistanceFactory'         LIBRARY StringsLib;
