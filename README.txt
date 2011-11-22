@@ -7,6 +7,8 @@ processing capabilities of the Vertica Analytic Database.
 You need the Vertica SDK to compile these programs and you need the
 Vertica Analytic Database to run them.
 
+All code is provided under the license found in LICENSE.txt
+
 *******************
 Submission guidelines:
 *******************

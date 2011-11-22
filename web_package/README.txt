@@ -1,29 +1,44 @@
-***************
-** Vertica Web Analysis Package. 
-**
-** Functions included (more details below):
-** 
-** Apache Log Parser: Parse Apache Web Server log files
-**
-** URI decoder
-** 
-** IIS / W3C Parser: Parse Microsoft IIS Web Server log files
-** 
-***************
+-------------------------------
+INTRODUCTION
+-------------------------------
+
+The Web Analysis Package includes functions that are commonly used
+for analysis of weblogs.
+
+Apache Log Parser: Parse Apache Web Server log files
+
+IIS / W3C Parser: Parse Microsoft IIS Web Server log files
+
+URI decoder: Decodes the name=value pairs in URLs
+http://en.wikipedia.org/wiki/Percent-encoding
+
+-------------------------------
+BUILDING
+-------------------------------
+
+To build:
+
+$ make
 
 
-1) To build, run:
+-------------------------------
+INSTALLING / UNINSTALLING
+-------------------------------
 
-  cd build
-  make
+Assuming vsql is in your path, just do:
 
-2) to install, run:
+$ make install
+$ make uninstall
 
-./install.sh
+Alternately, you can find the DDL that 'make install' uses in:
+ src/ddl/install.sql 
+and
+ src/ddl/uninstall.sql
 
-3) to uninstall, execute the following sql:
+-------------------------------
+USAGE
+-------------------------------
 
-./uninstall.sh
 
 *********************
 * W3C Log Parser
@@ -55,8 +70,14 @@ the filename in the table holding the log data).
 Please see the w3cLogParser.sql script for an example of how to stage
 the data and call the function.
 
+-------------------------------
+PERFORMANCE
+-------------------------------
 
 
 
+-------------------------------
+LICENSE
+-------------------------------
 
-
+Please see LICENSE.txt
