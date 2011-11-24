@@ -12,6 +12,7 @@ IIS / W3C Parser: Parse Microsoft IIS Web Server log files
 URI decoder: Decodes the name=value pairs in URLs
 http://en.wikipedia.org/wiki/Percent-encoding
 
+Email Validator: 
 -------------------------------
 BUILDING
 -------------------------------

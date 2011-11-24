@@ -18,7 +18,7 @@ THIRD_PARTY_LIB     = build/lib
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/,ApacheParser.o UriExtractor.o w3cLogParser.o)
+		   $(addprefix build/,ApacheParser.o UriExtractor.o w3cLogParser.o EmailValidator.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/WebPackage.so
