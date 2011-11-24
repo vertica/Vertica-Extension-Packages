@@ -1,0 +1,5 @@
+email:string
+abc@xyz.com
+www.hp.com
+3e1*@VerticaCorp.com
+me@VerticaCorp.com

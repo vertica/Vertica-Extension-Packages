@@ -55,6 +55,7 @@ $(PCRE_DIR)/.done:
 	(cd $(PCRE_DIR); $(TAR) xjf $(PCRE_TBZ) )
 	(cd $(PCRE_SRC); ./configure --prefix=$(INSTALL_DIR) )
 	(cd $(PCRE_SRC); make; make install)
+	touch $@
 
 # download pcre from sourceforge
 pcre-8.10.tar.bz2:

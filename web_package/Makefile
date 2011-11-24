@@ -25,7 +25,7 @@ PACKAGE_LIBNAME   = lib/WebPackage.so
 
 CXX=g++
 CXXFLAGS=-g -D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
-LDFLAGS=-shared -L $(THIRD_PARTY_LIB) -Wl,-Bstatic -luriparser -Wl,-Bdynamic
+LDFLAGS=-shared -L $(THIRD_PARTY_LIB) -Wl,-Bstatic -luriparser -Wl,-Bstatic -lpcre -Wl,-Bdynamic
 
 # add optimization if not a debug build
 # (make DEBUG=true" will make a non-optimized build)
@@ -86,9 +86,11 @@ DEBUG_DATA_PATH = $(shell pwd)/test-data
 # Run the simulator against the functons
 # Run the simulator against the functons
 sim_test: all simulator
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) ApacheParserFactory $(DEBUG_DATA_PATH)/apache.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) UriExtractorFactory $(DEBUG_DATA_PATH)/urls.txt
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) w3cLogParserFactory $(DEBUG_DATA_PATH)/iis.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) ApacheParserFactory   $(DEBUG_DATA_PATH)/apache.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) UriExtractorFactory   $(DEBUG_DATA_PATH)/urls.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) w3cLogParserFactory   $(DEBUG_DATA_PATH)/iis.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) EmailValidatorFactory $(DEBUG_DATA_PATH)/email_addresses.txt
+
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
