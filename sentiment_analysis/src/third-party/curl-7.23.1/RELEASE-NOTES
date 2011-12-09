@@ -1,0 +1,24 @@
+Curl and libcurl 7.23.1
+
+ Public curl releases:         126
+ Command line options:         149
+ curl_easy_setopt() options:   192
+ Public functions in libcurl:  58
+ Known libcurl bindings:       39
+ Contributors:                 907
+
+This release includes the following bugfixes:
+
+ o Windows: curl would fail if it found no CA cert, unless -k was used. Even
+   if a non-SSL protocol URL was used
+
+This release includes the following known bugs:
+
+ o see docs/KNOWN_BUGS (http://curl.haxx.se/docs/knownbugs.html)
+
+This release would not have looked like this without help, code, reports and
+advice from friends like these:
+
+ Mark Brand
+
+        Thanks! (and sorry if I forgot to mention someone)
