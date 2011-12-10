@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2011 Vertica Systems, an HP Company
  *
- * Description: Example User Defined Scalar Function: Remove spaces
+ * Description: Defined Scalar Function: Geocode 
  *
  * Create Date: Apr 29, 2011
  */
@@ -17,7 +17,7 @@ using namespace std;
 
 
 /*
- * This is a simple function that removes all spaces from the input string
+ * This function calls a free webservice to geocodes data with inputted street,city,state,and zip 
  */
 class Geocode : public ScalarFunction
 {
@@ -27,23 +27,25 @@ public:
     CURLcode res;
     std::string baseURL;
 
-        /* callback to get latlong from curl response */
-        size_t static
-        WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data)
-        {
-          size_t realsize = size * nmemb;
-          char * d = (char *)data;
-          memcpy(d, ptr, realsize);
-          d[realsize]=0; 
-          return realsize;
-        }
+    /* callback to get latlong from curl webservice response */
+    size_t static
+    WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data)
+    {
+       size_t realsize = size * nmemb;
+       char * d = (char *)data;
+       memcpy(d, ptr, realsize);
+       d[realsize]=0; 
+       return realsize;
+    }
 
 
-   virtual void setup(ServerInterface &srvInterface,
+    virtual void setup(ServerInterface &srvInterface,
 		      const SizedColumnTypes &argTypes) 
     {
        curl_global_init(CURL_GLOBAL_ALL);
        curl = curl_easy_init();
+   
+       // If you want to use your own API key, replace it in the correspoding apiKey=parameter below
        baseURL = "https://webgis.usc.edu/Services/Geocode/WebService/GeocoderWebServiceHttpNonParsed_V02_96.aspx?apiKey=3ad26e5b22f144b0ad7e0fb2efc2c4b3&version=2.96&format=csv";
     }
 
@@ -54,6 +56,7 @@ public:
        curl_global_cleanup();
     }
 
+    // Functions to split a string based on a delimter into a vector of tokens
     void split(vector<string> &result, string str, char delim ) {
       string tmp;
       string::iterator i;
@@ -89,12 +92,14 @@ public:
         do {
 
             char curlresponse[1024]; 
+
             // Get a copy of the input string
             std::string  streetStr = arg_reader.getStringRef(0).str();
             std::string  cityStr = arg_reader.getStringRef(1).str();
             std::string  stateStr = arg_reader.getStringRef(2).str();
             std::string  zipStr = arg_reader.getStringRef(3).str();
 
+	    // Replaces spaces with %20 for URLs
             for (size_t pos = streetStr.find(' '); 
 		 pos != string::npos;
 		 pos = streetStr.find(' ',pos)) 
@@ -109,7 +114,7 @@ public:
                 cityStr.replace(pos,1,"%20");
             }
 
-            
+            // Build the URL 
             std::string URL = baseURL + "&streetAddress=" + streetStr;
             URL += "&city=" + cityStr;
             URL += "&state=" + stateStr;
@@ -119,19 +124,21 @@ public:
               curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
             }
     
+	    // curl setup
             curl_easy_setopt(curl, CURLOPT_HEADER, 0);
             curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &curlresponse );
-	
+
+	    // perform the webservice call	
             res = curl_easy_perform(curl);
 
-            
-	    // Copy string into results
+            // parse webservice response to get the latitude and longitude data 
             std::vector<std::string> tokens;
             split(tokens,string(curlresponse),',');
-
             std::string latlong = tokens[3] + "," + tokens[4];
+
+	    // copy data back to Vertica
             res_writer.getStringRef().copy(latlong);
             res_writer.next();
         } while (arg_reader.next());
