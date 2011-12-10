@@ -52,14 +52,14 @@ RETURN: VARCHAR representing the latitude,longitude
 
 Here is a sample run with the test data provided in the package.
 
-[dbadmin@centos geocode_package]$ make test
-vsql -f examples/geocode.sql
+[dbadmin@centos geocode_package]$ vsql -f examples/geocode.sql 
 CREATE TABLE
     streetaddress    |   city    | state |  zip  |              geocode               
 ---------------------+-----------+-------+-------+------------------------------------
  8 Federal St        | Billerica | MA    | 01821 | 42.5455754814974,-71.2824066456301
  3000 Hanover Street | Palo Alto | CA    | 94304 | 37.4146176110341,-122.142834760344
-(2 rows)
+                     | Chicago   | IL    |       | 41.8386549328395,-87.6866416802019
+(3 rows)
 
 DROP TABLE
  
