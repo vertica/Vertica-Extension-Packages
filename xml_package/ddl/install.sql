@@ -46,7 +46,7 @@
 select version();
 
 \set libname 'XMLLib'
-\set libfile '\''`pwd`'/lib/PtoolePackage.so\''
+\set libfile '\''`pwd`'/lib/XMLPackage.so\''
 
 CREATE LIBRARY :libname AS :libfile;
 

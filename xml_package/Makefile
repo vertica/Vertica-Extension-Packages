@@ -37,7 +37,7 @@
 ############################
 
 SDK?=/opt/vertica/sdk
-VSQL?=/opt/vertica/bin/vsql -U dbadmin
+VSQL?=/opt/vertica/bin/vsql 
 
 VERTICA_SDK_INCLUDE = $(SDK)/include
 SIMULATOR_PATH = $(SDK)/simulator
@@ -97,7 +97,26 @@ test:
 	$(VSQL) -f examples/google_analytics.sql
 
 
+##############
+# Advanced upsage: use simulator to debug and test
+##############
+
+# Run the simulator against the functons
+sim_test: all simulator 
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XPathNumFactory   test-data/xpath_find.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XPathFindFactory  test-data/xpath_find_all.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XSLTApplyFactory  test-data/xslt_apply.txt
+
+# build the simulator (in SIMULATOR_PATH) and simlink it here
+simulator:
+	$(MAKE) -C $(SIMULATOR_PATH)
+	ln -f -s $(SIMULATOR_PATH)/vsim 
+
+
 clean:
 	rm -rf build
 	rm -rf lib
+	rm -rf vsim*
+
+
 
