@@ -106,6 +106,7 @@ sim_test: all simulator
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XPathNumFactory   test-data/xpath_find.txt
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XPathFindFactory  test-data/xpath_find_all.txt
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) XSLTApplyFactory  test-data/xslt_apply.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) HttpGetFactory    test-data/urls.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:

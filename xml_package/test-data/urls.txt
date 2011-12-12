@@ -1,0 +1,2 @@
+url:string
+http://www.vertica.com
