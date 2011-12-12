@@ -9,7 +9,7 @@ THIRD_PARTY = $(shell pwd)
 INSTALL_DIR = $(THIRD_PARTY)/../../build
 
 .PHONY: all
-all: stemmer jsoncpp
+all: stemmer jsoncpp libcurl
 
 .PHONY: stemmer
 stemmer:
@@ -20,7 +20,9 @@ stemmer:
 	@cp -r libstemmer_c/include/* $(INSTALL_DIR)/include
 
 .PHONY: jsoncpp
-jsoncpp: 
+jsoncpp: jsoncpp-src-0.5.0/.done
+
+jsoncpp-src-0.5.0/.done:
 	@mkdir -p $(INSTALL_DIR)
 	@echo "Unpacking, configuring and installing jsoncpp...";
 	$(TAR) xzf jsoncpp-src-0.5.0.tar.gz
@@ -28,14 +30,18 @@ jsoncpp:
 	(cd jsoncpp-src-0.5.0; $(PYTHON) scons.py platform=linux-gcc)
 	@cp jsoncpp-src-0.5.0/libs/linux-gcc-4.4.5/libjson_linux-gcc-4.4.5_libmt.a $(INSTALL_DIR)/lib
 	@cp -r jsoncpp-src-0.5.0/include//* $(INSTALL_DIR)/include
+	touch $@
 
 .PHONY: libcurl
-libcurl: 
+libcurl: curl-7.23.1/.done
+
+curl-7.23.1/.done:
 	mkdir -p $(INSTALL_DIR)
 	@echo "Unpacking, configuring and installing libcurl...";
-	(cd curl-7.23.1; $(TAR) xzf curl-7.23.1.tar.gz)
+	$(TAR) xzf curl-7.23.1.tar.gz
 	(cd curl-7.23.1; ./configure --prefix=$(INSTALL_DIR) --enable-shared=no)
 	(cd curl-7.23.1; make; make install)
+	touch $@
 
 clean:
 	cd libstemmer_c; $(MAKE) clean

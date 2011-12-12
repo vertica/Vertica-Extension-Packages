@@ -18,7 +18,7 @@ THIRD_PARTY_LIB     = build/lib
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/,TwitterSentiment.o lib/libstemmer.o)
+		   $(addprefix build/,TwitterSentiment.o lib/libstemmer.o lib/libcurl.a lib/libjson_linux-gcc-4.4.5_libmt.a)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/TwitterSentiment.so
@@ -26,7 +26,7 @@ PACKAGE_LIBNAME   = lib/TwitterSentiment.so
 CXX=g++
 CXXFLAGS=-g -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
 #LDFLAGS=-shared -L $(THIRD_PARTY_LIB) -Wl,-Bstatic -luriparser -Wl,-Bstatic -lpcre -Wl,-Bdynamic
-LDFLAGS=-shared -L $(THIRD_PARTY_LIB)
+LDFLAGS=-shared -L $(THIRD_PARTY_LIB) -lidn -lssl -lcrypto -lrt -lssl -lcrypto -ldl -lz -lz
 
 # add optimization if not a debug build
 # (make DEBUG=true" will make a non-optimized build)
@@ -35,7 +35,6 @@ CXXFLAGS+= -O3 -DNDEBUG
 CFLAGS+= -O3 -DNDEBUG
 endif
 
-.PHONY: all
 all: $(PACKAGE_LIBNAME)
 
 # target to ensure third-party libraries are build

@@ -1,3 +1,4 @@
 *.o
 curl-7.23.1
 stemwords
+jsoncpp-src-0.5.0

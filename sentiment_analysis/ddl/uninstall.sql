@@ -1,1 +1,1 @@
-DROP LIBRARY TextSearchLib CASCADE;
+DROP LIBRARY TwitterSentimentLib CASCADE;
