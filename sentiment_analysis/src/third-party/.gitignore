@@ -1,0 +1,3 @@
+*.o
+curl-7.23.1
+stemwords
