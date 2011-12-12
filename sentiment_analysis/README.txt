@@ -2,11 +2,20 @@
 INTRODUCTION
 -------------------------------
 
-This is a template designed to assist creating packages of extensions
-to the Vertica Analytic Database.
+This package provides the following functionality:
 
-You should fill out this section with a high level summary of the
-package and the functionality it provides.
+1. Twitter Search - perform a search on Twitter and return tweet texts as
+results
+2. Sentiment analysis - Simple algorithm to provide a sentiment score to text.
+This can be used over tweets to find general user sentiments.
+3. Word stemmer - uses the Porter stemming algorithm to stem words (e.g. going
+-> go etc.). Useful in sentiment analysis to canonicalize words, but also
+useful by itself
+4. URL Fetcher - function that fetches the given URL as a text string. Due to
+limitations in Vertica's varchar size, fetches only the first 65000 bytes of
+the URL.
+5. Twitter JSON Parser - function that parses the Twitter JSON format and
+returns tweet texts
 
 -------------------------------
 BUILDING
@@ -16,6 +25,9 @@ To build:
 
 $ make
 
+For non-standard SDK locations, use
+
+$ make SDK=/path/to/sdk
 
 -------------------------------
 INSTALLING / UNINSTALLING
@@ -35,17 +47,30 @@ and
 USAGE
 -------------------------------
 
-This section should contain instructions on usage of the functions
-contained within the package. All functions should be accompanied with
-an example of use in the examples directory.
+See examples/demo.sql for examples of usage. Brief usage summary:
 
--------------------------------
-PERFORMANCE
--------------------------------
+stem: Scalar function
+  Input - word to the stemmed
+  Output - word stem
 
-This section should contain any performance metrics you may have
-measured for your package. Please include what hardware and data size
-your measurements were performed on.
+fetch_url: Scalar function 
+  Input - the URL to fetch
+  Output - the contents of the URL
+
+sentiment: Scalar function
+  Input - Sentence/text
+  Output - Sentiment score - positive numbers indicate positive sentiment, 0
+           indicates neutral, and negative numbers indicate negative 
+           sentiment
+
+twitter: Transform function
+  Input - Twitter JSON data
+  Output - Twitter query (if any), and tweet texts contained in the JSON input
+           data
+
+twitter_search: Transform function
+  Input - Twitter search query 
+  Output - The query, and tweet texts matching the query
 
 -------------------------------
 LICENSE
