@@ -17,7 +17,7 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/,ConnectBy.o Transpose.o)
+		   $(addprefix build/,ConnectBy.o Transpose.o GroupGenerator.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/CompatLib.so
@@ -65,6 +65,7 @@ uninstall: ddl/uninstall.sql
 
 # run examples
 test:
+	$(VSQL) -f examples/group_generator.sql
 	$(VSQL) -f examples/connect_by_path.sql
 	$(VSQL) -f examples/transpose.sql
 

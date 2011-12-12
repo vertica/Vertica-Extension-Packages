@@ -21,17 +21,17 @@ using namespace std;
  *
  * Use group_generator(A, B, 95, 4)
  *
- * There will be too GroupingSets { {1, 1, 1}, {0, 1, 1}, {0, 0, 1}, {0, 0, 0} }
+ * There will be two GroupingSets { {1, 1, 1}, {0, 1, 1}, {0, 0, 1}, {0, 0, 0} }
  * Each GroupingSet size will be in the number of input columns. 3 in this example - {A, B, C}
 
  * 1/TRUE indicates the set does not have this column in its GroupingSet. Therefore a NULL should be emitted.
  * 0/FALSE indicates the set include the column in its GroupingSet and we copy the input value to the output.
  *
  * 95 is the argument passed in because 95 is based 10 of binary 000001011111.
- * We should make functions ROLLUP and CUBE to make this calculation easier.
+ * We should make functions ROLLUP_MASK and CUBE_MASK to make this calculation easier.
  *
  * See example SQL file on how to use GroupGenerator to do ROLLUP, CUBE,
- * GROUPING_SETS, and Multiple Distrinct Aggregates in the NEW EE.
+ * GROUPING_SETS, and Multiple Distinct Aggregates in the NEW EE.
  *
  */ 
 class GroupGenerator : public TransformFunction
