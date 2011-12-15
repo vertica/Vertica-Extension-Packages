@@ -20,7 +20,8 @@ using namespace Vertica;
 #define BUF_SIZE 1024
 
 /*
- * This is a simple function that removes all spaces from the input string
+ * This function invokes each input string command as if it was run with: bash -c '<command>'
+ * The output is split on newlines and output as rows.
  */
 class Shell : public TransformFunction
 {

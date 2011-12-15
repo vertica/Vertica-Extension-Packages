@@ -17,10 +17,10 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/,RemoveSpace.o)
+		   $(addprefix build/, Hostname.o Shell.o IntSequence.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
-PACKAGE_LIBNAME   = lib/Template.so
+PACKAGE_LIBNAME   = lib/Shell.so
 
 CXX=g++
 CXXFLAGS=-g -D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
@@ -80,7 +80,7 @@ DEBUG_DATA_PATH = $(shell pwd)/test-data
 
 # Run the simulator against the functons
 sim_test: all simulator
-	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FunctionName $(DEBUG_DATA_PATH)/testdata.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) ShellFactory $(DEBUG_DATA_PATH)/testdata.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:

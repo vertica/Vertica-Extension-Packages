@@ -17,7 +17,7 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o AnagramLib.o)
+		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o AnagramLib.o GroupConcat.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/StringsLib.so
