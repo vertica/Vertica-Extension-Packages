@@ -1,6 +1,7 @@
 /* Copyright (c) 2005 - 2011 Vertica, an HP company -*- C++ -*- */
 /* 
- * Description: User Defined Transform Function: for each partition, output a comma-separated list in a string
+ * Description: User Defined Transform Function: for each partition, output a
+ * comma-separated list in a string
  *
  * Create Date: Dec 15, 2011
  */
@@ -10,10 +11,12 @@
 using namespace Vertica;
 using namespace std;
 
+#define LINE_MAX 64000
 
 /*
  * Takes in a sequence of string values and produces a single output tuple with
- * a comma separated list of values.
+ * a comma separated list of values.  If the output string would overflow the
+ * maximum line length, stop appending values and include a ", ..."
  */
 
 class GroupConcat : public TransformFunction
@@ -27,6 +30,7 @@ class GroupConcat : public TransformFunction
 
         ostringstream oss;
         bool first = true;
+        bool exceeded = false;
         do {
             const VString &elem = input_reader.getStringRef(0);
 
@@ -35,11 +39,23 @@ class GroupConcat : public TransformFunction
             {
                 continue;
             }
-            else 
+            else if (!exceeded)
             {
-                if (!first) oss << ", ";
-                first = false;
-                oss << elem.str();
+                std::string s = elem.str();
+                size_t curpos = oss.tellp();
+                curpos += s.length() + 2;
+                if (curpos > LINE_MAX)
+                {
+                    exceeded = true;
+                    if (first) oss << "...";
+                    else oss << ", ...";
+                }
+                else
+                {
+                    if (!first) oss << ", ";
+                    first = false;
+                    oss << s;
+                }
             }
         } while (input_reader.next());
 
@@ -69,8 +85,8 @@ class GroupConcatFactory : public TransformFunctionFactory
         if (input_types.getColumnCount() != 1)
             vt_report_error(0, "Function only accepts 1 argument, but %zu provided", input_types.getColumnCount());
 
-        // Our output size will never be more than the input size
-        output_types.addVarchar(65000, "summary");
+        // output can be wide.  Include extra space for a last ", ..."
+        output_types.addVarchar(LINE_MAX+5, "list");
     }
 
     virtual TransformFunction *createTransformFunction(ServerInterface &srvInterface)

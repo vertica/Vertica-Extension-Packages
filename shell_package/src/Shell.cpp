@@ -174,8 +174,6 @@ public:
                 {
                     if (buf[ptr] == '\n')
                     {
-                        // ensure null terminated
-                        //outputline[bufend] = '\0'; 
                         // Copy string into results
                         output_writer.getStringRef(0).copy(idstr);
                         output_writer.getStringRef(1).copy(cmdstr);
@@ -194,12 +192,10 @@ public:
             // results from last line
             if (bufend > 0)
             {
-                // ensure null terminated
-                //outputline[bufend] = '\0'; 
                 // Copy string into results
                 output_writer.getStringRef(0).copy(idstr);
                 output_writer.getStringRef(1).copy(cmdstr);
-                output_writer.getStringRef(2).copy(outputline);
+                output_writer.getStringRef(2).copy(outputline,bufend);
                 output_writer.next();
                 bufend = 0; // reset
             } 
@@ -211,7 +207,7 @@ public:
                 output_writer.next();
             }
 
-            subproc.terminate(false/*gently!*/);
+            subproc.terminate(true/*gently!*/);
         } while (input_reader.next());
     }
 };
@@ -219,7 +215,9 @@ public:
 class ShellFactory : public TransformFunctionFactory
 {
     // Tell Vertica that we take in a row with 1 string, and return a row with 2 strings
-    virtual void getPrototype(ServerInterface &srvInterface, ColumnTypes &argTypes, ColumnTypes &returnType)
+    virtual void getPrototype(ServerInterface &srvInterface, 
+                              ColumnTypes &argTypes, 
+                              ColumnTypes &returnType)
     {
         argTypes.addVarchar();
         argTypes.addVarchar();
@@ -237,7 +235,8 @@ class ShellFactory : public TransformFunctionFactory
     {
         // Error out if we're called with anything but 1 argument
         if (input_types.getColumnCount() != 2)
-            vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", input_types.getColumnCount());
+            vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", 
+                            input_types.getColumnCount());
 
         // first column outputs the id string passed in
         int input_len = input_types.getColumnType(0).getStringLength();
@@ -251,8 +250,9 @@ class ShellFactory : public TransformFunctionFactory
         // Our output size will never be more than the input size
         output_types.addVarchar(input_len, "command");
 
-        // other output is a line of output from the shell command, which is truncated at 65000 characters
-        output_types.addVarchar(65000, "text");
+        // other output is a line of output from the shell command, which is
+        // truncated at LINE_MAX characters
+        output_types.addVarchar(LINE_MAX, "text");
     }
 
     virtual TransformFunction *createTransformFunction(ServerInterface &srvInterface)

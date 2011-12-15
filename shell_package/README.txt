@@ -47,11 +47,12 @@ command - command to execute.
 Output columns:
 id      - passed in
 command - passed in
-text    - line of output from shell command, one row per line
+text    - lines of output (1 row per line), truncated to 64000 characters
 
 The actual execution is accomplished by forking and running: bash -c <command>
 Because the command is actually interpreted by the shell, pipes,
-redirects, looping and other shell functionality is available.
+redirects, looping and other shell functionality is available.  One
+row per line of output is produced.
 
 Example:
 select shell_execute(local_node_name(),'date') over ();
@@ -68,6 +69,7 @@ select shell_execute(node_name, 'tail -10 vertica.log') over (partition by segva
 
 See examples/shell.sql for a number of other example uses.
 See examples/diagnostics.sql for a script to collect diagnostics through vsql + shell extension
+See examples/copy-cmd-writing.sql for a script to stage & load files from an ftp server
 
 Notes:
 * A badly formed shell command does not error the query; the text
