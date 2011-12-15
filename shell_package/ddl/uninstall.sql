@@ -1,4 +1,4 @@
 DROP LIBRARY ShellLib CASCADE;
 
-DROP TABLE allnodes CASCADE;
-DROP VIEW onallnodes;
+\set tablename allnodes
+\i ddl/remove-dist-table.sql

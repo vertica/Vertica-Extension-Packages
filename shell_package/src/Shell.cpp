@@ -18,6 +18,7 @@ using namespace Vertica;
 
 #define SHELL_EXECUTABLE "/bin/bash"
 #define BUF_SIZE 1024
+#define LINE_MAX 64000
 
 /*
  * This function invokes each input string command as if it was run with: bash -c '<command>'
@@ -91,8 +92,8 @@ public:
                                   PartitionWriter &output_writer)
     {
         // Basic error checking
-        if (input_reader.getNumCols() != 1)
-            vt_report_error(0, "Function only accept 1 argument, but %zu provided", 
+        if (input_reader.getNumCols() != 2)
+            vt_report_error(0, "Function only accept 2 arguments, but %zu provided", 
                             input_reader.getNumCols());
 
         const char *argv[4];
@@ -105,13 +106,21 @@ public:
         char *envp[1];
         envp[0] = NULL; // no env passed for the moment.  later
 
-        char outputline[65000];
+        char outputline[LINE_MAX];
         char buf[BUF_SIZE];
 
         // While we have inputs to process
         do {
-            // Get a copy of the input string
-            const VString &cmd = input_reader.getStringRef(0);
+            // Get a copy of input id
+            const VString &id = input_reader.getStringRef(0);
+            if (id.isNull())
+            {
+                vt_report_error(0, "Cannot supply null for id");
+            }
+            std::string idstr = id.str();
+
+            // Get a copy of the input command
+            const VString &cmd = input_reader.getStringRef(1);
             if (cmd.isNull())
             {
                 VString &outcmd = output_writer.getStringRef(0);
@@ -155,7 +164,7 @@ public:
             
             // read  output
             int bufend = 0;
-
+            bool hadOutput = false;
             ssize_t count=0;
             // read 1K chunks from pipe
             while ((count = read(stdoutpipe.pipes[0], buf, BUF_SIZE)))
@@ -166,33 +175,40 @@ public:
                     if (buf[ptr] == '\n')
                     {
                         // ensure null terminated
-                        outputline[bufend] = '\0'; 
+                        //outputline[bufend] = '\0'; 
                         // Copy string into results
-                        output_writer.getStringRef(0).copy(cmdstr);
-                        output_writer.getStringRef(1).copy(outputline);
+                        output_writer.getStringRef(0).copy(idstr);
+                        output_writer.getStringRef(1).copy(cmdstr);
+                        output_writer.getStringRef(2).copy(outputline,bufend);
                         output_writer.next();
                         bufend = 0; // reset
+                        hadOutput = true;
                     }
-                    else if (buf[ptr] == 0)
-                    {
-                        vt_report_error(0, "Null byte detected in shell output");
-                    }
-                    else
+                    else if (bufend < LINE_MAX)
                     {
                         outputline[bufend++] = buf[ptr];
                     }
+                    // discard characters on too long line
                 }
             }
             // results from last line
             if (bufend > 0)
             {
                 // ensure null terminated
-                outputline[bufend] = '\0'; 
+                //outputline[bufend] = '\0'; 
                 // Copy string into results
-                output_writer.getStringRef(0).copy(cmdstr);
-                output_writer.getStringRef(1).copy(outputline);
+                output_writer.getStringRef(0).copy(idstr);
+                output_writer.getStringRef(1).copy(cmdstr);
+                output_writer.getStringRef(2).copy(outputline);
                 output_writer.next();
                 bufend = 0; // reset
+            } 
+            else if (!hadOutput) // force at least 1 row of output
+            {
+                output_writer.getStringRef(0).copy(idstr);
+                output_writer.getStringRef(1).copy(cmdstr);
+                output_writer.getStringRef(2).setNull();
+                output_writer.next();
             }
 
             subproc.terminate(false/*gently!*/);
@@ -206,7 +222,9 @@ class ShellFactory : public TransformFunctionFactory
     virtual void getPrototype(ServerInterface &srvInterface, ColumnTypes &argTypes, ColumnTypes &returnType)
     {
         argTypes.addVarchar();
+        argTypes.addVarchar();
 
+        returnType.addVarchar();
         returnType.addVarchar();
         returnType.addVarchar();
     }
@@ -218,11 +236,17 @@ class ShellFactory : public TransformFunctionFactory
                                SizedColumnTypes &output_types)
     {
         // Error out if we're called with anything but 1 argument
-        if (input_types.getColumnCount() != 1)
-            vt_report_error(0, "Function only accepts 1 argument, but %zu provided", input_types.getColumnCount());
+        if (input_types.getColumnCount() != 2)
+            vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", input_types.getColumnCount());
 
-        // first column outputs the shell command string used to generate output
+        // first column outputs the id string passed in
         int input_len = input_types.getColumnType(0).getStringLength();
+
+        // Our output size will never be more than the input size
+        output_types.addVarchar(input_len, "id");
+
+        // second column outputs the shell command string used to generate output
+        input_len = input_types.getColumnType(1).getStringLength();
 
         // Our output size will never be more than the input size
         output_types.addVarchar(input_len, "command");
