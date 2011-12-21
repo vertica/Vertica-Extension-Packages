@@ -5,8 +5,8 @@
  *
  * Create Date: Apr 29, 2011
  */
-#include "Vertica.h"
 #include <curl/curl.h>
+#include "Vertica.h"
 #include <string>
 #include <vector>
 #include <iostream>
