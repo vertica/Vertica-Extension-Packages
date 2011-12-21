@@ -13,6 +13,8 @@ These implementations might be incomplete. Please help by updating them!
 CONNECT_BY (http://psoug.org/reference/connectby.html)
 TRANSPOSE  (http://www.orafaq.com/node/1871)
 
+GROUP_GENERATOR - use to build ROLLUP, CUBE, GROUPING_SETS, MULTIPLE DISTINCT AGGREGATES in the NEW EE.
+
 -------------------------------
 BUILDING
 -------------------------------
