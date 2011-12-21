@@ -1,0 +1,6 @@
+col1:string
+date
+pwd
+echo "hello $SHELL"
+
+

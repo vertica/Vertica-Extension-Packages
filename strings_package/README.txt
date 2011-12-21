@@ -21,6 +21,8 @@ WordCount: Counts the number of words that appear in a sentence
 GenAnagram: For each input string, it produces many output strings, one for each
 permutation of every subset of letters. (doc/Anagramarama.pdf)
 
+GroupConcat: Concatenates strings in a partition into a comma-separated list.
+
 -------------------------------
 BUILDING
 -------------------------------
