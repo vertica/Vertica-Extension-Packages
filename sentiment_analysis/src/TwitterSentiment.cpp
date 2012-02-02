@@ -5,11 +5,12 @@
  *
  * Create Date: Nov 25, 2011
  */
+#include <curl/curl.h>
+
 #include <sstream>
 #include <set>
 #include "Vertica.h"
 #include "libstemmer.h"
-#include <curl/curl.h>
 #include <json/json.h>
 #include "Words.h"
  
