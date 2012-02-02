@@ -7,6 +7,7 @@ TAR = tar
 
 THIRD_PARTY = $(shell pwd)
 INSTALL_DIR = $(THIRD_PARTY)/../../build
+PYTHON=python
 
 .PHONY: all
 all: stemmer jsoncpp libcurl
