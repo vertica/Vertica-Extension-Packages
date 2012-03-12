@@ -29,7 +29,7 @@ jsoncpp-src-0.5.0/.done:
 	$(TAR) xzf jsoncpp-src-0.5.0.tar.gz
 	(cd jsoncpp-src-0.5.0; unzip -n ../scons-local-2.1.0.zip)
 	(cd jsoncpp-src-0.5.0; $(PYTHON) scons.py platform=linux-gcc)
-	@cp jsoncpp-src-0.5.0/libs/linux-gcc-4.4.5/libjson_linux-gcc-4.4.5_libmt.a $(INSTALL_DIR)/lib
+	@cp `find jsoncpp-src-0.5.0/libs -name "*.a" | head -n1 ` $(INSTALL_DIR)/lib/libjson.a
 	@cp -r jsoncpp-src-0.5.0/include//* $(INSTALL_DIR)/include
 	touch $@
 
