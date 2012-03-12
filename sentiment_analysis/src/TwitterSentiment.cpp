@@ -17,6 +17,14 @@
 using namespace Vertica;
 using namespace std;
 
+// Make it a little harder to try and get a std::string from a NULL VString
+// (which in the 5.0 API is a recipe for disaster -- aka crashes)
+static inline const std::string& getStringSafe(const VString &vstr) 
+{
+    return vstr.isNull() ? "" : vstr.str();
+}
+
+
 /*
  * This is a simple function that stems an input word
  */
@@ -55,7 +63,7 @@ public:
         // While we have inputs to process
         do {
             // Get a copy of the input string
-            std::string  inStr = arg_reader.getStringRef(0).str();
+            std::string  inStr = getStringSafe(arg_reader.getStringRef(0));
 
             const unsigned char* stemword = sb_stemmer_stem(stemmer, reinterpret_cast<const sb_symbol*>(inStr.c_str()), inStr.size());
 
@@ -169,7 +177,7 @@ public:
             // While we have inputs to process
             do {
                 // Get a copy of the input string
-                std::string  inStr = arg_reader.getStringRef(0).str();
+                std::string  inStr = getStringSafe(arg_reader.getStringRef(0));
 
                 /* fetch contents of URL */ 
                 string contents = fetch_url(curl_handle, inStr.c_str()).substr(0, 65000);
@@ -231,7 +239,7 @@ public:
         // While we have inputs to process
         do {
             // Get a copy of the input string
-            string  inStr = input.getStringRef(0).str();
+            string  inStr = getStringSafe(input.getStringRef(0));
 
             bool success = reader.parse(inStr, root, false);
             if (!success)
@@ -320,7 +328,7 @@ public:
             // While we have inputs to process
             do {
                 // Get a copy of the input string
-                string  inStr = input.getStringRef(0).str();
+                string  inStr = getStringSafe(input.getStringRef(0));
 
                 // URL encode the search string
                 char *sstr = curl_easy_escape(curl_handle, inStr.c_str(), 0);
@@ -461,7 +469,7 @@ public:
         // While we have inputs to process
         do {
             // Get a copy of the input string
-            std::string  inStr = arg_reader.getStringRef(0).str();
+            std::string  inStr = getStringSafe(arg_reader.getStringRef(0));
 
             vector<string> words;
             tokenize(inStr, words);
