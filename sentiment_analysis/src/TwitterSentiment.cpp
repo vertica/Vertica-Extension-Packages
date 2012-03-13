@@ -19,9 +19,9 @@ using namespace std;
 
 // Make it a little harder to try and get a std::string from a NULL VString
 // (which in the 5.0 API is a recipe for disaster -- aka crashes)
-static inline const std::string& getStringSafe(const VString &vstr) 
+static inline const std::string getStringSafe(const VString &vstr) 
 {
-    return vstr.isNull() ? "" : vstr.str();
+    return (vstr.isNull() || vstr.length() == 0)  ? "" : vstr.str();
 }
 
 
