@@ -10,7 +10,7 @@ INSTALL_DIR = $(THIRD_PARTY)/../../build
 PYTHON=python
 
 .PHONY: all
-all: stemmer jsoncpp libcurl
+all: stemmer jsoncpp
 
 .PHONY: stemmer
 stemmer:
@@ -33,16 +33,7 @@ jsoncpp-src-0.5.0/.done:
 	@cp -r jsoncpp-src-0.5.0/include//* $(INSTALL_DIR)/include
 	touch $@
 
-.PHONY: libcurl
-libcurl: curl-7.23.1/.done
 
-curl-7.23.1/.done:
-	mkdir -p $(INSTALL_DIR)
-	@echo "Unpacking, configuring and installing libcurl...";
-	$(TAR) xzf curl-7.23.1.tar.gz
-	(cd curl-7.23.1; ./configure --prefix=$(INSTALL_DIR) --enable-shared=no)
-	(cd curl-7.23.1; make; make install)
-	touch $@
 
 clean:
 	cd libstemmer_c; $(MAKE) clean
