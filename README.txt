@@ -9,6 +9,14 @@ Vertica Analytic Database to run them.
 
 All code is provided under the license found in LICENSE.txt
 
+IMPORTANT: If you wish to contribute anything to this repository, in
+order for us to accept your pull request you MUST sign and send a copy
+of the appropriate Contributor License Agreement to Vertica
+(github-owners@vertica.com):
+
+license/PersonalCLA.pdf: If you are contributing for yourself
+license/CorporateCLA.pdf: If you are contributing on behalf of your company
+
 *******************
 Submission guidelines:
 *******************
