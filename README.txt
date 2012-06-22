@@ -55,6 +55,9 @@ compatlib_functions:
 encryption_package: 
   Description: Field level encryption functions
 
+shell_load_package:
+  Description: Have COPY fetch data by running commands rather than opening files
+
 template_package: 
   Description: template for new packages
 
