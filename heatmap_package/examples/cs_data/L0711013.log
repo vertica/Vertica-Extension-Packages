@@ -1,0 +1,272 @@
+L 07/11/2012 - 17:04:15: Log file started (file "logs/L0711013.log") (game "/usr/local/games/hlds/css/cstrike") (version "4981")
+L 07/11/2012 - 17:04:15: server_cvar: "mp_winlimit" "10"
+L 07/11/2012 - 17:04:15: server_cvar: "mp_maxrounds" "15"
+L 07/11/2012 - 17:04:15: World triggered "Round_Start"
+L 07/11/2012 - 17:04:21: World triggered "Round_Start"
+L 07/11/2012 - 17:04:25: "Panarchus<2><STEAM_0:1:17858699><>" entered the game
+L 07/11/2012 - 17:04:27: "where's-the-ammo<4><STEAM_0:0:32369201><>" entered the game
+L 07/11/2012 - 17:04:29: "Panarchus<2><STEAM_0:1:17858699><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:04:30: "Henry<12><STEAM_0:1:53104189><>" entered the game
+L 07/11/2012 - 17:04:32: "where's-the-ammo<4><STEAM_0:0:32369201><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 17:04:33: "revenger<9><STEAM_0:0:17255624><>" entered the game
+L 07/11/2012 - 17:04:34: World triggered "Game_Commencing"
+L 07/11/2012 - 17:04:34: "Panarchus<2><STEAM_0:1:17858699><CT>" joined team "TERRORIST"
+L 07/11/2012 - 17:04:34: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" committed suicide with "world" (attacker_position "-768 -1856 -176")
+L 07/11/2012 - 17:04:35: "careymichael<11><STEAM_0:1:783955><>" entered the game
+L 07/11/2012 - 17:04:36: "revenger<9><STEAM_0:0:17255624><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:04:36: "Veilrap<6><STEAM_0:0:4190636><>" entered the game
+L 07/11/2012 - 17:04:37: "tomwall<3><STEAM_0:1:30783438><>" entered the game
+L 07/11/2012 - 17:04:37: World triggered "Game_Commencing"
+L 07/11/2012 - 17:04:40: "careymichael<11><STEAM_0:1:783955><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:04:43: "Veilrap<6><STEAM_0:0:4190636><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 17:04:44: "clutchnasty<8><STEAM_0:1:33443748><>" entered the game
+L 07/11/2012 - 17:04:45: "tomwall<3><STEAM_0:1:30783438><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:04:46: World triggered "Round_Start"
+L 07/11/2012 - 17:04:48: "PJofT35<7><STEAM_0:0:32612111><>" entered the game
+L 07/11/2012 - 17:04:54: "Henry<12><STEAM_0:1:53104189><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:05:01: "careymichael<11><STEAM_0:1:783955><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "p228" (attacker_position "229 -242 -152") (victim_position "287 -257 -96")
+L 07/11/2012 - 17:05:02: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "elite" (attacker_position "-1056 1546 -56") (victim_position "-1043 1292 56")
+L 07/11/2012 - 17:05:07: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "elite" (headshot) (attacker_position "-1245 1194 8") (victim_position "-1283 592 -96")
+L 07/11/2012 - 17:05:12: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "elite" (attacker_position "768 1003 -100") (victim_position "920 980 -55")
+L 07/11/2012 - 17:05:14: "clutchnasty<8><STEAM_0:1:33443748><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 17:05:17: "PJofT35<7><STEAM_0:0:32612111><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 17:05:21: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:05:22: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:05:26: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:05:26: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:05:32: "tomwall<3><STEAM_0:1:30783438><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "usp" (attacker_position "866 2226 0") (victim_position "944 2105 64")
+L 07/11/2012 - 17:05:43: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "elite" (attacker_position "460 317 -160") (victim_position "646 351 -96")
+L 07/11/2012 - 17:05:43: Team "TERRORIST" triggered "Terrorists_Win" (CT "0") (T "1")
+L 07/11/2012 - 17:05:43: Team "CT" scored "0" with "4" players
+L 07/11/2012 - 17:05:43: Team "TERRORIST" scored "1" with "5" players
+L 07/11/2012 - 17:05:43: World triggered "Round_End"
+L 07/11/2012 - 17:05:54: World triggered "Round_Start"
+L 07/11/2012 - 17:06:06: "Henry<12><STEAM_0:1:53104189><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "mp5navy" (headshot) (attacker_position "177 -399 -152") (victim_position "217 -188 -88")
+L 07/11/2012 - 17:06:16: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "ak47" (headshot) (attacker_position "679 2010 0") (victim_position "747 771 -67")
+L 07/11/2012 - 17:06:24: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "ak47" (headshot) (attacker_position "523 2069 0") (victim_position "-741 1854 72")
+L 07/11/2012 - 17:06:38: "revenger<9><STEAM_0:0:17255624><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "deagle" (attacker_position "-415 968 -160") (victim_position "199 759 -96")
+L 07/11/2012 - 17:06:56: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "p90" (headshot) (attacker_position "-24 725 -160") (victim_position "-139 1151 -96")
+L 07/11/2012 - 17:07:02: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "ak47" (attacker_position "-104 2536 -64") (victim_position "-154 1067 -96")
+L 07/11/2012 - 17:07:08: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "ak47" (attacker_position "666 1944 0") (victim_position "739 1495 25")
+L 07/11/2012 - 17:07:08: Team "TERRORIST" triggered "Terrorists_Win" (CT "0") (T "2")
+L 07/11/2012 - 17:07:08: Team "CT" scored "0" with "4" players
+L 07/11/2012 - 17:07:08: Team "TERRORIST" scored "2" with "5" players
+L 07/11/2012 - 17:07:08: World triggered "Round_End"
+L 07/11/2012 - 17:07:19: World triggered "Round_Start"
+L 07/11/2012 - 17:07:43: "careymichael<11><STEAM_0:1:783955><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "tmp" (attacker_position "-517 2125 -152") (victim_position "-702 2140 -105")
+L 07/11/2012 - 17:07:47: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "ak47" (attacker_position "-32 2544 -64") (victim_position "-137 1457 -96")
+L 07/11/2012 - 17:07:54: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "ak47" (attacker_position "-70 2540 -64") (victim_position "-124 1859 -96")
+L 07/11/2012 - 17:08:32: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "famas" (headshot) (attacker_position "-921 2107 -152") (victim_position "-445 2119 -88")
+L 07/11/2012 - 17:09:36: "revenger<9><STEAM_0:0:17255624><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "ak47" (headshot) (attacker_position "712 358 -160") (victim_position "831 1928 64")
+L 07/11/2012 - 17:09:40: "revenger<9><STEAM_0:0:17255624><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "ak47" (attacker_position "397 763 -160") (victim_position "-506 941 -96")
+L 07/11/2012 - 17:10:13: "revenger<9><STEAM_0:0:17255624><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:10:14: "revenger<9><STEAM_0:0:17255624><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:10:18: "revenger<9><STEAM_0:0:17255624><CT>" triggered "Killed_A_Hostage"
+L 07/11/2012 - 17:10:24: "revenger<9><STEAM_0:0:17255624><CT>" triggered "Killed_A_Hostage"
+L 07/11/2012 - 17:10:31: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "elite" (attacker_position "674 1870 2") (victim_position "691 1623 41")
+L 07/11/2012 - 17:10:33: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "famas" (headshot) (attacker_position "659 1926 0") (victim_position "695 1716 47")
+L 07/11/2012 - 17:10:33: Team "CT" triggered "CTs_Win" (CT "1") (T "2")
+L 07/11/2012 - 17:10:33: Team "CT" scored "1" with "4" players
+L 07/11/2012 - 17:10:33: Team "TERRORIST" scored "2" with "5" players
+L 07/11/2012 - 17:10:33: World triggered "Round_End"
+L 07/11/2012 - 17:10:44: World triggered "Round_Start"
+L 07/11/2012 - 17:10:56: "Keemak<13><STEAM_0:0:6113698><>" connected, address "10.10.240.66:27005"
+L 07/11/2012 - 17:10:56: "Keemak<13><STEAM_0:0:6113698><>" STEAM USERID validated
+L 07/11/2012 - 17:11:12: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (attacker_position "288 2037 0") (victim_position "197 2424 64")
+L 07/11/2012 - 17:11:15: "Keemak<13><STEAM_0:0:6113698><>" entered the game
+L 07/11/2012 - 17:11:16: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "sg552" (attacker_position "544 2144 0") (victim_position "854 2201 64")
+L 07/11/2012 - 17:11:16: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "famas" (attacker_position "976 363 -142") (victim_position "145 360 -78")
+L 07/11/2012 - 17:11:19: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "famas" (attacker_position "-490 1934 0") (victim_position "1002 2096 192")
+L 07/11/2012 - 17:11:29: "Keemak<13><STEAM_0:0:6113698><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:11:30: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "g3sg1" (attacker_position "940 2101 128") (victim_position "-278 2022 72")
+L 07/11/2012 - 17:11:34: "tomwall<3><STEAM_0:1:30783438><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "famas" (attacker_position "662 2163 128") (victim_position "919 1920 192")
+L 07/11/2012 - 17:11:36: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:11:37: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:11:41: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:11:42: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:11:46: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "sg552" (headshot) (attacker_position "793 2242 0") (victim_position "732 2212 64")
+L 07/11/2012 - 17:12:00: "revenger<9><STEAM_0:0:17255624><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "famas" (attacker_position "962 2417 128") (victim_position "899 2518 171")
+L 07/11/2012 - 17:12:00: Team "CT" triggered "CTs_Win" (CT "2") (T "2")
+L 07/11/2012 - 17:12:00: Team "CT" scored "2" with "5" players
+L 07/11/2012 - 17:12:00: Team "TERRORIST" scored "2" with "5" players
+L 07/11/2012 - 17:12:00: World triggered "Round_End"
+L 07/11/2012 - 17:12:04: "revenger<9><STEAM_0:0:17255624><CT>" triggered "Killed_A_Hostage"
+L 07/11/2012 - 17:12:11: World triggered "Round_Start"
+L 07/11/2012 - 17:12:30: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (attacker_position "-985 1688 -152") (victim_position "-1140 1793 -88")
+L 07/11/2012 - 17:12:33: "revenger<9><STEAM_0:0:17255624><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "famas" (headshot) (attacker_position "-1190 1531 -104") (victim_position "-1112 1809 -105")
+L 07/11/2012 - 17:12:36: "tomwall<3><STEAM_0:1:30783438><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "famas" (headshot) (attacker_position "373 285 -152") (victim_position "504 390 -96")
+L 07/11/2012 - 17:12:37: "careymichael<11><STEAM_0:1:783955><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "m4a1" (headshot) (attacker_position "-809 625 8") (victim_position "-912 2032 72")
+L 07/11/2012 - 17:12:51: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (attacker_position "-325 1876 0") (victim_position "258 2219 64")
+L 07/11/2012 - 17:12:59: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:13:00: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:13:07: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:13:07: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:13:34: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "p90" (headshot) (attacker_position "-302 -594 -152") (victim_position "-291 -446 -88")
+L 07/11/2012 - 17:13:35: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "famas" (attacker_position "-328 -486 -160") (victim_position "-272 -589 -88")
+L 07/11/2012 - 17:13:35: Team "CT" triggered "CTs_Win" (CT "3") (T "2")
+L 07/11/2012 - 17:13:35: Team "CT" scored "3" with "5" players
+L 07/11/2012 - 17:13:35: Team "TERRORIST" scored "2" with "5" players
+L 07/11/2012 - 17:13:35: World triggered "Round_End"
+L 07/11/2012 - 17:13:46: World triggered "Round_Start"
+L 07/11/2012 - 17:13:47: "danny<14><STEAM_0:0:35923794><>" connected, address "10.10.240.238:27005"
+L 07/11/2012 - 17:13:47: "danny<14><STEAM_0:0:35923794><>" STEAM USERID validated
+L 07/11/2012 - 17:14:04: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "galil" (attacker_position "505 420 -152") (victim_position "839 290 -88")
+L 07/11/2012 - 17:14:04: "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "ump45" (headshot) (attacker_position "-831 760 8") (victim_position "-783 598 55")
+L 07/11/2012 - 17:14:05: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "elite" (headshot) (attacker_position "951 257 -152") (victim_position "552 395 -96")
+L 07/11/2012 - 17:14:07: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "elite" (attacker_position "969 335 -142") (victim_position "508 388 -96")
+L 07/11/2012 - 17:14:08: "danny<14><STEAM_0:0:35923794><>" entered the game
+L 07/11/2012 - 17:14:13: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "m4a1" (attacker_position "-406 377 8") (victim_position "-312 396 72")
+L 07/11/2012 - 17:14:17: "danny<14><STEAM_0:0:35923794><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 17:14:20: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "m4a1" (headshot) (attacker_position "-568 544 8") (victim_position "-586 747 72")
+L 07/11/2012 - 17:14:42: "Keemak<13><STEAM_0:0:6113698><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "famas" (attacker_position "-85 944 -160") (victim_position "-97 908 -96")
+L 07/11/2012 - 17:14:46: "Keemak<13><STEAM_0:0:6113698><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "famas" (attacker_position "-71 870 -160") (victim_position "237 719 -96")
+L 07/11/2012 - 17:14:47: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "m4a1" (attacker_position "-732 1064 8") (victim_position "-133 911 -96")
+L 07/11/2012 - 17:14:47: Team "TERRORIST" triggered "Terrorists_Win" (CT "3") (T "3")
+L 07/11/2012 - 17:14:47: Team "CT" scored "3" with "5" players
+L 07/11/2012 - 17:14:47: Team "TERRORIST" scored "3" with "6" players
+L 07/11/2012 - 17:14:47: World triggered "Round_End"
+L 07/11/2012 - 17:14:58: World triggered "Round_Start"
+L 07/11/2012 - 17:15:04: "lubahou<15><STEAM_0:1:52664969><>" connected, address "10.10.240.222:27005"
+L 07/11/2012 - 17:15:05: "lubahou<15><STEAM_0:1:52664969><>" STEAM USERID validated
+L 07/11/2012 - 17:15:15: "careymichael<11><STEAM_0:1:783955><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "m4a1" (headshot) (attacker_position "156 848 -152") (victim_position "-745 848 55")
+L 07/11/2012 - 17:15:16: "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "ump45" (attacker_position "601 343 -160") (victim_position "208 312 -105")
+L 07/11/2012 - 17:15:19: "Henry<12><STEAM_0:1:53104189><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "m4a1" (headshot) (attacker_position "241 267 -152") (victim_position "677 329 -96")
+L 07/11/2012 - 17:15:29: "tomwall<3><STEAM_0:1:30783438><CT>" killed "danny<14><STEAM_0:0:35923794><TERRORIST>" with "famas" (headshot) (attacker_position "-816 608 8") (victim_position "-798 1409 47")
+L 07/11/2012 - 17:15:37: "careymichael<11><STEAM_0:1:783955><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (attacker_position "-38 2433 -64") (victim_position "-289 2332 72")
+L 07/11/2012 - 17:15:39: "lubahou<15><STEAM_0:1:52664969><>" entered the game
+L 07/11/2012 - 17:15:43: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (attacker_position "317 2300 0") (victim_position "-362 1895 64")
+L 07/11/2012 - 17:15:46: "lubahou<15><STEAM_0:1:52664969><Unassigned>" joined team "CT"
+L 07/11/2012 - 17:15:51: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "p90" (attacker_position "597 1362 48") (victim_position "809 1509 25")
+L 07/11/2012 - 17:15:51: "careymichael<11><STEAM_0:1:783955><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (headshot) (attacker_position "848 2093 0") (victim_position "597 1362 95")
+L 07/11/2012 - 17:15:51: Team "CT" triggered "CTs_Win" (CT "4") (T "3")
+L 07/11/2012 - 17:15:51: Team "CT" scored "4" with "6" players
+L 07/11/2012 - 17:15:51: Team "TERRORIST" scored "3" with "6" players
+L 07/11/2012 - 17:15:51: World triggered "Round_End"
+L 07/11/2012 - 17:16:02: World triggered "Round_Start"
+L 07/11/2012 - 17:16:20: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (headshot) (attacker_position "-314 439 8") (victim_position "-343 669 55")
+L 07/11/2012 - 17:16:23: "careymichael<11><STEAM_0:1:783955><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (attacker_position "-454 738 8") (victim_position "-559 729 72")
+L 07/11/2012 - 17:16:24: "danny<14><STEAM_0:0:35923794><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "p90" (attacker_position "-776 583 8") (victim_position "-557 725 72")
+L 07/11/2012 - 17:16:30: "Keemak<13><STEAM_0:0:6113698><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (attacker_position "972 178 -152") (victim_position "780 488 -96")
+L 07/11/2012 - 17:16:34: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "p90" (headshot) (attacker_position "-734 848 8") (victim_position "-412 862 -88")
+L 07/11/2012 - 17:16:41: "tomwall<3><STEAM_0:1:30783438><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "famas" (attacker_position "-2 1159 -152") (victim_position "-734 848 55")
+L 07/11/2012 - 17:16:51: "Henry<12><STEAM_0:1:53104189><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "m4a1" (headshot) (attacker_position "736 358 -160") (victim_position "814 1028 -52")
+L 07/11/2012 - 17:17:05: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:17:05: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:17:10: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:17:10: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Touched_A_Hostage"
+L 07/11/2012 - 17:17:21: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" say_team "Next time, let's seige the house"
+L 07/11/2012 - 17:17:43: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Rescued_A_Hostage"
+L 07/11/2012 - 17:17:43: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Rescued_A_Hostage"
+L 07/11/2012 - 17:17:43: "danny<14><STEAM_0:0:35923794><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "p90" (headshot) (attacker_position "-379 -151 -32") (victim_position "-370 -811 -110")
+L 07/11/2012 - 17:17:43: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Rescued_A_Hostage"
+L 07/11/2012 - 17:17:44: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Rescued_A_Hostage"
+L 07/11/2012 - 17:17:44: Team "CT" triggered "All_Hostages_Rescued" (CT "5") (T "3")
+L 07/11/2012 - 17:17:44: Team "CT" scored "5" with "6" players
+L 07/11/2012 - 17:17:44: Team "TERRORIST" scored "3" with "6" players
+L 07/11/2012 - 17:17:44: World triggered "Round_End"
+L 07/11/2012 - 17:17:55: World triggered "Round_Start"
+L 07/11/2012 - 17:18:09: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "famas" (attacker_position "-1013 934 -160") (victim_position "-733 1007 -96")
+L 07/11/2012 - 17:18:21: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "galil" (headshot) (attacker_position "-1030 2110 -152") (victim_position "-1240 1597 -88")
+L 07/11/2012 - 17:18:24: "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "elite" (attacker_position "-123 1908 0") (victim_position "-163 1276 -88")
+L 07/11/2012 - 17:18:25: "careymichael<11><STEAM_0:1:783955><CT>" killed "danny<14><STEAM_0:0:35923794><TERRORIST>" with "m4a1" (attacker_position "-828 1535 0") (victim_position "-797 1901 64")
+L 07/11/2012 - 17:18:30: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "awp" (attacker_position "821 340 -160") (victim_position "783 1951 64")
+L 07/11/2012 - 17:18:37: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (headshot) (attacker_position "-314 1943 0") (victim_position "600 2543 192")
+L 07/11/2012 - 17:18:45: "careymichael<11><STEAM_0:1:783955><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "m4a1" (attacker_position "194 2230 0") (victim_position "-312 2320 55")
+L 07/11/2012 - 17:18:50: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (attacker_position "-93 2007 -160") (victim_position "-38 2271 -32")
+L 07/11/2012 - 17:18:51: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "galil" (headshot) (attacker_position "-83 2207 -112") (victim_position "-66 1889 -96")
+L 07/11/2012 - 17:19:06: "careymichael<11><STEAM_0:1:783955><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (attacker_position "859 1979 144") (victim_position "-256 1953 64")
+L 07/11/2012 - 17:19:06: Team "CT" triggered "CTs_Win" (CT "6") (T "3")
+L 07/11/2012 - 17:19:06: Team "CT" scored "6" with "6" players
+L 07/11/2012 - 17:19:06: Team "TERRORIST" scored "3" with "6" players
+L 07/11/2012 - 17:19:06: World triggered "Round_End"
+L 07/11/2012 - 17:19:17: World triggered "Round_Start"
+L 07/11/2012 - 17:19:41: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" say_team "all st?"
+L 07/11/2012 - 17:19:47: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" say_team "im in long hall"
+L 07/11/2012 - 17:19:47: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "galil" (headshot) (attacker_position "1007 1980 8") (victim_position "-866 1834 64")
+L 07/11/2012 - 17:19:59: "Keemak<13><STEAM_0:0:6113698><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "aug" (attacker_position "-138 1522 -160") (victim_position "-72 1852 72")
+L 07/11/2012 - 17:20:05: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (attacker_position "423 2397 0") (victim_position "-738 1835 72")
+L 07/11/2012 - 17:20:08: "revenger<9><STEAM_0:0:17255624><CT>" killed "danny<14><STEAM_0:0:35923794><TERRORIST>" with "awp" (attacker_position "835 332 -160") (victim_position "687 1919 64")
+L 07/11/2012 - 17:20:12: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (attacker_position "546 2498 128") (victim_position "-160 2544 -4")
+L 07/11/2012 - 17:20:15: "danny<14><STEAM_0:0:35923794><TERRORIST>" disconnected (reason "Disconnect by user.")
+L 07/11/2012 - 17:20:17: "careymichael<11><STEAM_0:1:783955><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "m4a1" (attacker_position "825 2062 0") (victim_position "631 1360 95")
+L 07/11/2012 - 17:20:17: "revenger<9><STEAM_0:0:17255624><CT>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "awp" (headshot) (attacker_position "738 345 -160") (victim_position "825 2062 47")
+L 07/11/2012 - 17:20:35: "lubahou<15><STEAM_0:1:52664969><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (attacker_position "669 2410 128") (victim_position "787 2379 192")
+L 07/11/2012 - 17:20:37: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "galil" (attacker_position "618 2322 128") (victim_position "650 2308 192")
+L 07/11/2012 - 17:20:44: "revenger<9><STEAM_0:0:17255624><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "awp" (attacker_position "589 2385 0") (victim_position "782 2544 95")
+L 07/11/2012 - 17:20:44: Team "CT" triggered "CTs_Win" (CT "7") (T "3")
+L 07/11/2012 - 17:20:44: Team "CT" scored "7" with "6" players
+L 07/11/2012 - 17:20:44: Team "TERRORIST" scored "3" with "5" players
+L 07/11/2012 - 17:20:44: World triggered "Round_End"
+L 07/11/2012 - 17:20:55: World triggered "Round_Start"
+L 07/11/2012 - 17:21:19: "revenger<9><STEAM_0:0:17255624><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "awp" (attacker_position "807 340 -160") (victim_position "749 2200 179")
+L 07/11/2012 - 17:21:24: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "sg552" (headshot) (attacker_position "740 2166 128") (victim_position "788 841 -54")
+L 07/11/2012 - 17:21:31: "tomwall<3><STEAM_0:1:30783438><CT>" joined team "TERRORIST"
+L 07/11/2012 - 17:21:36: "careymichael<11><STEAM_0:1:783955><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "m4a1" (attacker_position "-756 2032 8") (victim_position "902 1872 192")
+L 07/11/2012 - 17:21:59: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (attacker_position "639 2199 0") (victim_position "911 2201 64")
+L 07/11/2012 - 17:22:00: "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "sg552" (attacker_position "572 2481 128") (victim_position "502 2466 199")
+L 07/11/2012 - 17:22:05: "Henry<12><STEAM_0:1:53104189><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (attacker_position "569 2355 0") (victim_position "675 2314 64")
+L 07/11/2012 - 17:22:06: "revenger<9><STEAM_0:0:17255624><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "awp" (attacker_position "-125 2382 -64") (victim_position "544 2478 192")
+L 07/11/2012 - 17:22:09: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "galil" (attacker_position "896 2355 0") (victim_position "612 2509 74")
+L 07/11/2012 - 17:22:09: "Henry<12><STEAM_0:1:53104189><CT>" triggered "Killed_A_Hostage"
+L 07/11/2012 - 17:22:10: "Henry<12><STEAM_0:1:53104189><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (attacker_position "661 2527 10") (victim_position "916 2337 64")
+L 07/11/2012 - 17:22:10: Team "CT" triggered "CTs_Win" (CT "8") (T "3")
+L 07/11/2012 - 17:22:10: Team "CT" scored "8" with "5" players
+L 07/11/2012 - 17:22:10: Team "TERRORIST" scored "3" with "6" players
+L 07/11/2012 - 17:22:10: World triggered "Round_End"
+L 07/11/2012 - 17:22:21: World triggered "Round_Start"
+L 07/11/2012 - 17:22:38: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "galil" (attacker_position "-732 902 8") (victim_position "-132 963 -96")
+L 07/11/2012 - 17:22:52: "revenger<9><STEAM_0:0:17255624><CT>" killed "tomwall<3><STEAM_0:1:30783438><TERRORIST>" with "deagle" (attacker_position "248 802 -160") (victim_position "-732 869 72")
+L 07/11/2012 - 17:22:58: "revenger<9><STEAM_0:0:17255624><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "awp" (attacker_position "103 700 -160") (victim_position "-151 1147 -96")
+L 07/11/2012 - 17:23:02: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "galil" (attacker_position "544 361 -160") (victim_position "351 410 -96")
+L 07/11/2012 - 17:23:02: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "sg552" (headshot) (attacker_position "-776 1848 0") (victim_position "-854 983 64")
+L 07/11/2012 - 17:23:05: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (headshot) (attacker_position "295 744 -160") (victim_position "7 710 -113")
+L 07/11/2012 - 17:23:21: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "galil" (headshot) (attacker_position "-985 982 -160") (victim_position "-1328 828 -96")
+L 07/11/2012 - 17:23:21: Team "TERRORIST" triggered "Terrorists_Win" (CT "8") (T "4")
+L 07/11/2012 - 17:23:21: Team "CT" scored "8" with "5" players
+L 07/11/2012 - 17:23:21: Team "TERRORIST" scored "4" with "6" players
+L 07/11/2012 - 17:23:21: World triggered "Round_End"
+L 07/11/2012 - 17:23:32: World triggered "Round_Start"
+L 07/11/2012 - 17:23:52: "Keemak<13><STEAM_0:0:6113698><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (headshot) (attacker_position "946 -36 -152") (victim_position "931 212 -88")
+L 07/11/2012 - 17:23:58: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "galil" (headshot) (attacker_position "759 -423 -160") (victim_position "900 -735 -88")
+L 07/11/2012 - 17:24:03: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "galil" (attacker_position "946 78 -152") (victim_position "902 356 -103")
+L 07/11/2012 - 17:24:03: "careymichael<11><STEAM_0:1:783955><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "m4a1" (headshot) (attacker_position "-797 603 8") (victim_position "-769 1896 64")
+L 07/11/2012 - 17:24:08: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "sg552" (headshot) (attacker_position "-1 1424 -148") (victim_position "-38 1695 -96")
+L 07/11/2012 - 17:24:14: "careymichael<11><STEAM_0:1:783955><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (attacker_position "-912 1499 8") (victim_position "-764 1907 64")
+L 07/11/2012 - 17:24:15: "Henry<12><STEAM_0:1:53104189><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" with "m4a1" (headshot) (attacker_position "-195 1781 -152") (victim_position "-31 1424 -88")
+L 07/11/2012 - 17:24:21: "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "sg552" (attacker_position "-340 2047 -152") (victim_position "-718 2113 -88")
+L 07/11/2012 - 17:24:30: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "galil" (headshot) (attacker_position "-153 1951 0") (victim_position "-804 1940 58")
+L 07/11/2012 - 17:24:30: Team "TERRORIST" triggered "Terrorists_Win" (CT "8") (T "5")
+L 07/11/2012 - 17:24:30: Team "CT" scored "8" with "5" players
+L 07/11/2012 - 17:24:30: Team "TERRORIST" scored "5" with "6" players
+L 07/11/2012 - 17:24:30: World triggered "Round_End"
+L 07/11/2012 - 17:24:41: World triggered "Round_Start"
+L 07/11/2012 - 17:24:56: "Henry<12><STEAM_0:1:53104189><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (headshot) (attacker_position "941 -82 -152") (victim_position "916 -2 -88")
+L 07/11/2012 - 17:25:04: "Keemak<13><STEAM_0:0:6113698><CT>" killed "tomwall<3><STEAM_0:1:30783438><TERRORIST>" with "mp5navy" (attacker_position "-706 910 -160") (victim_position "-687 876 -88")
+L 07/11/2012 - 17:25:24: "careymichael<11><STEAM_0:1:783955><CT>" killed "PJofT35<7><STEAM_0:0:32612111><TERRORIST>" with "m4a1" (attacker_position "255 2254 0") (victim_position "464 2071 64")
+L 07/11/2012 - 17:25:25: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "galil" (headshot) (attacker_position "-339 1850 8") (victim_position "254 2252 64")
+L 07/11/2012 - 17:25:31: "Keemak<13><STEAM_0:0:6113698><CT>" killed "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" with "mp5navy" (attacker_position "-41 2514 -64") (victim_position "222 2496 64")
+L 07/11/2012 - 17:25:40: "revenger<9><STEAM_0:0:17255624><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "famas" (headshot) (attacker_position "372 2064 0") (victim_position "-581 2056 72")
+L 07/11/2012 - 17:25:43: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "g3sg1" (attacker_position "561 2500 128") (victim_position "103 2449 45")
+L 07/11/2012 - 17:25:54: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "g3sg1" (attacker_position "943 2177 0") (victim_position "863 2238 47")
+L 07/11/2012 - 17:25:57: "Henry<12><STEAM_0:1:53104189><CT>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "m4a1" (headshot) (attacker_position "-1031 2029 -152") (victim_position "-981 2087 -88")
+L 07/11/2012 - 17:26:20: "where's-the-ammo<4><STEAM_0:0:32369201><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "g3sg1" (attacker_position "942 1946 128") (victim_position "669 2043 64")
+L 07/11/2012 - 17:26:20: Team "TERRORIST" triggered "Terrorists_Win" (CT "8") (T "6")
+L 07/11/2012 - 17:26:20: Team "CT" scored "8" with "5" players
+L 07/11/2012 - 17:26:20: Team "TERRORIST" scored "6" with "6" players
+L 07/11/2012 - 17:26:20: World triggered "Round_End"
+L 07/11/2012 - 17:26:31: World triggered "Round_Start"
+L 07/11/2012 - 17:27:00: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "careymichael<11><STEAM_0:1:783955><CT>" with "galil" (attacker_position "-728 1867 8") (victim_position "-705 1535 72")
+L 07/11/2012 - 17:27:19: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "lubahou<15><STEAM_0:1:52664969><CT>" with "awp" (attacker_position "-192 1118 -152") (victim_position "54 750 -96")
+L 07/11/2012 - 17:27:21: "Henry<12><STEAM_0:1:53104189><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (headshot) (attacker_position "256 761 -160") (victim_position "-365 947 -96")
+L 07/11/2012 - 17:27:30: "tomwall<3><STEAM_0:1:30783438><TERRORIST>" killed "Henry<12><STEAM_0:1:53104189><CT>" with "galil" (attacker_position "-756 1100 0") (victim_position "-4 776 -96")
+L 07/11/2012 - 17:27:37: "revenger<9><STEAM_0:0:17255624><CT>" killed "tomwall<3><STEAM_0:1:30783438><TERRORIST>" with "famas" (attacker_position "240 771 -160") (victim_position "-845 1099 64")
+L 07/11/2012 - 17:29:08: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "Keemak<13><STEAM_0:0:6113698><CT>" with "ak47" (attacker_position "-72 2522 -64") (victim_position "-102 1227 -113")
+L 07/11/2012 - 17:29:20: "clutchnasty<8><STEAM_0:1:33443748><TERRORIST>" killed "revenger<9><STEAM_0:0:17255624><CT>" with "ak47" (attacker_position "-70 2543 -64") (victim_position "-109 1945 -96")
+L 07/11/2012 - 17:29:20: Team "TERRORIST" triggered "Terrorists_Win" (CT "8") (T "7")
+L 07/11/2012 - 17:29:20: Team "CT" scored "8" with "5" players
+L 07/11/2012 - 17:29:20: Team "TERRORIST" scored "7" with "6" players
+L 07/11/2012 - 17:29:20: World triggered "Round_End"
+L 07/11/2012 - 17:29:25: World triggered "Intermission_Round_Limit"
+L 07/11/2012 - 17:29:35: [META] Loaded 0 plugins (1 already loaded)
+L 07/11/2012 - 17:29:35: [META] Loaded 0 plugins (1 already loaded)
+L 07/11/2012 - 17:29:35: Log file closed

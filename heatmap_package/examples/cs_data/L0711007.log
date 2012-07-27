@@ -1,0 +1,167 @@
+L 07/11/2012 - 14:15:33: Log file started (file "logs/L0711007.log") (game "/usr/local/games/hlds/css/cstrike") (version "4981")
+L 07/11/2012 - 14:15:33: server_cvar: "mp_winlimit" "10"
+L 07/11/2012 - 14:15:33: server_cvar: "mp_maxrounds" "15"
+L 07/11/2012 - 14:15:33: World triggered "Round_Start"
+L 07/11/2012 - 16:07:03: "Panarchus<2><STEAM_0:1:17858699><>" connected, address "10.10.240.206:27005"
+L 07/11/2012 - 16:07:03: "Panarchus<2><STEAM_0:1:17858699><>" STEAM USERID validated
+L 07/11/2012 - 16:07:09: World triggered "Round_Start"
+L 07/11/2012 - 16:07:35: "Panarchus<2><STEAM_0:1:17858699><>" entered the game
+L 07/11/2012 - 16:07:46: "Panarchus<2><STEAM_0:1:17858699><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 16:07:47: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:08:30: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Planted_The_Bomb"
+L 07/11/2012 - 16:09:15: Team "TERRORIST" triggered "Target_Bombed" (CT "0") (T "0")
+L 07/11/2012 - 16:09:15: Team "CT" scored "0" with "0" players
+L 07/11/2012 - 16:09:15: Team "TERRORIST" scored "0" with "1" players
+L 07/11/2012 - 16:09:15: World triggered "Round_End"
+L 07/11/2012 - 16:09:20: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:09:20: "tomwall<3><STEAM_0:1:30783438><>" connected, address "10.10.240.54:27005"
+L 07/11/2012 - 16:09:20: "tomwall<3><STEAM_0:1:30783438><>" STEAM USERID validated
+L 07/11/2012 - 16:09:26: World triggered "Round_Start"
+L 07/11/2012 - 16:10:09: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Planted_The_Bomb"
+L 07/11/2012 - 16:10:30: "where's-the-ammo<4><STEAM_0:0:32369201><>" connected, address "10.10.240.30:27005"
+L 07/11/2012 - 16:10:30: "where's-the-ammo<4><STEAM_0:0:32369201><>" STEAM USERID validated
+L 07/11/2012 - 16:10:54: Team "TERRORIST" triggered "Target_Bombed" (CT "0") (T "0")
+L 07/11/2012 - 16:10:54: Team "CT" scored "0" with "0" players
+L 07/11/2012 - 16:10:54: Team "TERRORIST" scored "0" with "1" players
+L 07/11/2012 - 16:10:54: World triggered "Round_End"
+L 07/11/2012 - 16:10:56: "tomwall<3><STEAM_0:1:30783438><>" entered the game
+L 07/11/2012 - 16:10:56: "where's-the-ammo<4><STEAM_0:0:32369201><>" entered the game
+L 07/11/2012 - 16:10:59: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:11:05: World triggered "Round_Start"
+L 07/11/2012 - 16:11:06: "where's-the-ammo<4><STEAM_0:0:32369201><Unassigned>" joined team "CT"
+L 07/11/2012 - 16:11:08: "Cranky<5><STEAM_0:0:5130812><>" connected, address "10.10.240.46:27005"
+L 07/11/2012 - 16:11:08: World triggered "Game_Commencing"
+L 07/11/2012 - 16:11:09: "Cranky<5><STEAM_0:0:5130812><>" STEAM USERID validated
+L 07/11/2012 - 16:11:11: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:11:14: "tomwall<3><STEAM_0:1:30783438><Unassigned>" joined team "CT"
+L 07/11/2012 - 16:11:17: World triggered "Round_Start"
+L 07/11/2012 - 16:11:30: "Cranky<5><STEAM_0:0:5130812><>" entered the game
+L 07/11/2012 - 16:11:38: "Cranky<5><STEAM_0:0:5130812><Unassigned>" joined team "CT"
+L 07/11/2012 - 16:11:39: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:11:39: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "usp" (attacker_position "-663 1436 32") (victim_position "514 1317 96")
+L 07/11/2012 - 16:11:39: Team "CT" triggered "CTs_Win" (CT "1") (T "0")
+L 07/11/2012 - 16:11:39: Team "CT" scored "1" with "3" players
+L 07/11/2012 - 16:11:39: Team "TERRORIST" scored "0" with "1" players
+L 07/11/2012 - 16:11:39: World triggered "Round_End"
+L 07/11/2012 - 16:11:44: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:11:50: World triggered "Round_Start"
+L 07/11/2012 - 16:11:57: "where's-the-ammo<4><STEAM_0:0:32369201><CT>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "p90" (headshot) (attacker_position "-80 -1461 64") (victim_position "-158 -1531 128")
+L 07/11/2012 - 16:12:06: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:12:06: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "usp" (headshot) (attacker_position "465 1217 32") (victim_position "66 1355 96")
+L 07/11/2012 - 16:12:06: Team "CT" triggered "CTs_Win" (CT "2") (T "0")
+L 07/11/2012 - 16:12:06: Team "CT" scored "2" with "3" players
+L 07/11/2012 - 16:12:06: Team "TERRORIST" scored "0" with "1" players
+L 07/11/2012 - 16:12:06: World triggered "Round_End"
+L 07/11/2012 - 16:12:11: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:12:17: World triggered "Round_Start"
+L 07/11/2012 - 16:12:17: "where's-the-ammo<4><STEAM_0:0:32369201><CT>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "p90" (headshot) (attacker_position "-384 -1760 64") (victim_position "-336 -1648 128")
+L 07/11/2012 - 16:12:47: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:12:47: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (headshot) (attacker_position "-338 1397 32") (victim_position "47 1710 96")
+L 07/11/2012 - 16:12:47: Team "CT" triggered "CTs_Win" (CT "3") (T "0")
+L 07/11/2012 - 16:12:47: Team "CT" scored "3" with "3" players
+L 07/11/2012 - 16:12:47: Team "TERRORIST" scored "0" with "1" players
+L 07/11/2012 - 16:12:47: World triggered "Round_End"
+L 07/11/2012 - 16:12:52: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:12:58: World triggered "Round_Start"
+L 07/11/2012 - 16:13:03: "Veilrap<6><STEAM_0:0:4190636><>" connected, address "10.10.240.210:27005"
+L 07/11/2012 - 16:13:12: "Veilrap<6><STEAM_0:0:4190636><>" entered the game
+L 07/11/2012 - 16:13:21: "Veilrap<6><STEAM_0:0:4190636><Unassigned>" joined team "TERRORIST"
+L 07/11/2012 - 16:13:24: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:13:24: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (attacker_position "-973 496 32") (victim_position "-1015 864 -125")
+L 07/11/2012 - 16:13:24: Team "CT" triggered "CTs_Win" (CT "4") (T "0")
+L 07/11/2012 - 16:13:24: Team "CT" scored "4" with "3" players
+L 07/11/2012 - 16:13:24: Team "TERRORIST" scored "0" with "2" players
+L 07/11/2012 - 16:13:24: World triggered "Round_End"
+L 07/11/2012 - 16:13:29: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:13:35: World triggered "Round_Start"
+L 07/11/2012 - 16:13:54: "Cranky<5><STEAM_0:0:5130812><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m4a1" (attacker_position "115 1368 32") (victim_position "39 2036 96")
+L 07/11/2012 - 16:14:15: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:14:15: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "aug" (headshot) (attacker_position "772 2889 4") (victim_position "1536 3008 -61")
+L 07/11/2012 - 16:14:15: Team "CT" triggered "CTs_Win" (CT "5") (T "0")
+L 07/11/2012 - 16:14:15: Team "CT" scored "5" with "3" players
+L 07/11/2012 - 16:14:15: Team "TERRORIST" scored "0" with "2" players
+L 07/11/2012 - 16:14:15: World triggered "Round_End"
+L 07/11/2012 - 16:14:20: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:14:26: World triggered "Round_Start"
+L 07/11/2012 - 16:14:33: STEAMAUTH: Client Veilrap received failure code 1
+L 07/11/2012 - 16:14:37: "Cranky<5><STEAM_0:0:5130812><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "m4a1" (attacker_position "196 246 3") (victim_position "349 483 64")
+L 07/11/2012 - 16:14:54: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:14:54: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (headshot) (attacker_position "0 2047 32") (victim_position "234 2189 72")
+L 07/11/2012 - 16:15:09: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "aug" (attacker_position "644 3458 -93") (victim_position "1072 3504 -61")
+L 07/11/2012 - 16:15:09: Team "CT" triggered "CTs_Win" (CT "6") (T "0")
+L 07/11/2012 - 16:15:09: Team "CT" scored "6" with "3" players
+L 07/11/2012 - 16:15:09: Team "TERRORIST" scored "0" with "2" players
+L 07/11/2012 - 16:15:09: World triggered "Round_End"
+L 07/11/2012 - 16:15:14: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:15:20: World triggered "Round_Start"
+L 07/11/2012 - 16:15:24: "Cranky<5><STEAM_0:0:5130812><CT>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "m4a1" (headshot) (attacker_position "160 -1712 64") (victim_position "352 -1600 128")
+L 07/11/2012 - 16:15:47: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "elite" (attacker_position "-86 1533 32") (victim_position "287 1231 96")
+L 07/11/2012 - 16:15:53: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:15:53: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "aug" (attacker_position "-881 1347 0") (victim_position "-315 1424 96")
+L 07/11/2012 - 16:16:00: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (attacker_position "-866 1364 0") (victim_position "144 1520 96")
+L 07/11/2012 - 16:16:00: Team "CT" triggered "CTs_Win" (CT "7") (T "0")
+L 07/11/2012 - 16:16:00: Team "CT" scored "7" with "3" players
+L 07/11/2012 - 16:16:00: Team "TERRORIST" scored "0" with "2" players
+L 07/11/2012 - 16:16:00: World triggered "Round_End"
+L 07/11/2012 - 16:16:05: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:16:11: World triggered "Round_Start"
+L 07/11/2012 - 16:16:29: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:16:29: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "aug" (headshot) (attacker_position "460 1299 32") (victim_position "-170 1373 96")
+L 07/11/2012 - 16:16:42: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "elite" (attacker_position "23 2094 8") (victim_position "-11 1656 96")
+L 07/11/2012 - 16:16:53: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:17:17: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Planted_The_Bomb"
+L 07/11/2012 - 16:17:47: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "aug" (attacker_position "2192 273 8") (victim_position "2258 899 128")
+L 07/11/2012 - 16:18:02: Team "TERRORIST" triggered "Target_Bombed" (CT "7") (T "1")
+L 07/11/2012 - 16:18:02: Team "CT" scored "7" with "3" players
+L 07/11/2012 - 16:18:02: Team "TERRORIST" scored "1" with "2" players
+L 07/11/2012 - 16:18:02: World triggered "Round_End"
+L 07/11/2012 - 16:18:07: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:18:13: World triggered "Round_Start"
+L 07/11/2012 - 16:18:38: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "g3sg1" (headshot) (attacker_position "-1163 1663 -191") (victim_position "-1025 379 96")
+L 07/11/2012 - 16:19:18: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:19:18: "Cranky<5><STEAM_0:0:5130812><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (headshot) (attacker_position "-1040 472 32") (victim_position "-744 477 96")
+L 07/11/2012 - 16:19:23: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "g3sg1" (attacker_position "-1121 1661 -192") (victim_position "-960 475 96")
+L 07/11/2012 - 16:19:29: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m249" (attacker_position "-902 496 32") (victim_position "-1103 1180 -128")
+L 07/11/2012 - 16:19:29: Team "CT" triggered "CTs_Win" (CT "8") (T "1")
+L 07/11/2012 - 16:19:29: Team "CT" scored "8" with "3" players
+L 07/11/2012 - 16:19:29: Team "TERRORIST" scored "1" with "2" players
+L 07/11/2012 - 16:19:29: World triggered "Round_End"
+L 07/11/2012 - 16:19:34: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:19:40: World triggered "Round_Start"
+L 07/11/2012 - 16:20:13: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "g3sg1" (attacker_position "-1141 1733 -192") (victim_position "-1110 1264 -145")
+L 07/11/2012 - 16:20:16: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:20:16: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "m249" (attacker_position "-864 800 0") (victim_position "-1226 1520 -121")
+L 07/11/2012 - 16:20:25: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "tomwall<3><STEAM_0:1:30783438><CT>" with "m249" (headshot) (attacker_position "-926 1459 -175") (victim_position "-1067 1098 -128")
+L 07/11/2012 - 16:20:45: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:22:00: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Planted_The_Bomb"
+L 07/11/2012 - 16:22:24: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "m249" (headshot) (attacker_position "1445 442 17") (victim_position "1963 690 65")
+L 07/11/2012 - 16:22:24: Team "TERRORIST" triggered "Terrorists_Win" (CT "8") (T "2")
+L 07/11/2012 - 16:22:24: Team "CT" scored "8" with "3" players
+L 07/11/2012 - 16:22:24: Team "TERRORIST" scored "2" with "2" players
+L 07/11/2012 - 16:22:24: World triggered "Round_End"
+L 07/11/2012 - 16:22:29: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:22:35: World triggered "Round_Start"
+L 07/11/2012 - 16:22:56: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "where's-the-ammo<4><STEAM_0:0:32369201><CT>" with "m249" (headshot) (attacker_position "-112 1792 32") (victim_position "-10 1904 96")
+L 07/11/2012 - 16:23:07: "Cranky<5><STEAM_0:0:5130812><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "p90" (attacker_position "91 1925 32") (victim_position "58 2174 64")
+L 07/11/2012 - 16:23:11: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" killed "Cranky<5><STEAM_0:0:5130812><CT>" with "m249" (attacker_position "-51 2131 0") (victim_position "94 1741 96")
+L 07/11/2012 - 16:23:44: "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" triggered "Planted_The_Bomb"
+L 07/11/2012 - 16:23:52: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (headshot) (attacker_position "417 -421 23") (victim_position "345 -921 104")
+L 07/11/2012 - 16:23:59: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Begin_Bomb_Defuse_With_Kit"
+L 07/11/2012 - 16:24:04: "tomwall<3><STEAM_0:1:30783438><CT>" triggered "Defused_The_Bomb"
+L 07/11/2012 - 16:24:04: Team "CT" triggered "Bomb_Defused" (CT "9") (T "2")
+L 07/11/2012 - 16:24:04: Team "CT" scored "9" with "3" players
+L 07/11/2012 - 16:24:04: Team "TERRORIST" scored "2" with "2" players
+L 07/11/2012 - 16:24:04: World triggered "Round_End"
+L 07/11/2012 - 16:24:09: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Got_The_Bomb"
+L 07/11/2012 - 16:24:15: World triggered "Round_Start"
+L 07/11/2012 - 16:24:58: "tomwall<3><STEAM_0:1:30783438><CT>" killed "Veilrap<6><STEAM_0:0:4190636><TERRORIST>" with "m4a1" (attacker_position "-1286 2234 0") (victim_position "58 2182 64")
+L 07/11/2012 - 16:25:13: "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" triggered "Dropped_The_Bomb"
+L 07/11/2012 - 16:25:13: "where's-the-ammo<4><STEAM_0:0:32369201><CT>" killed "Panarchus<2><STEAM_0:1:17858699><TERRORIST>" with "p90" (attacker_position "558 2268 0") (victim_position "528 2374 69")
+L 07/11/2012 - 16:25:13: Team "CT" triggered "CTs_Win" (CT "10") (T "2")
+L 07/11/2012 - 16:25:13: Team "CT" scored "10" with "3" players
+L 07/11/2012 - 16:25:13: Team "TERRORIST" scored "2" with "2" players
+L 07/11/2012 - 16:25:13: World triggered "Round_End"
+L 07/11/2012 - 16:25:13: Team "CT" triggered "Intermission_Win_Limit"
+L 07/11/2012 - 16:25:23: [META] Loaded 0 plugins (1 already loaded)
+L 07/11/2012 - 16:25:23: [META] Loaded 0 plugins (1 already loaded)
+L 07/11/2012 - 16:25:23: Log file closed

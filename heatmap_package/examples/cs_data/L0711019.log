@@ -1,0 +1,15 @@
+L 07/11/2012 - 18:08:55: Log file started (file "logs/L0711019.log") (game "/usr/local/games/hlds/css/cstrike") (version "4981")
+L 07/11/2012 - 18:08:55: server_cvar: "mp_winlimit" "10"
+L 07/11/2012 - 18:08:55: server_cvar: "mp_maxrounds" "15"
+L 07/11/2012 - 18:08:55: World triggered "Round_Start"
+L 07/11/2012 - 18:08:56: "revenger<9><STEAM_0:0:17255624><>" disconnected (reason "Disconnect by user.")
+L 07/11/2012 - 18:09:02: World triggered "Round_Start"
+L 07/11/2012 - 18:09:03: "where's-the-ammo<4><STEAM_0:0:32369201><>" entered the game
+L 07/11/2012 - 18:09:03: "Henry<12><STEAM_0:1:53104189><>" entered the game
+L 07/11/2012 - 18:09:10: "Henry<12><STEAM_0:1:53104189><Unassigned>" joined team "CT"
+L 07/11/2012 - 18:09:17: "Henry<12><STEAM_0:1:53104189><CT>" disconnected (reason "Disconnect by user.")
+L 07/11/2012 - 18:09:17: World triggered "Round_Draw" (CT "0") (T "0")
+L 07/11/2012 - 18:09:17: Team "CT" scored "0" with "0" players
+L 07/11/2012 - 18:09:17: Team "TERRORIST" scored "0" with "0" players
+L 07/11/2012 - 18:09:17: World triggered "Round_End"
+L 07/11/2012 - 18:09:20: Log file closed
