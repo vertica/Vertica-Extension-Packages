@@ -79,13 +79,24 @@ Output:
 		c - The count, or weight.
 
 	Optional input: 
-		file_in - The background image used (PNG only). (Partially implemented)
-		file_out - The location for the image output.
-		gaussian - Turn image level Gaussian smoothing
+		file_in (string)  - The background image used (PNG only)
+		file_out (string) - The location for the image output
+		width (int)  -	The desired width of the final image in pixels (1 - 2560)
+		height (int) -	The desired height of the final image in pixels (1 - 2560)
+		gaussian (boolean)- Turns on image level Gaussian smoothing
+		overlay (boolean) - Automatically overlays the created heatmap image
+							onto the given input file (if given)
+		contour (boolean) - Turns on a different color scheme that stratifies the
+							weights of each pixel and puts them into fully-colored
+							"buckets" of heat. In order of intensity: red, yellow,
+							green, blue
+		xflip (boolean) -	Flips all of the pixels across the y-axis (assumes
+							origin is center of image)
+		yflip (boolean) -	Same as above, except flips across the x-axis
 
 	Output: 
 		The image file (in png format)
-		The red green blue alpha info (r, b, g, a). (Partially implemented)
+		The x y red green blue alpha info of pixels (x, y, r, b, g, a)
 
 3. gmaps.py
 
