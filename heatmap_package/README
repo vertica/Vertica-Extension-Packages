@@ -79,7 +79,7 @@ Output:
 		c - The count, or weight.
 
 	Optional input: 
-		file_in - The background image used (PNG only). (Partially implemented)
+		file_in - The background image used (PNG only).
 		file_out - The location for the image output.
 		gaussian - Turn image level Gaussian smoothing
 
