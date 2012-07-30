@@ -233,11 +233,11 @@ class HeatMapImage : public TransformFunction
             else inputted_height = 0;
 
             flip_x = false;
-            if (srvInterface.getParamReader().containsParameter("flip_x"))
-                flip_x = srvInterface.getParamReader().getBoolRef("flip_x");
+            if (srvInterface.getParamReader().containsParameter("xflip"))
+                flip_x = srvInterface.getParamReader().getBoolRef("xflip");
             flip_y = false;
-            if (srvInterface.getParamReader().containsParameter("flip_y"))
-                flip_y = srvInterface.getParamReader().getBoolRef("flip_y");
+            if (srvInterface.getParamReader().containsParameter("yflip"))
+                flip_y = srvInterface.getParamReader().getBoolRef("yflip");
             
             
             if (inputted_width < 0) inputted_width = 0;
@@ -484,8 +484,8 @@ class HeatMapImageFactory : public TransformFunctionFactory
         parameterTypes.addBool("output_rows");
         parameterTypes.addInt("width");
         parameterTypes.addInt("height");
-        parameterTypes.addBool("flip_x");
-        parameterTypes.addBool("flip_y");
+        parameterTypes.addBool("xflip");
+        parameterTypes.addBool("yflip");
         parameterTypes.addBool("gaussian");
     }
 
