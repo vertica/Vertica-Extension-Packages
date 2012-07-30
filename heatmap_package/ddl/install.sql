@@ -2,6 +2,8 @@
 
 select version();
 
+DROP LIBRARY HeatMapFunctions CASCADE;
+
 -- Step 1: Create LIBRARY 
 \set libfile '\''`pwd`'/lib/HeatMapLib.so\'';
 CREATE LIBRARY HeatMapFunctions AS :libfile;

@@ -9,6 +9,7 @@
 #include "Vertica.h"
 #include <sstream>
 #include <vector>
+#include <stdexcept>
 #include "GaussianBlur.h"
 
 using namespace Vertica;
@@ -20,6 +21,7 @@ class HeatMap : public TransformFunction
     typedef struct {
         float x;
         float y;
+        float w;
     } tuple;
     vector<tuple> tuple_buffer;
     int tuple_buffer_max;
@@ -63,6 +65,7 @@ class HeatMap : public TransformFunction
     int do_normalize;
     bool do_gaussian;
     bool do_bounding;
+    bool use_weights;
 
     //Scales the histogram, increases the number of bins while trying to maintain overrall shape of data//
     void rescale_histogram(float min_x, float max_x, float min_y, float max_y) {
@@ -269,12 +272,18 @@ class HeatMap : public TransformFunction
                 if ( bin_y >= histogram_height )
                   bin_y = histogram_height-1;
                 if ( bin_x >= 0 && bin_x < histogram_width && bin_y >= 0 && bin_y <= histogram_height ) {
-                    count[bin_x][bin_y] += histogram_weight;                        
+                    count[bin_x][bin_y] += histogram_weight*bt.w;                        
                 }
             }
             tuple_buffer.pop_back();
         }
     }
+
+    enum vtype { FLOAT, INT, NUMERIC };
+    vtype x_type;
+    vtype y_type;
+    vtype w_type;
+    
 
     // Sets up the parameters
     virtual void setup(ServerInterface & 	srvInterface,
@@ -326,12 +335,53 @@ class HeatMap : public TransformFunction
             if (srvInterface.getParamReader().containsParameter("gaussian")) {
                 do_gaussian=srvInterface.getParamReader().getBoolRef("gaussian");
             }
+            
+            use_weights = false;
+            if (srvInterface.getParamReader().containsParameter("use_weights")) {
+                use_weights=srvInterface.getParamReader().getBoolRef("use_weights");
+            }
+
+            if( argTypes.getColumnType(0).isFloat() ) {
+                x_type = FLOAT;
+            } else if( argTypes.getColumnType(0).isInt() ) {
+                x_type = INT;
+            } else if( argTypes.getColumnType(0).isNumeric() ) {
+                x_type = NUMERIC;
+            } else {
+                throw runtime_error("X must be a float, integer, or numeric.");
+            }
+
+            if( argTypes.getColumnType(1).isFloat() ) {
+                y_type = FLOAT;
+            } else if( argTypes.getColumnType(1).isInt() ) {
+                y_type = INT;
+            } else if( argTypes.getColumnType(1).isNumeric() ) {
+                y_type = NUMERIC;
+            } else {
+                throw runtime_error("Y must be a float, integer, or numeric.");
+            }
+
+            if(use_weights) {
+                if( argTypes.getColumnType(2).isFloat() ) {
+                    w_type = FLOAT;
+                } else if( argTypes.getColumnType(2).isInt() ) {
+                    w_type = INT;
+                } else if( argTypes.getColumnType(2).isNumeric() ) {
+                    w_type = NUMERIC;
+                } else {
+                    throw runtime_error("Weight must be a float, integer, or numeric.");
+                }
+            }
+
+
 /*
                     parameterTypes.addInt("guassian");
 */
         } catch(exception& e) {
             // Standard exception. Quit.
             vt_report_error(0, "Exception while processing partition: [%s]", e.what());
+        } catch(char * msg) {
+            vt_report_error(0, "Error: [%s]", msg);
         }
     }
 
@@ -341,17 +391,61 @@ class HeatMap : public TransformFunction
                                   PartitionWriter &outputWriter)
     {
         try {
-            if (inputReader.getNumCols() != 2)
-              vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", inputReader.getNumCols());
+            if ((inputReader.getNumCols() != 3 && use_weights) || (inputReader.getNumCols() != 2 && !use_weights))
+              vt_report_error(0, "Function only accepts 2 or 3 arguments, but %zu provided", inputReader.getNumCols());
 
             do {
-                const VNumeric &x_numeric = inputReader.getNumericRef(0);
-                const VNumeric &y_numeric = inputReader.getNumericRef(1);
+                float x_val = 0;
+                float y_val = 0;
+                float w_val = 1;
+                switch(x_type) {
+                  case NUMERIC:
+                    x_val = inputReader.getNumericRef(0).toFloat();
+                    break;
+                  case INT:
+                    x_val = inputReader.getIntRef(0);
+                    break;
+                  case FLOAT:
+                    x_val = inputReader.getFloatRef(0);
+                    break;
+                  default:
+                    break;
+                }
+                switch(y_type) {
+                  case NUMERIC:
+                    y_val = inputReader.getNumericRef(1).toFloat();
+                    break;
+                  case INT:
+                    y_val = inputReader.getIntRef(1);
+                    break;
+                  case FLOAT:
+                    y_val = inputReader.getFloatRef(1);
+                    break;
+                  default:
+                    break;
+                }
+                if(use_weights) {
+                    switch(w_type) {
+                      case NUMERIC:
+                        w_val = inputReader.getNumericRef(2).toFloat();
+                        break;
+                      case INT:
+                        w_val = inputReader.getIntRef(2);
+                        break;
+                      case FLOAT:
+                        w_val = inputReader.getFloatRef(2);
+                        break;
+                      default:
+                        w_val = 1;
+                        break;
+                    }
+                }
 
                 tuple t;
 
-                t.x = x_numeric.toFloat();
-                t.y = y_numeric.toFloat();
+                t.x = x_val;
+                t.y = y_val;
+                t.w = w_val;
 
                 tuple_buffer.push_back(t);
                 tuple_buffer_count++;
@@ -406,8 +500,8 @@ class HeatMapFactory : public TransformFunctionFactory
 {
     virtual void getPrototype(ServerInterface &srvInterface, ColumnTypes &argTypes, ColumnTypes &returnType)
     {
-        argTypes.addNumeric();
-        argTypes.addNumeric();
+        argTypes.addAny();
+
         returnType.addNumeric();
         returnType.addNumeric();
         if (srvInterface.getParamReader().containsParameter("bounding_box")) {
@@ -426,8 +520,8 @@ class HeatMapFactory : public TransformFunctionFactory
                                const SizedColumnTypes &inputTypes, 
                                SizedColumnTypes &outputTypes)
     {
-        if (inputTypes.getColumnCount() != 2)
-            vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", inputTypes.getColumnCount());
+        if (inputTypes.getColumnCount() != 2 && inputTypes.getColumnCount() != 3)
+            vt_report_error(0, "Function only accepts 2 or 3 arguments, but %zu provided", inputTypes.getColumnCount());
         outputTypes.addNumeric(10,4);
         outputTypes.addNumeric(10,4);
         if (srvInterface.getParamReader().containsParameter("bounding_box")) {
@@ -457,6 +551,8 @@ class HeatMapFactory : public TransformFunctionFactory
         parameterTypes.addInt("normalize");
 
         parameterTypes.addBool("bounding_box");
+
+        parameterTypes.addBool("use_weights");
     }
 
     virtual TransformFunction *createTransformFunction(ServerInterface &srvInterface)
