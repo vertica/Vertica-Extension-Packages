@@ -1,0 +1,48 @@
+CREATE TABLE
+ Rows Loaded 
+-------------
+           5
+(1 row)
+
+  f1  |     f2     |         f3          |        f4        |       f5        |        f6         |         f7          |         f8         |        f9        |   f10    | f11 |           f12            | f13 | f14 | f15 | f16 |                f17                |  f18   |  f19   | f20 |       f21       | f22 |         f23          |     f24      | f25 | f26 | f27 |           f28            | f29 | f30 | f31 | f32 |        f33        |                          f34                           | f35 |   f36    |            f37            | f38 | f39 | f40  | f41 |     f42      |      f43      |      f44       |         f45         |        f46         |      f47       | f48  | f49 | f50 | f51 | f52 | f53 
+------+------------+---------------------+------------------+-----------------+-------------------+---------------------+--------------------+------------------+----------+-----+--------------------------+-----+-----+-----+-----+-----------------------------------+--------+--------+-----+-----------------+-----+----------------------+--------------+-----+-----+-----+--------------------------+-----+-----+-----+-----+-------------------+--------------------------------------------------------+-----+----------+---------------------------+-----+-----+------+-----+--------------+---------------+----------------+---------------------+--------------------+----------------+------+-----+-----+-----+-----+-----
+ 1900 | 1976-08-16 | Bernardo Bertolucci | Alberto Grimaldi | Franco Arcalli  | Vittorio Storaro  |                     | Ennio Morricone    | English Language |          |     | Italy                    |     |     |     |     |                                   | Italy  | Drama  |     |                 |     |                      |              |     |     |     |                          |     |     |     |     |                   |                                                        |     | 70056923 | 1976 Cannes Film Festival |     |     |      |     | 1000039-1900 |               |                | Gianni Quaranta     | Ezio Frigerio      |                |      |     |     |     |     | 
+ 1941 | 1979-12-14 | Steven Spielberg    | Buzz Feitshans   | Robert Zemeckis | William A. Fraker | Michael Kahn        | John Williams      | English Language | PG (USA) |     | United States of America |     |     |     |     | 1941                              | Oregon | Comedy |     | Robert Zemeckis |     |                      | World War II |     |     |     | Deborah Nadoolman Landis |     |     |     |     | Universal Studios | A Comedy Spectacular!                                  |     | 206584   |                           |     |     |      |     | 1941         | John Milius   | Sally Dennison | Dean Edward Mitzner | William F. O'Brien | John P. Austin | 1941 |     |     |     |     | 
+ 1969 | 1988-11-18 | Ernest Thompson     | Bill Badalato    | Ernest Thompson | Jules Brenner     | William M. Anderson | Michael Small      | English Language | R (USA)  |     | United States of America |     |     |     |     | 1969                              |        | Drama  |     |                 |     |                      | Vietnam War  |     |     |     | Julie Weiss              |     |     |     |     |                   |                                                        |     | 60022327 |                           |     |     |      |     | 1969         |               |                | Marcia Hinds        | Bo Johnson         |                |      |     |     |     |     | 
+ 1984 | 1984-10-10 | Michael Radford     | Robert Devereux  | Michael Radford | Roger Deakins     | Tom Priestley       | Dominic Muldowney  | English Language | R (USA)  |     | United Kingdom           |     |     |     |     | 1984: For the Love of Big Brother | London | Indie  |     | George Orwell   |     |                      | Brainwashing |     |     |     |                          |     |     |     |     |                   | George Orwell's Terrifying Vision Comes To The Screen. |     | 60026934 |                           |     |     |      |     |              |               |                | Allan Cameron       |                    |                |      |     |     |     |     | 
+ 2046 | 2004-09-29 | Wong Kar-wai        | Wong Kar-wai     | Wong Kar-wai    | Christopher Doyle | William Chang       | Shigeru Umebayashi | Cantonese        | R (USA)  |     | Hong Kong                |     |     |     |     | 2046                              |        | Drama  |     |                 |     | In the Mood for Love |              |     |     |     | William Chang            |     |     |     |     |                   |                                                        |     | 70042371 | 2004 Cannes Film Festival |     |     | 2046 |     | 2046         | Chan Ye-cheng |                | William Chang       | Alfred Yau         |                | 2046 |     |     |     |     | 
+(5 rows)
+
+DROP TABLE
+CREATE TABLE
+ Rows Loaded 
+-------------
+           5
+(1 row)
+
+   station    |     time      | temp 
+--------------+---------------+------
+ 011990-99999 | -619524000000 |    0
+ 011990-99999 | -619506000000 |   22
+ 011990-99999 | -619484400000 |  -11
+ 012650-99999 | -655531200000 |  111
+ 012650-99999 | -655509600000 |   78
+(5 rows)
+
+DROP TABLE
+CREATE TABLE
+ Rows Loaded 
+-------------
+           5
+(1 row)
+
+                 name                  |                         constit                          | addr | comprehensive |         type          
+---------------------------------------+----------------------------------------------------------+------+---------------+-----------------------
+ M.D. Anderson Cancer Center - Orlando |                                                          |      | f             | 
+ Cancer Therapy and Research Center    | University of Texas Health Science Center at San Antonio |      | t             | Clinical and Research
+ Huntsman Cancer Institute             | University of Utah                                       |      | t             | Clinical and Research
+ Siteman Cancer Center                 | Washington University School of Medicine                 |      | t             | Clinical and Research
+ Dana-Farber/Harvard Cancer Center     | Dana-Farber Cancer Institute                             |      | t             | Clinical and Research
+(5 rows)
+
+DROP TABLE
