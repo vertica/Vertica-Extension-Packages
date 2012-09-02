@@ -9,6 +9,7 @@ all: build/myudx.so
 .PHONEY: install	
 
 build/myudx.so: /opt/vertica/sdk/include/Vertica.cpp src/Email.cpp
+	mkdir -p build
 	$(CPP) -D HAVE_LONG_LONG_INT_64 -g -Wall -Wno-unused-value -shared -fPIC -I $(INCLUDE) -o $@ /opt/vertica/sdk/include/Vertica.cpp src/Email.cpp
 
 
@@ -24,4 +25,3 @@ uninstall: .hidden/install
 
 clean:
 	rm build/myudx.so
-	
