@@ -42,7 +42,10 @@ public:
     }
 
     void destroy(ServerInterface &srvInterface) {
-        pclose(handle);
+        int retVal = pclose(handle);
+        if (retVal) {
+            vt_report_error(0, "External process '%s' exited with code %d", cmd.c_str(), retVal);
+        }
     }
 };
 
