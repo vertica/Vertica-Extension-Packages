@@ -4,6 +4,7 @@
 #include "LoadArgParsers.h"
 #include <stdio.h>
 #include <poll.h>
+#include <sys/wait.h>
 
 using namespace Vertica;
 
@@ -42,7 +43,19 @@ public:
     }
 
     void destroy(ServerInterface &srvInterface) {
-        pclose(handle);
+        int status = pclose(handle);
+
+        if (WIFEXITED(status)) {
+            if (WEXITSTATUS(status) == 0) {
+                // Success!
+            } else {
+                vt_report_error(0, "Process exited with status %d", WEXITSTATUS(status));
+            }
+        } else if (WIFSIGNALED(status)) {
+            vt_report_error(0, "Process killed by signal %d%s", WTERMSIG(status), WCOREDUMP(status) ? " (core dumped)" : "");
+        } else {
+            vt_report_error(0, "Process terminated with Unexpected status - 0x%x\n", status);
+        }
     }
 };
 
