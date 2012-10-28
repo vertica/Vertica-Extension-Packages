@@ -10,7 +10,7 @@ build: build/ExternalFilter.so build/ExternalSource.so
 ## See targets below for actual build logic
 
 clean:
-	rm build/ExternalFilter.so build/ExternalSource.so
+	rm -rf build
 
 install: build
 	$(VSQL) -c "CREATE LIBRARY ExternalFilterLib AS '`pwd`/build/ExternalFilter.so';"
@@ -19,13 +19,14 @@ install: build
 	$(VSQL) -c "CREATE SOURCE ExternalSource AS LANGUAGE 'C++' NAME 'ExternalSourceFactory' LIBRARY ExternalSourceLib;"
 
 uninstall:
-	$(VSQL) -c "DROP LIBRARY ExternalFilterLib CASCADE;"
-	$(VSQL) -c "DROP LIBRARY ExternalSourceLib CASCADE;"
+	if $(VSQL) -c "SELECT lib_name FROM user_libraries;" -t | grep -q ExternalFilterLib; then $(VSQL) -c "DROP LIBRARY ExternalFilterLib CASCADE;"; else echo "ExternalFilterLib not installed."; fi
+	if $(VSQL) -c "SELECT lib_name FROM user_libraries;" -t | grep -q ExternalSourceLib; then $(VSQL) -c "DROP LIBRARY ExternalSourceLib CASCADE;"; else echo "ExternalSourceLib not installed."; fi
 
 test:
+	@$(MAKE) uninstall
 	@$(MAKE) install
-	diff -u <($(VSQL) -f examples/Tests.ExternalFilter.sql) examples/Tests.ExternalFilter.out
-	diff -u <($(VSQL) -f examples/Tests.ExternalSource.sql) examples/Tests.ExternalSource.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalFilter.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalFilter.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalSource.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalSource.out
 	@$(MAKE) uninstall
 	@echo "*** Test passed! ***"
 
