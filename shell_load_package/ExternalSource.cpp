@@ -60,14 +60,15 @@ public:
         std::vector<std::string> targetNodes = planCtxt.getTargetNodes();
         
         // Concatenate node names
-        std::string nodeNames = "";
+        std::ostringstream targetNodeNamesStream;
+        targetNodeNamesStream << "TARGET_NODE_NAMES=";
         for (int i = 0; i < targetNodes.size(); i++) {
-            nodeNames += targetNodes[i];
+            targetNodeNamesStream << targetNodes[i];
             if (i > 0) {
-                nodeNames += ",";
+                targetNodeNamesStream << ",";
             }
         }
-        env.push_back(std::string("TARGET_NODE_NAMES=") + nodeNames);
+        env.push_back(targetNodeNamesStream.str());
         
         // Find index of current node
         int currentNodeIndex = -1;
@@ -80,13 +81,13 @@ public:
         if (currentNodeIndex == -1)
             vt_report_error(0, "Current node is not a target node?");
         
-        std::ostringstream oss;
-        oss << "NUM_SPLITS=" << targetNodes.size();
-        env.push_back(oss.str());
+        std::ostringstream numTargetNodesStream;
+        numTargetNodesStream << "NUM_TARGET_NODES=" << targetNodes.size();
+        env.push_back(numTargetNodesStream.str());
         
-        std::ostringstream oss2;
-        oss2 << "SPLIT_INDEX=" << currentNodeIndex;
-        env.push_back(oss2.str());
+        std::ostringstream currentNodeIndexStream;
+        currentNodeIndexStream << "CURRENT_NODE_INDEX=" << currentNodeIndex;
+        env.push_back(currentNodeIndexStream.str());
         
         std::vector<UDSource*> retVal;
         retVal.push_back(vt_createFuncObj(srvInterface.allocator, ExternalSource, cmd, env));

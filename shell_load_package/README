@@ -58,11 +58,13 @@ The following environment variables are available from ExternalSource:
 
   - CURRENT_NODE_NAME  - name of the current node, e.g. 'v_test_node0001'
   - TARGET_NODE_NAMES  - comma-separated list of nodes on which the query runs
-  - NUM_SPLITS         - number of nodes on which the query runs
-  - SPLIT_INDEX        - an index (0..NUM_SPLITS-1) of this node
+  - NUM_TARGET_NODES   - number of nodes on which the query runs
+  - CURRENT_NODE_INDEX - an index (0..NUM_TARGET_NODES-1) of this node
 
-You may use NUM_SPLITS and SPLIT_INDEX to have cmd return a subsed of data
-on each node, e.g. that where [ $something % $NUM_SPLITS -eq $SPLIT_INDEX ].
+You can use NUM_TARGET_NODES and CURRENT_NODE_INDEX to have cmd return a subset
+of data on each node, e.g. that where:
+
+    [ $something % $NUM_TARGET_NODES -eq $CURRENT_NODE_INDEX ]
 
 The following environment variables are available from ExternalFilter:
 
