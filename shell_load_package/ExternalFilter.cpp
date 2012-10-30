@@ -2,7 +2,7 @@
 
 #include "Vertica.h"
 #include "LoadArgParsers.h"
-#include "ProcessLaunchingPlugin.cpp"
+#include "ProcessLaunchingPlugin.h"
 
 using namespace Vertica;
 

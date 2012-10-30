@@ -35,10 +35,10 @@ test:
 
 ## Actual build targets
 
-build/ExternalFilter.so: ExternalFilter.cpp $(SDK_HOME)/include/Vertica.cpp  $(SDK_HOME)/include/BuildInfo.h $(SDK_HOME)/examples/HelperLibraries/LoadArgParsers.h popen3.h
+build/ExternalFilter.so: ExternalFilter.cpp $(SDK_HOME)/include/Vertica.cpp  $(SDK_HOME)/include/BuildInfo.h $(SDK_HOME)/examples/HelperLibraries/LoadArgParsers.h
 	mkdir -p build
-	$(CXX) $(CXXFLAGS) -o $@ $(SDK_HOME)/include/Vertica.cpp ExternalFilter.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $(SDK_HOME)/include/Vertica.cpp ExternalFilter.cpp ProcessLaunchingPlugin.cpp popen3.c
 
 build/ExternalSource.so: ExternalSource.cpp $(SDK_HOME)/include/Vertica.cpp  $(SDK_HOME)/include/BuildInfo.h $(SDK_HOME)/examples/HelperLibraries/LoadArgParsers.h
 	mkdir -p build
-	$(CXX) $(CXXFLAGS) -o $@ $(SDK_HOME)/include/Vertica.cpp ExternalSource.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $(SDK_HOME)/include/Vertica.cpp ExternalSource.cpp ProcessLaunchingPlugin.cpp popen3.c
