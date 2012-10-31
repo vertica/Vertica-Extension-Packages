@@ -12,7 +12,7 @@ class ExternalFilter : public UDFilter, protected ProcessLaunchingPlugin {
                                 DataBuffer &input, InputState input_state,
                                 DataBuffer &output)
     {
-        pump(input, input_state, output);
+        return pump(input, input_state, output);
     }
 
 public:

@@ -13,7 +13,7 @@ class ExternalSource : public UDSource, protected ProcessLaunchingPlugin {
     {
         DataBuffer input = {NULL, 0, 0};
         InputState input_state = END_OF_FILE;
-        pump(input, input_state, output);
+        return pump(input, input_state, output);
     }
 
 public:
