@@ -40,7 +40,7 @@ should work:
 dbadmin ALL=(ALL) NOPASSWD: ALL
 Defaults:dbadmin !requiretty
 
-Alternatively, remove the -DSUDO_TO_NOBODY define in the Makefile to have the
+Alternatively, add -DNO_SUDO to CXXFLAGS in the Makefile to have the
 commands run as the Vertica process. Note that even though running as 'nobody'
 is not secure (one user could harm or inspect another user's process), at
 least it is a bit safer in that an accidental "rm -rf" will not delete your

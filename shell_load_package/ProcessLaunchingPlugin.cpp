@@ -22,7 +22,7 @@ void ProcessLaunchingPlugin::setupProcess() {
     
     // Open child
     char *const argv[] = {
-#ifdef SUDO_TO_NOBODY
+#ifndef NO_SUDO
         "/usr/bin/sudo", "-u", "nobody", "-n",
 #endif
         "/bin/sh", "-c", const_cast<char *const>(cmd.c_str()),
