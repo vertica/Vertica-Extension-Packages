@@ -13,6 +13,12 @@ using namespace Vertica;
 
 ProcessLaunchingPlugin::ProcessLaunchingPlugin(std::string cmd, std::vector<std::string> env) : cmd(cmd), env(env) {}
 
+#ifndef NO_SUDO
+#define ProcessLaunchingPluginArgv(...) {"/usr/bin/sudo", "-u", "nobody", "-n", "--", __VA_ARGS__, NULL}
+#else
+#define ProcessLaunchingPluginArgv(...) {__VA_ARGS__, NULL}
+#endif
+
 void ProcessLaunchingPlugin::setupProcess() {
     // Convert std::vector<std::string> to char *const envp[]
     std::vector<const char *>cStrArray(env.size()+1, NULL);
@@ -21,13 +27,7 @@ void ProcessLaunchingPlugin::setupProcess() {
     }
     
     // Open child
-    char *const argv[] = {
-#ifndef NO_SUDO
-        "/usr/bin/sudo", "-u", "nobody", "-n",
-#endif
-        "/bin/sh", "-c", const_cast<char *const>(cmd.c_str()),
-        NULL
-    };
+    char *const argv[] = ProcessLaunchingPluginArgv("/bin/sh", "-c", const_cast<char *const>(cmd.c_str()));
     child = popen3(argv[0], argv, const_cast<char **>(&cStrArray[0]), O_NONBLOCK);
 
     // Validate the file handle; make sure we can read from this file
