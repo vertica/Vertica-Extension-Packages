@@ -9,8 +9,8 @@ commands to generate or fetch data, and commands to filter data loaded
 by an existing Vertica source, passing it via pipes through an external
 command.
 
-Be aware: executing arbitrary shell commands (as the same user as the
-Vertica process!) is a loaded gun and should be used with care.
+Be aware: executing arbitrary shell commands is a loaded gun and should
+be used with care.
 
 -------------------------------
 BUILDING
@@ -32,6 +32,19 @@ Assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
+
+Make sure the user running the Vertica process is able to sudo to user 'nobody'
+without password and without having a tty. The following /etc/sudoers entry
+should work:
+
+dbadmin ALL=(ALL) NOPASSWD: ALL
+Defaults:dbadmin !requiretty
+
+Alternatively, remove the -DSUDO_TO_NOBODY define in the Makefile to have the
+commands run as the Vertica process. Note that even though running as 'nobody'
+is not secure (one user could harm or inspect another user's process), at
+least it is a bit safer in that an accidental "rm -rf" will not delete your
+database.
 
 -------------------------------
 USAGE

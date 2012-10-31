@@ -4,7 +4,7 @@ SDK_HOME ?= /opt/vertica/sdk
 SHELL = /bin/bash
 VSQL ?= /opt/vertica/bin/vsql
 
-CXXFLAGS := $(CXXFLAGS) -I $(SDK_HOME)/include -I ../../HelperLibraries/ -I $(SDK_HOME)/examples/HelperLibraries/ -O0 -g -fPIC -shared
+CXXFLAGS := $(CXXFLAGS) -DSUDO_TO_NOBODY -I $(SDK_HOME)/include -I ../../HelperLibraries/ -I $(SDK_HOME)/examples/HelperLibraries/ -O0 -g -fPIC -shared
 
 build: build/ExternalFilter.so build/ExternalSource.so
 ## See targets below for actual build logic

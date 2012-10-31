@@ -21,7 +21,13 @@ void ProcessLaunchingPlugin::setupProcess() {
     }
     
     // Open child
-    char *const argv[] = {"/bin/sh", "-c", const_cast<char *const>(cmd.c_str()), NULL};
+    char *const argv[] = {
+#ifdef SUDO_TO_NOBODY
+        "/usr/bin/sudo", "-u", "nobody", "-n",
+#endif
+        "/bin/sh", "-c", const_cast<char *const>(cmd.c_str()),
+        NULL
+    };
     child = popen3(argv[0], argv, const_cast<char **>(&cStrArray[0]), O_NONBLOCK);
 
     // Validate the file handle; make sure we can read from this file
