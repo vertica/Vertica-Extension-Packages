@@ -25,8 +25,10 @@ uninstall:
 test:
 	@$(MAKE) uninstall
 	@$(MAKE) install
-	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalFilter.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalFilter.out
-	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalSource.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalSource.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalFilter.sql 2>&1       | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalFilter.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalFilterErrors.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalFilterErrors.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalSource.sql 2>&1       | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalSource.out
+	diff -u <(TMPDIR=$(TMPDIR) $(VSQL) -f examples/Tests.ExternalSourceErrors.sql 2>&1 | perl -pe 's/(?<=\.cpp|\.sql):\d+/:x/g' | perl -pe 's/destroy/process/g') examples/Tests.ExternalSourceErrors.out
 	@$(MAKE) uninstall
 	@echo "*** Test passed! ***"
 

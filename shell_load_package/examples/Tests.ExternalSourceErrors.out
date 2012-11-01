@@ -1,0 +1,10 @@
+CREATE TABLE
+ Rows Loaded 
+-------------
+          10
+(1 row)
+
+vsql:examples/Tests.ExternalSourceErrors.sql:x: ERROR 0:  Error calling process() in User Function UDSource at [ProcessLaunchingPlugin.cpp:x], error code: 0, message: Process exited with status 7
+vsql:examples/Tests.ExternalSourceErrors.sql:x: ERROR 0:  Error calling process() in User Function UDSource at [ProcessLaunchingPlugin.cpp:x], error code: 0, message: External process 'echo "message on stderr" >&2' reported error: message on stderr
+
+DROP TABLE
