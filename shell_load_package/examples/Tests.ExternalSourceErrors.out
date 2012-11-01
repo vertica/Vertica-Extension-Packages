@@ -7,4 +7,6 @@ CREATE TABLE
 vsql:examples/Tests.ExternalSourceErrors.sql:x: ERROR 0:  Error calling process() in User Function UDSource at [ProcessLaunchingPlugin.cpp:x], error code: 0, message: Process exited with status 7
 vsql:examples/Tests.ExternalSourceErrors.sql:x: ERROR 0:  Error calling process() in User Function UDSource at [ProcessLaunchingPlugin.cpp:x], error code: 0, message: External process 'echo "message on stderr" >&2' reported error: message on stderr
 
+vsql:examples/Tests.ExternalSourceErrors.sql:x: ERROR 0:  Error calling process() in User Function UDSource at [ProcessLaunchingPlugin.cpp:x], error code: 0, message: External process 'echo "message on stderr and exit" >&2; exit 8' reported error: message on stderr and exit
+
 DROP TABLE
