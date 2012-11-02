@@ -143,8 +143,6 @@ void ProcessLaunchingPlugin::checkProcessStatus() {
     if (waitpid_ret == -1) {
         int err = errno;
         vt_report_error(0, "Error retrieving the termination status of child (%d): %s", err, strerror(err));
-    } else if (waitpid_ret == 0) {
-        // Still running
     } else if (waitpid_ret == child.pid) {
         // Child terminated, check termination status
         if (WIFEXITED(status)) {
