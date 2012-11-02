@@ -119,7 +119,7 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
     output_buffer_full = output.offset == output.size;
     
     // Return value
-    if (child.stdin == -1 && child.stdout == -1) {
+    if (child.stdin == -1 && child.stdout == -1 && child.stderr == -1) {
         checkProcessStatus();
         return DONE;
     } else {
