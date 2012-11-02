@@ -22,8 +22,7 @@ private:
     std::string cmd;
     std::vector<std::string> env;
     Popen3Proc child;
-    bool running;
-    void checkProcessStatus(bool wait_for_term);
+    void checkProcessStatus();
 
 };
 

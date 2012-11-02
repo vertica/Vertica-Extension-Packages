@@ -34,7 +34,6 @@ void ProcessLaunchingPlugin::setupProcess() {
     if (child.pid < 0) {
         vt_report_error(0, "Error running child process (cmd = %s, code = %d): %s", cmd.c_str(), errno, strerror(errno));
     }
-    running = true;
 }
 
 // Pumps data
@@ -44,14 +43,6 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
     if (output.size == output.offset && input.size == input.offset && input_state != END_OF_FILE) {
         vt_report_error(0, "Can't read nor write, why poll?");
     }
-    
-    // Detect if the process has exited yet.
-    // Has to be done before we check for data in the pipe;
-    // if it's done before, we might miss that it has exited,
-    // in which case we'll just loop again;
-    // but if it's done after, we might miss the last packet
-    // of data.
-    checkProcessStatus(false);
     
     bool stdin_can_accept_data, stdout_has_data, stderr_has_data;
     if (ppoll3(child, &stdin_can_accept_data, &stdout_has_data, &stderr_has_data, 10)) {
@@ -129,6 +120,7 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
     
     // Return value
     if (child.stdin == -1 && child.stdout == -1) {
+        checkProcessStatus();
         return DONE;
     } else {
         if (input_state != END_OF_FILE && input_buffer_empty && child.stdin >= 0) {
@@ -143,25 +135,18 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
 
 void ProcessLaunchingPlugin::destroyProcess() {
     pclose3(child);
-    checkProcessStatus(true);
 }
 
-void ProcessLaunchingPlugin::checkProcessStatus(bool wait_for_term) {
-    if (!running)
-        return; // process terminated and termination status was already collected
-    
+void ProcessLaunchingPlugin::checkProcessStatus() {
     int status;
-    pid_t waitpid_ret = waitpid(child.pid, &status, wait_for_term ? 0 : WNOHANG);
+    pid_t waitpid_ret = waitpid(child.pid, &status, 0);
     if (waitpid_ret == -1) {
         int err = errno;
         vt_report_error(0, "Error retrieving the termination status of child (%d): %s", err, strerror(err));
     } else if (waitpid_ret == 0) {
         // Still running
     } else if (waitpid_ret == child.pid) {
-        // Child terminated
-        running = false;
-        
-        // Check termination status
+        // Child terminated, check termination status
         if (WIFEXITED(status)) {
             if (WEXITSTATUS(status) == 0) {
                 // Success!
