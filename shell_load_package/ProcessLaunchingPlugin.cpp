@@ -5,6 +5,7 @@
 #include "LoadArgParsers.h"
 #include "popen3.h"
 #include <stdio.h>
+#include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
 #include <fcntl.h>
