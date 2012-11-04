@@ -9,8 +9,8 @@ commands to generate or fetch data, and commands to filter data loaded
 by an existing Vertica source, passing it via pipes through an external
 command.
 
-Be aware: executing arbitrary shell commands (as the same user as the
-Vertica process!) is a loaded gun and should be used with care.
+Be aware: executing arbitrary shell commands is a loaded gun and should
+be used with care.
 
 -------------------------------
 BUILDING
@@ -33,6 +33,19 @@ Assuming vsql is in your path, just do:
 $ make install
 $ make uninstall
 
+Make sure the user running the Vertica process is able to sudo to user 'nobody'
+without password and without having a tty. The following /etc/sudoers entry
+should work:
+
+dbadmin ALL=(ALL) NOPASSWD: ALL
+Defaults:dbadmin !requiretty
+
+Alternatively, add -DNO_SUDO to CXXFLAGS in the Makefile to have the
+commands run as the Vertica process. Note that even though running as 'nobody'
+is not secure (one user could harm or inspect another user's process), at
+least it is a bit safer in that an accidental "rm -rf" will not delete your
+database.
+
 -------------------------------
 USAGE
 -------------------------------
@@ -41,8 +54,9 @@ COPY <table> WITH SOURCE ExternalSource(cmd='<command>' [, nodes='<nodes list>']
 COPY <table> WITH FILTER ExternalFilter(cmd='<command>');
 
 Arguments:
-command - command to execute.
-nodes list - comma-separated list of node names to execute on.  By default will pick one node arbitrarily.
+command    - command to execute.
+nodes list - comma-separated list of node names to execute on,
+             'ANY NODE' (default) or 'ALL NODES'.
 
 The actual execution is accomplished by forking and running: sh -c <command>
 Because the command is actually interpreted by the shell, pipes,
@@ -52,6 +66,22 @@ Example:
 create table t (i int);
 copy t with source ExternalSource(cmd='seq 1 10');
 copy t from 'list_of_numbers.txt.gz' with filter ExternalFilter(cmd='gunzip');
+
+The following environment variables are available from ExternalSource:
+
+  - CURRENT_NODE_NAME  - name of the current node, e.g. 'v_test_node0001'
+  - TARGET_NODE_NAMES  - comma-separated list of nodes on which the query runs
+  - NUM_TARGET_NODES   - number of nodes on which the query runs
+  - CURRENT_NODE_INDEX - an index (0..NUM_TARGET_NODES-1) of this node
+
+You can use NUM_TARGET_NODES and CURRENT_NODE_INDEX to have cmd return a subset
+of data on each node, e.g. that where:
+
+    [ $something % $NUM_TARGET_NODES -eq $CURRENT_NODE_INDEX ]
+
+The following environment variables are available from ExternalFilter:
+
+  - CURRENT_NODE_NAME  - see above
 
 -------------------------------
 LICENSE

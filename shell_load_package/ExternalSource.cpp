@@ -2,60 +2,29 @@
 
 #include "Vertica.h"
 #include "LoadArgParsers.h"
-#include <stdio.h>
-#include <poll.h>
-#include <sys/wait.h>
+#include "ProcessLaunchingPlugin.h"
 
 using namespace Vertica;
 
-class ExternalSource : public UDSource {
-private:
-    FILE *handle;
-    std::string cmd;
-
-    virtual StreamState process(ServerInterface &srvInterface, DataBuffer &output) {
-        pollfd pfd;
-	pfd.fd = fileno(handle);
-	pfd.events = POLLIN;
-	pfd.revents = 0;
-	int ret = poll(&pfd, 1, 1000);  // Timeout and try again after 1000ms
-
-	if (ret == 0) {
-	    return KEEP_GOING;
-	} else if (ret < 0) {
-	    vt_report_error(0, "Could not read from external process '%s'", cmd.c_str());
-	}
-
-        output.offset = fread(output.buf + output.offset, 1, output.size - output.offset, handle);
-        return feof(handle) ? DONE : OUTPUT_NEEDED;
+class ExternalSource : public UDSource, protected ProcessLaunchingPlugin {
+    
+    virtual StreamState process(ServerInterface &srvInterface,
+                                DataBuffer &output)
+    {
+        DataBuffer input = {NULL, 0, 0};
+        InputState input_state = END_OF_FILE;
+        return pump(input, input_state, output);
     }
 
 public:
-    ExternalSource(std::string cmd) : cmd(cmd) {}
+    ExternalSource(std::string cmd, std::vector<std::string> env) : ProcessLaunchingPlugin(cmd, env) {}
 
     void setup(ServerInterface &srvInterface) {
-        handle = popen(cmd.c_str(),"r");
-
-        // Validate the file handle; make sure we can read from this file
-        if (handle == NULL) {
-            vt_report_error(0, "Error opening file [%s]", cmd.c_str());
-        }
+        setupProcess();
     }
 
     void destroy(ServerInterface &srvInterface) {
-        int status = pclose(handle);
-
-        if (WIFEXITED(status)) {
-            if (WEXITSTATUS(status) == 0) {
-                // Success!
-            } else {
-                vt_report_error(0, "Process exited with status %d", WEXITSTATUS(status));
-            }
-        } else if (WIFSIGNALED(status)) {
-            vt_report_error(0, "Process killed by signal %d%s", WTERMSIG(status), WCOREDUMP(status) ? " (core dumped)" : "");
-        } else {
-            vt_report_error(0, "Process terminated with Unexpected status - 0x%x\n", status);
-        }
+        destroyProcess();
     }
 };
 
@@ -69,7 +38,7 @@ public:
         std::vector<ArgEntry> argSpec;
         argSpec.push_back((ArgEntry){"cmd", true, VerticaType(VarcharOID, -1)});
         argSpec.push_back((ArgEntry){"nodes", false, VerticaType(VarcharOID, -1)});
-        validateArgs("FileSource", argSpec, srvInterface.getParamReader());
+        validateArgs("ExternalSource", argSpec, srvInterface.getParamReader());
 
         /* Populate planData */
         // Nothing to do here
@@ -81,9 +50,47 @@ public:
 
     virtual std::vector<UDSource*> prepareUDSources(ServerInterface &srvInterface,
             NodeSpecifyingPlanContext &planCtxt) {
+        
+        // I bet this could be written in 1/3 the lines... sorry :/
+        
+        std::string cmd = srvInterface.getParamReader().getStringRef("cmd").str();
+        std::vector<std::string> env;
+        env.push_back(std::string("CURRENT_NODE_NAME=") + srvInterface.getCurrentNodeName());
+        
+        std::vector<std::string> targetNodes = planCtxt.getTargetNodes();
+        
+        // Concatenate node names
+        std::ostringstream targetNodeNamesStream;
+        targetNodeNamesStream << "TARGET_NODE_NAMES=";
+        for (int i = 0; i < targetNodes.size(); i++) {
+            targetNodeNamesStream << targetNodes[i];
+            if (i > 0) {
+                targetNodeNamesStream << ",";
+            }
+        }
+        env.push_back(targetNodeNamesStream.str());
+        
+        // Find index of current node
+        int currentNodeIndex = -1;
+        for (int i = 0; i < targetNodes.size(); i++) {
+            if (targetNodes[i] == srvInterface.getCurrentNodeName()) {
+                currentNodeIndex = i;
+                break;
+            }
+        }
+        if (currentNodeIndex == -1)
+            vt_report_error(0, "Current node is not a target node?");
+        
+        std::ostringstream numTargetNodesStream;
+        numTargetNodesStream << "NUM_TARGET_NODES=" << targetNodes.size();
+        env.push_back(numTargetNodesStream.str());
+        
+        std::ostringstream currentNodeIndexStream;
+        currentNodeIndexStream << "CURRENT_NODE_INDEX=" << currentNodeIndex;
+        env.push_back(currentNodeIndexStream.str());
+        
         std::vector<UDSource*> retVal;
-	retVal.push_back(vt_createFuncObj(srvInterface.allocator, ExternalSource,
-					  srvInterface.getParamReader().getStringRef("cmd").str()));
+        retVal.push_back(vt_createFuncObj(srvInterface.allocator, ExternalSource, cmd, env));
         return retVal;
     }
 
