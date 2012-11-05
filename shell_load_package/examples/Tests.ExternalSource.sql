@@ -2,7 +2,7 @@
 create table t (i integer);
 
 copy t with source ExternalSource(cmd='seq 1 10') no commit;
-select * from t;
+select * from t order by i asc;
 rollback;
 
 drop table t;
