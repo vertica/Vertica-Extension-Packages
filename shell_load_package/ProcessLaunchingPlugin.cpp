@@ -136,6 +136,7 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
 
 void ProcessLaunchingPlugin::destroyProcess() {
     pclose3(child);
+    waitpid(child.pid, NULL, 0);
 }
 
 void ProcessLaunchingPlugin::checkProcessStatus() {
