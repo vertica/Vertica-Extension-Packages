@@ -15,7 +15,7 @@ using namespace Vertica;
 ProcessLaunchingPlugin::ProcessLaunchingPlugin(std::string cmd, std::vector<std::string> env) : cmd(cmd), env(env) {}
 
 #ifndef NO_SUDO
-#define ProcessLaunchingPluginArgv(...) {"/usr/bin/sudo", "-u", "nobody", "-n", "--", __VA_ARGS__, NULL}
+#define ProcessLaunchingPluginArgv(...) {"/usr/bin/sudo", "-E", "-u", "nobody", "-n", "--", __VA_ARGS__, NULL}
 #else
 #define ProcessLaunchingPluginArgv(...) {__VA_ARGS__, NULL}
 #endif
@@ -136,6 +136,7 @@ StreamState ProcessLaunchingPlugin::pump(DataBuffer &input, InputState input_sta
 
 void ProcessLaunchingPlugin::destroyProcess() {
     pclose3(child);
+    waitpid(child.pid, NULL, 0);
 }
 
 void ProcessLaunchingPlugin::checkProcessStatus() {

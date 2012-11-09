@@ -1,4 +1,5 @@
 CREATE TABLE
+CREATE TABLE
  Rows Loaded 
 -------------
           10
@@ -19,4 +20,21 @@ CREATE TABLE
 (10 rows)
 
 ROLLBACK
+ Rows Loaded 
+-------------
+           1
+(1 row)
+
+ count 
+-------
+     0
+(1 row)
+
+ count 
+-------
+     1
+(1 row)
+
+ROLLBACK
+DROP TABLE
 DROP TABLE
