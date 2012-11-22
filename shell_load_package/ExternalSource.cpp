@@ -63,10 +63,10 @@ public:
         std::ostringstream targetNodeNamesStream;
         targetNodeNamesStream << "TARGET_NODE_NAMES=";
         for (int i = 0; i < targetNodes.size(); i++) {
-            targetNodeNamesStream << targetNodes[i];
             if (i > 0) {
                 targetNodeNamesStream << ",";
             }
+            targetNodeNamesStream << targetNodes[i];
         }
         env.push_back(targetNodeNamesStream.str());
         
