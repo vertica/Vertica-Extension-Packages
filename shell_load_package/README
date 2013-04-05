@@ -62,10 +62,17 @@ The actual execution is accomplished by forking and running: sh -c <command>
 Because the command is actually interpreted by the shell, pipes,
 redirects, looping and other shell functionality is available.
 
-Example:
+Example 1:
+Creating a table and populating it once.
+
 create table t (i int);
 copy t with source ExternalSource(cmd='seq 1 10');
 copy t from 'list_of_numbers.txt.gz' with filter ExternalFilter(cmd='gunzip');
+
+Example 2:
+Creating an external table without state (is populated on every query).
+
+create external table t (i int) as copy source ExternalSource(cmd='seq 1 10');
 
 The following environment variables are available from ExternalSource:
 
