@@ -17,12 +17,11 @@
 // (Ew...)
 #include "StringParsers.h"
 
+using namespace Vertica;
+
 static inline TimeADT getTimeFromHMS(uint32 hour, uint8 min, uint8 sec) {
     return getTimeFromUnixTime(sec + min*60 + hour*3600);
 }
-
-
-using namespace Vertica;
 
 class ODBCLoader : public UDParser {
 public:
@@ -99,8 +98,12 @@ private:
         case NumericOID:        return SQL_NUMERIC;
         case BinaryOID:         return SQL_BINARY;
         case VarbinaryOID:      return SQL_LONGVARBINARY;
-        case LongVarbinaryOID:  return SQL_LONGVARBINARY;
-        case LongVarcharOID:    return SQL_LONGVARCHAR;
+
+#ifndef NO_LONG_OIDS
+	case LongVarbinaryOID:  return SQL_LONGVARBINARY;
+	case LongVarcharOID:    return SQL_LONGVARCHAR;
+#endif // NO_LONG_OIDS
+
         default:                vt_report_error(0, "Unrecognized Vertica type: %s (OID %llu)", type.getTypeStr(), type.getTypeOid()); return SQL_UNKNOWN_TYPE;  // Should never get here; vt_report_error() shouldn't return
         }
     }
@@ -124,8 +127,12 @@ private:
         case NumericOID:        return SQL_C_CHAR;
         case BinaryOID:         return SQL_C_BINARY;
         case VarbinaryOID:      return SQL_C_BINARY;
-        case LongVarbinaryOID:  return SQL_C_BINARY;
-        case LongVarcharOID:    return SQL_C_CHAR;
+
+#ifndef NO_LONG_OIDS
+	case LongVarbinaryOID:  return SQL_C_BINARY;
+	case LongVarcharOID:    return SQL_C_CHAR;
+#endif // NO_LONG_OIDS
+
         default:                vt_report_error(0, "Unrecognized Vertica type %s (OID: %llu)", type.getTypeStr(), type.getTypeOid()); return SQL_UNKNOWN_TYPE;  // Should never get here; vt_report_error() shouldn't return
         }
     }
@@ -141,7 +148,11 @@ private:
         // Everything string-based is the same size too.
         // Except ODBC may decide that we want a trailing null terminator.
         case CharOID: case VarcharOID: case BinaryOID: case VarbinaryOID:
-        case LongVarbinaryOID: case LongVarcharOID:
+	
+#ifndef NO_LONG_OIDS
+	case LongVarbinaryOID: case LongVarcharOID:
+#endif // NO_LONG_OIDS
+
             return type.getMaxSize() + 1;
 
         // Numeric is a special beast
@@ -266,7 +277,11 @@ public:
                         // Strings (all the same representation)
                     case CharOID: case BinaryOID:
                     case VarcharOID: case VarbinaryOID:
-                    case LongVarcharOID: case LongVarbinaryOID:
+
+#ifndef NO_LONG_OIDS
+		    case LongVarcharOID: case LongVarbinaryOID:
+#endif // NO_LONG_OIDS
+
                         if (data.len == SQL_NTS) { data.len = strnlen((char*)data.buf, getFieldSizeForCol(i)); }
                         writer->getStringRef(i).copy((char*)data.buf, data.len);
                         break;
