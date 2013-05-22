@@ -16,11 +16,18 @@ To build:
 
 $ make
 
+Note that this UDx is targeted against the Vertica 6.1 SDK or later.  If you are using Vertica 6.0, you can instead do
+
+$ make CXXFLAGS="-DNO_LONG_OIDS"
+
 The ODBC Loader depends on ODBC.  It is tested with the unixODBC driver manager.  unixODBC is available through all major Linux distribution's package managers; we recommend getting the supported version through your distribution.  It is also available from <http://www.unixodbc.org>.
 
-unixODBC needs to be installed on ALL COMPUTERS IN YOUR VERTICA CLUSTER in order to be able to use the ODBC Loader!
+unixODBC needs to be installed and configured IDENTICALLY on ALL COMPUTERS IN YOUR VERTICA CLUSTER in order to be able to use the ODBC Loader!
 
-In order to compile the ODBC Loader, you will need the unixODBC development headers as well.  Most Linux distributions package these separately, in a package named something like "unixodbc-dev" or "unixodbc-devel".  You only need these installed on the machine you're using to build the ODBC Loader.
+In order to compile the ODBC Loader, you will need the unixODBC development headers as well.  Most Linux distributions package these separately, in a package named something like "unixodbc-dev" or "unixodbc-devel".  You only need these installed on the machine you're using to compile the ODBC Loader.
+
+Please make sure that you are compiling on your Vertica cluster (or at least on a machine that is running the same version and build of unixODBC as your Vertica cluster).  UnixODBC's ABI, particularly prior to version 2.3.0, is not 100% stable; you need to compile for the particular version that you are using.
+
 
 -------------------------------
 INSTALLING / UNINSTALLING
