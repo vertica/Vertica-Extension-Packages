@@ -215,5 +215,37 @@ class ShellFactory : public TransformFunctionFactory
 
 };
 
-RegisterFactory(ShellFactory);
+class ShellFactoryBinary : public ShellFactory {
+public:
+    // Tell Vertica that we take in a row with 1 string, and return a row with 2 strings
+    virtual void getPrototype(ServerInterface &srvInterface, 
+                              ColumnTypes &argTypes, 
+                              ColumnTypes &returnType)
+    {
+        argTypes.addVarbinary();
 
+	returnType.addInt();
+        returnType.addVarbinary();
+    }
+
+    // Tell Vertica what our return string length will be, given the input
+    // string length
+    virtual void getReturnType(ServerInterface &srvInterface, 
+                               const SizedColumnTypes &input_types, 
+                               SizedColumnTypes &output_types)
+    {
+        // Error out if we're called with anything but 1 argument
+        if (input_types.getColumnCount() != 1)
+            vt_report_error(0, "Function only accepts 1 argument, but %zu provided", 
+                            input_types.getColumnCount());
+
+	output_types.addInt("line_num");
+
+        // other output is a line of output from the shell command, which is
+        // truncated at LINE_MAX characters
+        output_types.addVarbinary(LINE_MAX, "text");
+    }
+};
+
+RegisterFactory(ShellFactory);
+RegisterFactory(ShellFactoryBinary);
