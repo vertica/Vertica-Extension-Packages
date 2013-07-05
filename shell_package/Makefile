@@ -17,13 +17,13 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/, Hostname.o Shell.o IntSequence.o)
+		   $(addprefix build/, Hostname.o Shell.o IntSequence.o ProcessLaunchingPlugin.o popen3.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/Shell.so
 
-CXX=g++
-CXXFLAGS=-g -D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
+CXX?=g++
+CXXFLAGS=-g -D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE) -DNO_SUDO
 LDFLAGS=-shared
 
 # add optimization if not a debug build
@@ -59,13 +59,16 @@ build/Vertica.o: $(VERTICA_SDK_INCLUDE)/Vertica.cpp
 
 # Targets to install and uninstall the library and functions
 install: $(PACKAGE_LIBNAME) ddl/install.sql
-	$(VSQL) -f ddl/install.sql
+	$(VSQL) -af ddl/install.sql
 uninstall: ddl/uninstall.sql
-	$(VSQL) -f ddl/uninstall.sql
+	$(VSQL) -af ddl/uninstall.sql
 
 # run examples
 test:
-	$(VSQL) -f examples/removespace.sql
+	$(MAKE) install
+	$(VSQL) -af examples/diagnostics.sql
+	$(VSQL) -af examples/shell.sql
+	$(MAKE) uninstall
 
 clean:
 	rm -rf build
