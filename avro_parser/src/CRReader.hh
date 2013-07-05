@@ -49,7 +49,7 @@ typedef boost::array<uint8_t, 16> DataFileSync;
  */
 class AVRO_DECL CRReaderBase : boost::noncopyable {
     //const std::string filename_;
-    const ContinuousReader cr_;
+    const ContinuousReader &cr_;
     const std::auto_ptr<InputStream> stream_;
     const DecoderPtr decoder_;
     int64_t objectCount_;

@@ -34,6 +34,8 @@ LDFLAGS=-shared -L $(THIRD_PARTY_LIB) -lavrocpp_s
 ifndef DEBUG
 endif
 
+export PATH := $(PATH):$(PWD)/build/bin
+
 build : $(PACKAGE_LIBNAME) 
 
 install: build

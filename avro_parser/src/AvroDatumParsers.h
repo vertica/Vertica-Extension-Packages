@@ -1,21 +1,23 @@
 #ifndef avro_DatumParsers_hh__
 #define avro_DatumParsers_hh__
 
+using namespace Vertica;
+
 /**
  * Parse an avro bool to a boolean
  */
 bool
 parseBool (const avro::GenericDatum& d, 
            size_t colNum,
-           Vertica::vbool& target,
-           const Vertica::VerticaType& type)
+           vbool& target,
+           const VerticaType& type)
 {
     if ( d.type() != AVRO_BOOL )
         return false;
 
     target = (d.value<bool>() ?
-              Vertica::vbool_true :
-              Vertica::vbool_false);
+              vbool_true :
+              vbool_false);
     return true;
 }
 
@@ -25,8 +27,8 @@ parseBool (const avro::GenericDatum& d,
 bool
 parseInt (const avro::GenericDatum& d, 
           size_t colNum,
-          Vertica::vint& target,
-          const Vertica::VerticaType& type)
+          vint& target,
+          const VerticaType& type)
 {
    
     if ( d.type() == AVRO_INT )
@@ -44,8 +46,8 @@ parseInt (const avro::GenericDatum& d,
 bool
 parseFloat (const avro::GenericDatum& d, 
             size_t colNum,
-            Vertica::vfloat& target,
-            const Vertica::VerticaType& type)
+            vfloat& target,
+            const VerticaType& type)
 {
     if ( d.type() == AVRO_FLOAT )
         target = (double)d.value<float>();
@@ -62,8 +64,8 @@ parseFloat (const avro::GenericDatum& d,
 bool
 parseVarchar (const avro::GenericDatum& d, 
               size_t colNum,
-              Vertica::VString& target,
-              const Vertica::VerticaType& type)
+              VString& target,
+              const VerticaType& type)
 {
     if ( d.type() != AVRO_STRING )
         return false;
@@ -78,8 +80,8 @@ parseVarchar (const avro::GenericDatum& d,
 bool
 parseVarbinary(const avro::GenericDatum& d, 
                size_t colNum,
-               Vertica::VString& target,
-               const Vertica::VerticaType& type)
+               VString& target,
+               const VerticaType& type)
 {
     // Don't attempt to parse binary.
     // Just copy it.
@@ -92,8 +94,8 @@ parseVarbinary(const avro::GenericDatum& d,
 
 bool parseNumeric(const avro::GenericDatum& d, 
                   size_t colNum,
-                  Vertica::VNumeric& target,
-                  const Vertica::VerticaType& type)
+                  VNumeric& target,
+                  const VerticaType& type)
 {
     if ( d.type() != AVRO_STRING )
         return false;
@@ -101,7 +103,7 @@ bool parseNumeric(const avro::GenericDatum& d,
     std::vector<char> str (val.size()+1);
     std::copy(val.begin(), val.end(), str.begin());
     str.push_back('\0');
-    return Vertica::VNumeric::charToNumeric(&str[0], type, target);
+    return VNumeric::charToNumeric(&str[0], type, target);
 }
 
 /**
@@ -111,15 +113,15 @@ bool parseNumeric(const avro::GenericDatum& d,
  */
 bool parseDate(const avro::GenericDatum& d, 
               size_t colNum,
-              Vertica::DateADT& target,
-              const Vertica::VerticaType& type)
+              DateADT& target,
+              const VerticaType& type)
 {
     try {
         std::string val = d.value<std::string>();
-        target = Vertica::dateIn(val.c_str(), true);
+        target = dateIn(val.c_str(), true);
         return true;
     } catch (...) {
-        Vertica::log("Invalid date format: %s", d.value<std::string>().c_str());
+        log("Invalid date format: %s", d.value<std::string>().c_str());
         return false;
     }
 }
@@ -131,12 +133,12 @@ bool parseDate(const avro::GenericDatum& d,
  */
 bool parseTime(const avro::GenericDatum& d, 
                size_t colNum,
-               Vertica::TimeADT& target,
-               const Vertica::VerticaType& type)
+               TimeADT& target,
+               const VerticaType& type)
 {
     try {
         std::string val = d.value<std::string>();
-        target = Vertica::timeIn(val.c_str(), type.getTypeMod(), true);
+        target = timeIn(val.c_str(), type.getTypeMod(), true);
         return true;
     } catch (...) {
         return false;
@@ -150,12 +152,12 @@ bool parseTime(const avro::GenericDatum& d,
  */
 bool parseTimestamp(const avro::GenericDatum& d, 
                     size_t colNum,
-                    Vertica::Timestamp& target,
-                    const Vertica::VerticaType& type)
+                    Timestamp& target,
+                    const VerticaType& type)
 {
     try {
         std::string val = d.value<std::string>();
-        target = Vertica::timestampIn(val.c_str(), type.getTypeMod(), true);
+        target = timestampIn(val.c_str(), type.getTypeMod(), true);
         return true;
     } catch (...) {
         return false;
@@ -169,12 +171,12 @@ bool parseTimestamp(const avro::GenericDatum& d,
  */
 bool parseTimeTz(const avro::GenericDatum& d, 
                  size_t colNum,
-                 Vertica::TimeTzADT& target,
-                 const Vertica::VerticaType& type)
+                 TimeTzADT& target,
+                 const VerticaType& type)
 {
     try {
         std::string val = d.value<std::string>();
-        target = Vertica::timetzIn(val.c_str(), type.getTypeMod(), true);
+        target = timetzIn(val.c_str(), type.getTypeMod(), true);
         return true;
     } catch (...) {
         return false;
@@ -188,12 +190,12 @@ bool parseTimeTz(const avro::GenericDatum& d,
  */
 bool parseTimestampTz(const avro::GenericDatum& d, 
                       size_t colNum, 
-                      Vertica::TimestampTz &target, 
-                      const Vertica::VerticaType &type) 
+                      TimestampTz &target, 
+                      const VerticaType &type) 
 {
     try {
         std::string val = d.value<std::string>();
-        target = Vertica::timestamptzIn(val.c_str(), type.getTypeMod(), true);
+        target = timestamptzIn(val.c_str(), type.getTypeMod(), true);
         return true;
     } catch (...) {
         return false;
@@ -205,12 +207,12 @@ bool parseTimestampTz(const avro::GenericDatum& d,
  */
 bool parseInterval(const avro::GenericDatum& d, 
                    size_t colNum, 
-                   Vertica::Interval &target, 
-                   const Vertica::VerticaType &type) 
+                   Interval &target, 
+                   const VerticaType &type) 
 {
     try {
         std::string val = d.value<std::string>();        
-        target = Vertica::intervalIn(val.c_str(), type.getTypeMod(), true);
+        target = intervalIn(val.c_str(), type.getTypeMod(), true);
         return true;
     } catch (...) {
         return false;
@@ -223,91 +225,91 @@ bool parseInterval(const avro::GenericDatum& d,
 bool
 parseAvroFieldToType(const GenericDatum& d, 
                      size_t colNum, 
-                     const Vertica::VerticaType &type,
-                     Vertica::StreamWriter *writer)
+                     const VerticaType &type,
+                     ::Vertica::StreamWriter *writer)
 {
     bool retVal;
     
     switch(type.getTypeOid())
     {
-    case Vertica::BoolOID :
+    case BoolOID :
     {
-        Vertica::vbool val;
+        vbool val;
         retVal = parseBool(d, colNum, val, type);
         writer->setBool(colNum, val);
         break;
         
     }
-    case Vertica::Int8OID: {
-        Vertica::vint val;
+    case Int8OID: {
+        vint val;
         retVal = parseInt(d, colNum, val, type);
         writer->setInt(colNum, val);
         break;
     }
-    case Vertica::Float8OID: {
-        Vertica::vfloat val;
+    case Float8OID: {
+        vfloat val;
         retVal = parseFloat(d, colNum, val, type);
         writer->setFloat(colNum, val);
         break;
     }
-    case Vertica::CharOID: {
-        Vertica::VString val = writer->getStringRef(colNum);
+    case CharOID: {
+        VString val = writer->getStringRef(colNum);
         retVal = parseVarchar(d, colNum, val, type);
         break;
     }
-    case Vertica::VarcharOID: {
-        Vertica::VString val = writer->getStringRef(colNum);
+    case VarcharOID: {
+        VString val = writer->getStringRef(colNum);
         retVal = parseVarchar(d, colNum, val, type);
         break;
     }
-    case Vertica::NumericOID: {
-        Vertica::VNumeric val = writer->getNumericRef(colNum);
+    case NumericOID: {
+        VNumeric val = writer->getNumericRef(colNum);
         retVal = parseNumeric(d, colNum, val, type);
         break;
     }
-    case Vertica::DateOID: {
-        Vertica::DateADT val;
+    case DateOID: {
+        DateADT val;
         retVal = parseDate(d, colNum, val, type);
         writer->setDate(colNum, val);
         break;
     }
-    case Vertica::TimeOID: {
-        Vertica::TimeADT val;
+    case TimeOID: {
+        TimeADT val;
         retVal = parseTime(d, colNum, val, type);
         writer->setTime(colNum, val);
         break;
     }
-    case Vertica::TimestampOID: {
-        Vertica::Timestamp val;
+    case TimestampOID: {
+        Timestamp val;
         retVal = parseTimestamp(d, colNum, val, type);
         writer->setTimestamp(colNum, val);
         break;
     }
-    case Vertica::TimestampTzOID: {
-        Vertica::TimestampTz val;
+    case TimestampTzOID: {
+        TimestampTz val;
         retVal = parseTimestampTz(d, colNum, val, type);
         writer->setTimestampTz(colNum, val);
         break;
     }
-    case Vertica::BinaryOID:
-    case Vertica::VarbinaryOID: {
-        Vertica::VString val = writer->getStringRef(colNum);
+    case BinaryOID:
+    case VarbinaryOID: {
+        VString val = writer->getStringRef(colNum);
         retVal = parseVarbinary(d, colNum, val, type);
         break;
     }
-    case Vertica::IntervalOID: {
-        Vertica::Interval val;
+    case IntervalOID: {
+        Interval val;
         retVal = parseInterval(d, colNum, val, type);
         writer->setInterval(colNum, val);
         break;
     }
-    case Vertica::TimeTzOID: {
-        Vertica::TimeTzADT val;
+    case TimeTzOID: {
+        TimeTzADT val;
         retVal = parseTimeTz(d, colNum, val, type);
         writer->setTimeTz(colNum, val);
         break;
     }
-    case Vertica::IntervalYMOID:
+    case IntervalYMOID:
     default:
         vt_report_error(0, "Error, unrecognized type: '%s'", type.getTypeStr());
         retVal = false;
