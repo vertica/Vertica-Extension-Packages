@@ -16,37 +16,34 @@ TRANSPOSE  (http://www.orafaq.com/node/1871)
 GROUP_GENERATOR - use to build ROLLUP, CUBE, GROUPING_SETS, MULTIPLE DISTINCT AGGREGATES in the NEW EE.
 
 -------------------------------
-BUILDING
--------------------------------
-
-To build:
-
-$ make
-
-
--------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
 
-Assuming vsql is in your path, just do:
+You can install this package by running the SQL commands in:
+ src/ddl/install.sql 
+or, to uninstall,
+ src/ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a 
+node in	your cluster and are running them from there.
+
+Alternatively, assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
 
-Alternately, you can find the DDL that 'make install' uses in:
- src/ddl/install.sql 
-and
- src/ddl/uninstall.sql
+-------------------------------
+BUILDING
+-------------------------------
+
+To build from source:
+
+$ make
 
 -------------------------------
 USAGE
 -------------------------------
 
-See examples
-
--------------------------------
-PERFORMANCE
--------------------------------
+See examples (in the examples/ directory)
 
 -------------------------------
 LICENSE

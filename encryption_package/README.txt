@@ -60,10 +60,26 @@ this today, but the key would be exposed with a simple
 'select ..from views'.
 
 -------------------------------
+INSTALLING / UNINSTALLING
+-------------------------------
+
+You can install by running the SQL statements in
+ src/ddl/install.sql 
+or, to uninstall,
+ src/ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a 
+node in	your cluster and are running them from there.
+
+Alternatively, assuming you can run vsql, just do:
+
+$ make install
+$ make uninstall
+
+-------------------------------
 BUILDING
 -------------------------------
 
-To build:
+To build from source:
 
 $ make
 
@@ -74,19 +90,6 @@ in src/third-party/include/my_aes.h to 192 or 256 bits if you're
 inclined. I kept the 128 bit default to be the same as MySQL for
 compatibility.
 
--------------------------------
-INSTALLING / UNINSTALLING
--------------------------------
-
-Assuming you can run vsql, just do:
-
-$ make install
-$ make uninstall
-
-Alternately, you can find the DDL that 'make install' uses in:
- src/ddl/install.sql 
-and
- src/ddl/uninstall.sql
 
 -------------------------------
 USAGE

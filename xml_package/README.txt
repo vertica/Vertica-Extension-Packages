@@ -3,6 +3,13 @@ Note:
 
 The reason these are in a singular package is because they all rely on one another.
 
+Installation:
+You can install this library by running the SQL commands in
+ ddl/install.sql
+Or, to uninstall,
+ ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a
+node in your cluster and are running them from there.
 
 
 

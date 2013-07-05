@@ -17,26 +17,28 @@ image file.
 3. A demonstration python program that takes heat map output and overlays your data over Google maps.
 
 -------------------------------
-BUILDING
--------------------------------
-
-To build:
-
-$ make
-
--------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
 
-Assuming vsql is in your path, just do:
+You can install by running the SQL statements in
+ src/ddl/install.sql 
+or, to uninstall,
+ src/ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a 
+node in	your cluster and are running them from there.
+
+Alternatively, assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
 
-Alternately, you can find the DDL that 'make install' uses in:
- src/ddl/install.sql 
-and
- src/ddl/uninstall.sql
+-------------------------------
+BUILDING
+-------------------------------
+
+To build from source code:
+
+$ make
 
 -------------------------------
 USAGE

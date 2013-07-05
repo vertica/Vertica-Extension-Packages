@@ -51,7 +51,18 @@ INSTRUCTIONS ON SETUP AND USE
   register a free twilio account, and then follow the instructions in
   examples/SMS.sql.
 
-- Step #3: These make commands are supported:
+
+- Step #3: Install.
+  To install a precompiled binary, run the SQL statements in
+   ddl/install.sql
+  or, to uninstall,
+   ddl/uninstall.sql
+
+  Note that the SQL statements assume that you have copied this package 
+  to a node in your cluster and are running them from there.
+
+
+To install from source, these make commands are supported:
   - make: compile the function.
 
   - make install: install the function into the Vertica instance on

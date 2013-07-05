@@ -13,22 +13,19 @@ Be aware: executing arbitrary shell commands is a loaded gun and should
 be used with care.
 
 -------------------------------
-BUILDING
--------------------------------
-
-To build:
-
-$ make
-
-To test the resulting binary:
-
-$ make test
-
--------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
 
-Assuming vsql is in your path, just do:
+To install, first copy build/ExternalFilter.so and 
+build/ExternalSource.so to a node on your cluster.  Then log 
+into that node with vsql and run the following commands:
+
+CREATE LIBRARY ExternalFilterLib AS '/path/to/ExternalFilter.so';
+CREATE FILTER ExternalFilter AS LANGUAGE 'C++' NAME 'ExternalFilterFactory' LIBRARY ExternalFilterLib;
+CREATE LIBRARY ExternalSourceLib AS '/path/to/ExternalSource.so';
+CREATE SOURCE ExternalSource AS LANGUAGE 'C++' NAME 'ExternalSourceFactory' LIBRARY ExternalSourceLib;
+
+Alternatively, assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
@@ -41,10 +38,22 @@ dbadmin ALL=(nobody) NOPASSWD: ALL
 Defaults:dbadmin !requiretty
 
 Alternatively, add -DNO_SUDO to CXXFLAGS in the Makefile to have the
-commands run as the Vertica process. Note that even though running as 'nobody'
-is not secure (one user could harm or inspect another user's process), at
-least it is a bit safer in that an accidental "rm -rf" will not delete your
-database.
+commands run as the Vertica process, and rebuild from source. Note that 
+even though running as 'nobody' is not secure (one user could harm or 
+inspect another user's process), at least it is a bit safer in that an 
+accidental "rm -rf" will not delete your database.
+
+-------------------------------
+BUILDING
+-------------------------------
+
+To build this library from source code:
+
+$ make
+
+To test the resulting binary:
+
+$ make test
 
 -------------------------------
 USAGE

@@ -25,6 +25,23 @@ http://en.wikipedia.org/wiki/Wikipedia:Database_download)
 
 
 -------------------------------
+INSTALLING / UNINSTALLING
+-------------------------------
+
+You can install this library by running the SQL commands in
+ src/ddl/install.sql 
+or, to uninstall,
+ src/ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a
+node in your cluster and are running them from there.
+
+
+Alternatively, assuming vsql is in your path, just do:
+
+$ make install
+$ make uninstall
+
+-------------------------------
 BUILDING
 -------------------------------
 
@@ -32,20 +49,6 @@ To build:
 
 $ make
 
-
--------------------------------
-INSTALLING / UNINSTALLING
--------------------------------
-
-Assuming vsql is in your path, just do:
-
-$ make install
-$ make uninstall
-
-Alternately, you can find the DDL that 'make install' uses in:
- src/ddl/install.sql 
-and
- src/ddl/uninstall.sql
 
 -------------------------------
 USAGE

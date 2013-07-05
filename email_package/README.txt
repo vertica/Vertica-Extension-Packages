@@ -7,24 +7,30 @@ addresses. You can include a subject line and provide an inline message as the
 body, or a text file whose content is printed into the body. 
 
 -------------------------------
-BUILDING
--------------------------------
-
-To build:
-
-$ make
-
-
--------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
 
-Assuming vsql is in your path, just do:
+You can install by copying `build/myudx.so' to your Vertica cluster, then 
+running the following SQL statements:
+
+CREATE LIBRARY EMAILLib as '/path/to/myudx.so';"
+CREATE FUNCTION EMAIL as language 'C++' name 'EMAILFactory' library EMAILLib;
+
+Alternatively, assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
 
 Or, if vsql not in your standard path, edit the makefile.
+
+-------------------------------
+BUILDING
+-------------------------------
+
+To build from source:
+
+$ make
+
 
 -------------------------------
 USAGE

@@ -18,6 +18,19 @@ the 'tparty' directory.  Building the parser also builds those libraries.
 * Installation steps
 ***************************************
 
+To install the pre-compiled binary:
+
+- Copy `lib/AvroParser.so' to a machine in your Vertica cluster
+
+- Connect to that machine with vsql and run the following SQL statements:
+CREATE LIBRARY AvroParserLib AS '/path/to/AvroParser.so';
+CREATE PARSER AvroParser AS LANGUAGE 'C++' NAME 'AvroParserFactory' LIBRARY AvroParserLib;
+
+(That's it!)
+
+
+To install from source code:
+
 - Change to the downloaded directory (if you aren't there already ;) )
     cd Avro
 

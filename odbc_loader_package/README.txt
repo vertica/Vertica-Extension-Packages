@@ -9,10 +9,30 @@ This package contains a pair of User-Defined Load functions, ODBCSource() and OD
 These Load functions connect to a remote database and load data directly from that database into Vertica.  Data is not converted into an intermediate file format; the data is fetched over the network via ODBC and each record is copied directly into Vertica as it is received.
 
 -------------------------------
+INSTALLING / UNINSTALLING
+-------------------------------
+
+You can install by running the SQL statements in
+ ddl/install.sql 
+or, to uninstall,
+ ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a 
+node in your cluster and are running them from there.
+
+Alternatively, assuming vsql is in your path, just do:
+
+$ make install
+$ make uninstall
+
+As mentioned under 'BUILDING', to install the ODBC Loader you will need to have an ODBC driver manager installed on your cluster.
+
+In order for the ODBC Loader to be useful, you will also need to install one or more ODBC drivers.  These must be installed on ALL COMPUTERS IN YOUR VERTICA CLUSTER!  The drivers are what enable the ODBC Loader to talk to other non-Vertica databases.  Each database product typically has its own driver; you'll need to install the driver per their documentation and packages.
+
+-------------------------------
 BUILDING
 -------------------------------
 
-To build:
+To build this library from source code:
 
 $ make
 
@@ -28,24 +48,6 @@ In order to compile the ODBC Loader, you will need the unixODBC development head
 
 Please make sure that you are compiling on your Vertica cluster (or at least on a machine that is running the same version and build of unixODBC as your Vertica cluster).  UnixODBC's ABI, particularly prior to version 2.3.0, is not 100% stable; you need to compile for the particular version that you are using.
 
-
--------------------------------
-INSTALLING / UNINSTALLING
--------------------------------
-
-Assuming vsql is in your path, just do:
-
-$ make install
-$ make uninstall
-
-Alternately, you can find the DDL that 'make install' uses in:
- ddl/install.sql 
-and
- ddl/uninstall.sql
-
-As mentioned under 'BUILDING', to install the ODBC Loader you will need to have an ODBC driver manager installed on your cluster.
-
-In order for the ODBC Loader to be useful, you will also need to install one or more ODBC drivers.  These must be installed on ALL COMPUTERS IN YOUR VERTICA CLUSTER!  The drivers are what enable the ODBC Loader to talk to other non-Vertica databases.  Each database product typically has its own driver; you'll need to install the driver per their documentation and packages.
 
 -------------------------------
 USAGE

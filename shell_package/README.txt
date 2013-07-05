@@ -12,27 +12,42 @@ correctly formulating the query that invokes the Shell function,
 processes can be spawned on any subset of nodes in the cluster.
 
 -------------------------------
-BUILDING
--------------------------------
-
-To build:
-
-$ make
-
-
--------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
 
-Assuming vsql is in your path, just do:
+You can install the package by running the SQL commands in
+ src/ddl/install.sql 
+or, to uninstall,
+ src/ddl/uninstall.sql
+Note that the SQL statements assume that you have copied this package to a
+node in your cluster and are running them from there.
+
+Alternatively, assuming vsql is in your path, just do:
 
 $ make install
 $ make uninstall
 
-Alternately, you can find the DDL that 'make install' uses in:
- src/ddl/install.sql 
-and
- src/ddl/uninstall.sql
+Make sure the user running the Vertica process is able to sudo to user 'nobody'
+without password and without having a tty. The following /etc/sudoers entry
+should work:
+
+dbadmin ALL=(nobody) NOPASSWD: ALL
+Defaults:dbadmin !requiretty
+
+Alternatively, add -DNO_SUDO to CXXFLAGS in the Makefile to have the
+commands run as the Vertica process, and rebuild from source. Note that
+even though running as 'nobody' is not secure (one user could harm or
+inspect another user's process), at least it is a bit safer in that an
+accidental "rm -rf" will not delete your database.
+
+-------------------------------
+BUILDING
+-------------------------------
+
+To build from source code:
+
+$ make
+
 
 -------------------------------
 USAGE
