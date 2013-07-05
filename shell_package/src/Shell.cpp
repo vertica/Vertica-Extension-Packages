@@ -11,14 +11,20 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/signal.h>
+#include <signal.h>
+#include <string.h>
+#include <stdio.h>
+
+#include <algorithm>
 
 #include "Vertica.h"
+#include "ProcessLaunchingPlugin.h"
 
 using namespace Vertica;
 
-#define SHELL_EXECUTABLE "/bin/bash"
-#define BUF_SIZE 1024
-#define LINE_MAX 64000
+#define LINE_MAX 65000
+
+typedef unsigned char byte;
 
 /*
  * This function invokes each input string command as if it was run with: bash -c '<command>'
@@ -26,61 +32,86 @@ using namespace Vertica;
  */
 class Shell : public TransformFunction
 {
+private:
+  // Can't be too large in case we're ever stack-allocated
+  // But this should fit on any reasonable stack
+  byte input_buf[256 * 1024];
+  byte output_buf[256 * 1024];
+  vint line_num;
+
+  sighandler_t orig_handler;
+  
+  bool fillInput(DataBuffer &input, size_t input_max_size, PartitionReader &input_reader, int col, bool keepExistingData = true) {
+    // First, keep any existing data
+    // memmove() handles the case of overlapping data
+
+    if (keepExistingData) {
+      memmove(input.buf, input.buf + input.offset, input.size - input.offset);
+      input.size = input.size - input.offset;
+    } else {
+      input.size = 0;
+    }
+
+    input.offset = 0;
+
+    const VString *str = input_reader.getStringPtr(col);
+    while (str->isNull() || str->length() <= input_max_size - input.size) {
+      if (!str->isNull()) {
+	memcpy(input.buf + input.offset, str->data(), str->length());
+	input.size += str->length();
+      }
+      if (!input_reader.next()) return false;
+      str = input_reader.getStringPtr(col);
+    }
+
+    return true;
+  }
+
+  void emitOutput(DataBuffer &output, PartitionWriter &output_writer, bool flush_output = false) {
+    printf("Output buffer: %zu of %zu bytes used [%s]\n", output.offset, output.size, output.buf);
+    fflush(stdout);
+    size_t pos = 0;
+    size_t line_start = 0;
+    while (pos < output.offset) {
+      if (output.buf[pos] == '\n') {
+	++pos;
+
+	// Hardcode which data goes into which column
+	output_writer.setInt(0, (vint)line_num++);
+	output_writer.getStringRef(1).copy((const char*)&output_buf[line_start], std::min((vint)(pos - line_start), (vint)65000));
+	output_writer.next();
+
+	line_start = pos;
+      } else {
+	++pos;
+      }
+    }
+
+    if (flush_output) {
+      // Hardcode which data goes into which column
+      output_writer.setInt(0, (vint)line_num++);
+      output_writer.getStringRef(1).copy((const char*)&output_buf[line_start], std::min((vint)(pos - line_start), (vint)65000));
+      output_writer.next();
+      output.offset = 0;
+    } else {
+      // Keep unused data in the buffer for next time
+      memmove(output.buf, output.buf + pos, output.offset - pos);
+      output.offset = pos;
+    }
+  }
+
 public:
 
-    /**
-     * ensures don't leave any loose pipes open on exit
-     */
-    struct ScopedPipes {
-        int pipes[2];
+    virtual void setup(ServerInterface &srvInterface, const SizedColumnTypes &argTypes)
+    {
+        orig_handler = signal(SIGCHLD, SIG_DFL);
+    }
 
-        ScopedPipes()
-        { 
-            pipes[0] = 0; 
-            pipes[1] = 0;
-
-            if (pipe(pipes) < 0) {
-                vt_report_error(0, "Unable to open pipe");
-            }
-        }
-
-        void closePipe(int i)
-        {
-            if (pipes[i])
-            {
-                close(pipes[i]);
-                pipes[i] = 0;
-            }
-        }
-
-        ~ScopedPipes()
-        {
-            closePipe(0);
-            closePipe(1);
-        }
-    };
-
-    /**
-     * ensures don't leave any loose sub processes lying around on exit
-     */
-    struct ScopedSubprocess {
-        pid_t pid;
-
-        ScopedSubprocess(pid_t p) : pid(p) {}
-        
-        void terminate(bool gently)
-        {
-            //if (!gently) kill(pid,SIGKILL);
-            int result=0;
-            waitpid(pid, &result, 0);
-            pid = 0;
-        }
-        
-        ~ScopedSubprocess()
-        {
-            terminate(false/*by kill!*/);
-        }
-    };
+    virtual void destroy(ServerInterface &srvInterface, const SizedColumnTypes &argTypes)
+    {
+        // Totally not thread-safe.  Oh well...
+        if (orig_handler != SIG_DFL) signal(SIGCHLD, orig_handler);
+    }
 
     /*
      * For each partition, executes each string input by forking an invocation
@@ -91,124 +122,55 @@ public:
                                   PartitionReader &input_reader,
                                   PartitionWriter &output_writer)
     {
-        // Basic error checking
-        if (input_reader.getNumCols() != 2)
-            vt_report_error(0, "Function only accept 2 arguments, but %zu provided", 
-                            input_reader.getNumCols());
+      printf("test\n");
+      fflush(stdout);
+      // Emulate an ExternalFilter
+      DataBuffer input;
+      input.buf = (char*)&input_buf[0];
+      input.size = sizeof(input_buf);
+      input.offset = 0;
+      // Fetch data for the initial input buffer
+      fillInput(input, sizeof(input_buf), input_reader, 0, false /* keepExistingData */);
 
-        const char *argv[4];
-        const char *dashc = "-c";
-        argv[0] = SHELL_EXECUTABLE;
-        argv[1] = dashc;
-        argv[2] = NULL; // to be filled in
-        argv[3] = NULL; // terminator
+      DataBuffer output;
+      output.buf = (char*)&output_buf[0];
+      output.size = sizeof(output_buf);
+      output.offset = 0;
+      // Initial output buffer should be empty; no data to fetch
 
-        char *envp[1];
-        envp[0] = NULL; // no env passed for the moment.  later
+      StreamState state;
+      InputState input_state = OK;
 
-        char outputline[LINE_MAX];
-        char buf[BUF_SIZE];
+      ProcessLaunchingPlugin p(srvInterface.getParamReader().getStringRef("cmd").str(),
+			       std::vector<std::string>());
 
-        // While we have inputs to process
-        do {
-            // Get a copy of input id
-            const VString &id = input_reader.getStringRef(0);
-            if (id.isNull())
-            {
-                vt_report_error(0, "Cannot supply null for id");
-            }
-            std::string idstr = id.str();
+      p.setupProcess();
+      
+      do {
+	state = p.pump(input, input_state, output);
 
-            // Get a copy of the input command
-            const VString &cmd = input_reader.getStringRef(1);
-            if (cmd.isNull())
-            {
-                VString &outcmd = output_writer.getStringRef(0);
-                outcmd.setNull();
-                VString &outtext = output_writer.getStringRef(1);
-                outtext.setNull();
-                output_writer.next();
-            }
-            std::string cmdstr = cmd.str();
-            argv[2] = cmdstr.c_str();
-            
-            ScopedPipes stdinpipe;
-            ScopedPipes stdoutpipe;
+	switch (state) {
+	case INPUT_NEEDED: 
+	  if (input_state != END_OF_FILE && input_reader.getNumRows() > 0) {
+	    input_state = (fillInput(input, sizeof(input_buf), input_reader, 0)
+			   ? OK : END_OF_FILE);
+	  }
+	  break;	  
+	case OUTPUT_NEEDED:
+	  emitOutput(output, output_writer);
+	  break;
+	case DONE:
+	  break;
+	case KEEP_GOING:
+	  continue;
+	default:
+	  vt_report_error(0, "Unsupported StreamState: %d", (int)state);
+	}
+      } while (state != DONE);
 
-            pid_t result = vfork();
-            if (result == 0)
-            {
-                // setup pipes to stdin, stdout, stderr
-                // cannot use method, as it modifies memory (disallowed under vfork)
-                close(0);
-                dup(stdinpipe.pipes[0]);
-                close(1);
-                dup(stdoutpipe.pipes[1]);
-                close(2);
-                dup(stdoutpipe.pipes[1]);
+      emitOutput(output, output_writer, true /* flush_output */);
 
-                if (execve(SHELL_EXECUTABLE,const_cast<char * const *>(argv),envp))
-                {
-                    _exit(-1); // silently exit
-                }
-            }
-
-            ScopedSubprocess subproc(result);
-
-            // close far side of pipes
-            stdinpipe.closePipe(0);
-            stdoutpipe.closePipe(1);
-           
-            // do not provide any input to command
-            stdinpipe.closePipe(0);
-            
-            // read  output
-            int bufend = 0;
-            bool hadOutput = false;
-            ssize_t count=0;
-            // read 1K chunks from pipe
-            while ((count = read(stdoutpipe.pipes[0], buf, BUF_SIZE)))
-            {
-                // iterate, copying into 
-                for (ssize_t ptr = 0; ptr < count; ptr++)
-                {
-                    if (buf[ptr] == '\n')
-                    {
-                        // Copy string into results
-                        output_writer.getStringRef(0).copy(idstr);
-                        output_writer.getStringRef(1).copy(cmdstr);
-                        output_writer.getStringRef(2).copy(outputline,bufend);
-                        output_writer.next();
-                        bufend = 0; // reset
-                        hadOutput = true;
-                    }
-                    else if (bufend < LINE_MAX)
-                    {
-                        outputline[bufend++] = buf[ptr];
-                    }
-                    // discard characters on too long line
-                }
-            }
-            // results from last line
-            if (bufend > 0)
-            {
-                // Copy string into results
-                output_writer.getStringRef(0).copy(idstr);
-                output_writer.getStringRef(1).copy(cmdstr);
-                output_writer.getStringRef(2).copy(outputline,bufend);
-                output_writer.next();
-                bufend = 0; // reset
-            } 
-            else if (!hadOutput) // force at least 1 row of output
-            {
-                output_writer.getStringRef(0).copy(idstr);
-                output_writer.getStringRef(1).copy(cmdstr);
-                output_writer.getStringRef(2).setNull();
-                output_writer.next();
-            }
-
-            subproc.terminate(true/*gently!*/);
-        } while (input_reader.next());
+      p.destroyProcess();
     }
 };
 
@@ -220,11 +182,14 @@ class ShellFactory : public TransformFunctionFactory
                               ColumnTypes &returnType)
     {
         argTypes.addVarchar();
-        argTypes.addVarchar();
 
+	returnType.addInt();
         returnType.addVarchar();
-        returnType.addVarchar();
-        returnType.addVarchar();
+    }
+
+    virtual void getParameterType(ServerInterface &srvInterface,
+				  SizedColumnTypes &parameterTypes) {
+      parameterTypes.addVarchar(65000, "cmd");
     }
 
     // Tell Vertica what our return string length will be, given the input
@@ -234,21 +199,11 @@ class ShellFactory : public TransformFunctionFactory
                                SizedColumnTypes &output_types)
     {
         // Error out if we're called with anything but 1 argument
-        if (input_types.getColumnCount() != 2)
-            vt_report_error(0, "Function only accepts 2 arguments, but %zu provided", 
+        if (input_types.getColumnCount() != 1)
+            vt_report_error(0, "Function only accepts 1 argument, but %zu provided", 
                             input_types.getColumnCount());
 
-        // first column outputs the id string passed in
-        int input_len = input_types.getColumnType(0).getStringLength();
-
-        // Our output size will never be more than the input size
-        output_types.addVarchar(input_len, "id");
-
-        // second column outputs the shell command string used to generate output
-        input_len = input_types.getColumnType(1).getStringLength();
-
-        // Our output size will never be more than the input size
-        output_types.addVarchar(input_len, "command");
+	output_types.addInt("line_num");
 
         // other output is a line of output from the shell command, which is
         // truncated at LINE_MAX characters
@@ -260,5 +215,37 @@ class ShellFactory : public TransformFunctionFactory
 
 };
 
-RegisterFactory(ShellFactory);
+class ShellFactoryBinary : public ShellFactory {
+public:
+    // Tell Vertica that we take in a row with 1 string, and return a row with 2 strings
+    virtual void getPrototype(ServerInterface &srvInterface, 
+                              ColumnTypes &argTypes, 
+                              ColumnTypes &returnType)
+    {
+        argTypes.addVarbinary();
 
+	returnType.addInt();
+        returnType.addVarbinary();
+    }
+
+    // Tell Vertica what our return string length will be, given the input
+    // string length
+    virtual void getReturnType(ServerInterface &srvInterface, 
+                               const SizedColumnTypes &input_types, 
+                               SizedColumnTypes &output_types)
+    {
+        // Error out if we're called with anything but 1 argument
+        if (input_types.getColumnCount() != 1)
+            vt_report_error(0, "Function only accepts 1 argument, but %zu provided", 
+                            input_types.getColumnCount());
+
+	output_types.addInt("line_num");
+
+        // other output is a line of output from the shell command, which is
+        // truncated at LINE_MAX characters
+        output_types.addVarbinary(LINE_MAX, "text");
+    }
+};
+
+RegisterFactory(ShellFactory);
+RegisterFactory(ShellFactoryBinary);
