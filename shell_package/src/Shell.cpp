@@ -24,7 +24,7 @@ using namespace Vertica;
 
 #define LINE_MAX 65000
 
-typedef unsigned char byte;
+//typedef unsigned char byte;
 
 /*
  * This function invokes each input string command as if it was run with: bash -c '<command>'
