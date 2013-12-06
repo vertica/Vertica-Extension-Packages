@@ -13,8 +13,14 @@ INSTALLING / UNINSTALLING
 You can install by copying `build/myudx.so' to your Vertica cluster, then 
 running the following SQL statements:
 
-CREATE LIBRARY EMAILLib as '/path/to/myudx.so';"
+CREATE LIBRARY EMAILLib as 'build/myudx.so';"
 CREATE FUNCTION EMAIL as language 'C++' name 'EMAILFactory' library EMAILLib;
+
+To uninstall, you can run:
+
+DROP LIBRARY EMAILLib CASCADE;
+
+(The 'CASCADE' will cause the EMAIL function to be dropped as well.)
 
 Alternatively, assuming vsql is in your path, just do:
 
@@ -46,7 +52,7 @@ address - 	   The email address, or location of emails.
 subject - 	   The subject of the email.
 boolean - 	   A varchar indicating if the fourth argument is a file name, 
 	  	   or an inline message. 'True' or '1' indicates a text file 
-	  	   name. Anything else is false, indicating an inline message.
+	  	   name. 'False' or '0' is false, indicating an inline message.
 message/filename - The inline message or the name of the file to be included in
 		   the body of the email. 
 
