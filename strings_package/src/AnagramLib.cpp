@@ -1,10 +1,6 @@
 #include "Vertica.h"
 #include <string.h>
 
-namespace Vertica {
-#include "VerticaUDxInternal.h"
-};
-
 using namespace Vertica;
 
 // Anagram generator
