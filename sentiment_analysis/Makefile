@@ -47,6 +47,11 @@ $(PACKAGE_LIBNAME): tparty $(BUILD_FILES)
 	mkdir -p lib
 	$(CXX) -o $@ $(BUILD_FILES) $(LDFLAGS) 
 
+
+build/lib/libstemmer.o: tparty
+
+build/lib/libjson.a: tparty
+
 # rule to make build/XXX.so from src/XXX.so
 build/%.o: src/%.cpp tparty 
 	@mkdir -p build
