@@ -27,7 +27,7 @@ $(INSTALL_DIR)/src/cmake-2.8.8/.done:
 	@echo "Unpacking, configuring and installing cmake...";
 	(cd $(INSTALL_DIR)/src; $(TAR) xzf $(THIRD_PARTY)/cmake-2.8.8.tar.gz)
 	(cd $(INSTALL_DIR)/src/cmake-2.8.8; ./configure --prefix=$(INSTALL_DIR))
-	(cd $(INSTALL_DIR)/src/cmake-2.8.8; gmake install)
+	(cd $(INSTALL_DIR)/src/cmake-2.8.8; $(MAKE) install)
 	touch $@
 
 .PHONY: boost
@@ -43,7 +43,7 @@ $(INSTALL_DIR)/src/boost_1_50_0/.done:
 .PHONY: avro
 avro: $(INSTALL_DIR)/src/avro-cpp-1.7.0/.done
 
-$(INSTALL_DIR)/src/avro-cpp-1.7.0/.done:
+$(INSTALL_DIR)/src/avro-cpp-1.7.0/.done: $(INSTALL_DIR)/src/cmake-2.8.8/.done $(INSTALL_DIR)/src/boost_1_50_0/.done
 	@mkdir -p $(INSTALL_DIR)/lib
 	@mkdir -p $(INSTALL_DIR)/include
 	@mkdir -p $(INSTALL_DIR)/src
