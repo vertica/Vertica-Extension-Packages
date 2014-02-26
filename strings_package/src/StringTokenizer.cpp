@@ -5,7 +5,7 @@
  * Create Date: Apr 29, 2011
  */
 #include "Vertica.h"
-#include <sstream>
+#include <ctype.h>
 
 using namespace Vertica;
 using namespace std;
@@ -53,22 +53,21 @@ class StringTokenizer : public TransformFunction
             }
             else 
             {
-                // Otherwise, let's tokenize the string and output the words
-                std::string tmp = sentence.str();
-                istringstream ss(tmp);
+                size_t word_start = 0, word_end = 0;
 
-                do
-                {
-                    std::string buffer;
-                    ss >> buffer;
-                    
-                    // Copy to output
-                    if (!buffer.empty()) {
-                        VString &word = output_writer.getStringRef(0);
-                        word.copy(buffer);
-                        output_writer.next();
-                    }
-                } while (ss);
+		const char *s_data = sentence.data();
+		const size_t s_len = sentence.length();
+		  
+
+		while (word_end < s_len) {
+                    for ( ; word_end < s_len && !isspace(s_data[word_end]); word_end++) {}
+
+		    VString &word = output_writer.getStringRef(0);
+		    word.copy(&s_data[word_start], word_end - word_start);
+		    output_writer.next();
+
+		    word_start = ++word_end;
+		}
             }
         } while (input_reader.next());
     }

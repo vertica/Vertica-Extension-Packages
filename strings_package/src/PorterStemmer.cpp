@@ -467,6 +467,15 @@ int main(int argc, char * argv[])
 class PorterStemmer : public ScalarFunction
 {
 public:
+    struct stemmer *the_stemmer;
+
+    virtual void setup(ServerInterface &srvInterface, const SizedColumnTypes &argTypes) {
+        the_stemmer = create_stemmer();
+    }
+
+    virtual void destroy(ServerInterface &srvInterface, const SizedColumnTypes &argTypes) {
+        free_stemmer(the_stemmer);
+    }
 
     /*
      * This method processes a block of rows in a single invocation.
@@ -483,15 +492,13 @@ public:
             vt_report_error(0, "Function only accept 1 arguments, but %zu provided", 
                             arg_reader.getNumCols());
 
-        // Use one stemmer per block -- could be better (one per class instance)
-        struct stemmer *the_stemmer = create_stemmer();
-
         // While we have inputs to process
         do {
             const VString &input = arg_reader.getStringRef(0);
             if (input.isNull()) 
             {
                 res_writer.getStringRef().setNull();
+		res_writer.next();
             } 
             else 
             {
@@ -511,12 +518,18 @@ public:
             }
         } while (arg_reader.next());
 
-        free_stemmer(the_stemmer);
     }
 };
 
 class PorterStemmerFactory : public ScalarFunctionFactory
 {
+public:
+    // Tell Vertica a little about us so it can optimize us more effectively
+    PorterStemmerFactory() {
+        vol = STABLE;
+        strict = RETURN_NULL_ON_NULL_INPUT;
+    }
+
     // return an instance of PorterStemmer to perform the actual addition.
     virtual ScalarFunction *createScalarFunction(ServerInterface &interface)
     { return vt_createFuncObj(interface.allocator, PorterStemmer); }
