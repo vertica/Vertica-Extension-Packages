@@ -50,7 +50,15 @@ public:
 				if (root.isNull()) {
 					res_writer.getStringRef().setNull(); // NULL is NULL
 				} else {
-					std::string val = (root.isString()) ? root.asString() : json_writer.write(root); // Get value
+					std::string val;
+
+					if (root.isString()) {
+						val = root.asString(); // Get string
+					} else {
+						val = json_writer.write(root); // Get JSON value
+						val.erase(val.end() - 1); // Remove trailing newline from FastWriter::write
+					}
+
 					res_writer.getStringRef().copy(val);
 				}
 			}
