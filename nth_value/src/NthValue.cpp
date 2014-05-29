@@ -28,10 +28,10 @@ public:
 		// While we have inputs to process
 		do {
 			// Get a copy of the input expression
-			std::string expr = arg_reader.getStringRef(num_cols - 2).str(); // last-1st arg is expression
+			const std::string expr = arg_reader.getStringRef(num_cols - 2).str(); // last-1st arg is expression
 			const vint offset = arg_reader.getIntRef(num_cols - 1); // last arg is offset
 
-			if (offset < 1) {
+			if (offset < 0) { // Allow 0 offset as and (consequently) return NULL
 				vt_report_error(0, "This function only accepts positive integers as offset");
 				}
 
