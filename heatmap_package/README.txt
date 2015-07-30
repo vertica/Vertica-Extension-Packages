@@ -32,6 +32,8 @@ Alternatively, assuming vsql is in your path, just do:
 $ make install
 $ make uninstall
 
+If you have downloaded this package from Github, rather than from the Vertica Marketplace, you must build it before you can install it:
+
 -------------------------------
 BUILDING
 -------------------------------
