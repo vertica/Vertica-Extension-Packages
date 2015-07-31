@@ -447,11 +447,14 @@ class HeatMapImageFactory : public TransformFunctionFactory
         argTypes.addNumeric();
         argTypes.addFloat();
         returnType.addInt();
-        returnType.addInt();
-        returnType.addInt();
-        returnType.addInt();
-        returnType.addInt();
-        returnType.addInt();
+        if (srvInterface.getParamReader().containsParameter("output_rows") && 
+                srvInterface.getParamReader().getBoolRef("output_rows") == true) {
+            returnType.addInt();
+            returnType.addInt();
+            returnType.addInt();
+            returnType.addInt();
+            returnType.addInt();
+        }
     }
 
     virtual void getReturnType(ServerInterface &srvInterface, 
