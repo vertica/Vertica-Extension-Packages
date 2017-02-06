@@ -90,7 +90,7 @@ class GroupConcatDelimFactory : public TransformFunctionFactory
         if (input_types.getColumnCount() != 2)
             vt_report_error(0, "Function only accepts 2 argument, but %zu provided", input_types.getColumnCount());
 
-        // output can be wide.  Include extra space for a last ", ..."
+        // output can be wide.  Include extra space for a last "..."
         output_types.addVarchar(LINE_MAX+5, "list");
     }
 
