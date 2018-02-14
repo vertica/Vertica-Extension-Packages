@@ -121,6 +121,13 @@ class AESEncryptFactory : public ScalarFunctionFactory
 	// I believe it's faster than computing the length and round. 
         returnType.addVarchar(t.getStringLength()+AES_BLOCK_SIZE);
     }
+	
+public:
+    AESEncryptFactory() 
+    {
+        vol = IMMUTABLE;
+    }
+
 };
 
 RegisterFactory(AESEncryptFactory);

@@ -117,6 +117,13 @@ class AESDecryptFactory : public ScalarFunctionFactory
         const VerticaType &t = argTypes.getColumnType(0);
         returnType.addVarchar(t.getStringLength());
     }
+	
+public:
+    AESDecryptFactory() 
+    {
+        vol = IMMUTABLE;
+    }
+    
 };
 
 RegisterFactory(AESDecryptFactory);
