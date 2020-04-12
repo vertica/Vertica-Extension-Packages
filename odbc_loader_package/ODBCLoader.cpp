@@ -251,6 +251,7 @@ public:
             for (SQLUSMALLINT i = 0; i < numcols; i++) {
 
                 Buf data = col_data_bufs[i];
+                std::string rejectReason;
                 
                 // Null's are easy
                 // except when they're not due to typecast mismatch fun
@@ -311,7 +312,8 @@ public:
                         // Hacky workaround:  Some databases (ie., us) send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
                         TimeADT t = 0;
-                        if (!parser.parseTimeTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i))) {
+                        
+                        if (!parser.parseTimeTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i), rejectReason)) {
                             vt_report_error(0, "Error parsing TimeTz: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
                         }
                         writer->setTimeTz(i,t);
@@ -322,7 +324,7 @@ public:
                         // Hacky workaround:  Some databases (ie., us) send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
                         TimestampTz t = 0;
-                        if (!parser.parseTimestampTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i))) {
+                        if (!parser.parseTimestampTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i), rejectReason)) {
                             vt_report_error(0, "Error parsing TimestampTz: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
                         }
                         writer->setTimestampTz(i,t);
@@ -372,7 +374,7 @@ public:
                     case NumericOID: {
                         // Hacky workaround:  Some databases may send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
-                        if (!parser.parseNumeric((char*)data.buf, (size_t)data.len, i, writer->getNumericRef(i), getVerticaTypeOfCol(i))) {
+                        if (!parser.parseNumeric((char*)data.buf, (size_t)data.len, i, writer->getNumericRef(i), getVerticaTypeOfCol(i), rejectReason)) {
                             vt_report_error(0, "Error parsing Numeric: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
                         }
                         break;
