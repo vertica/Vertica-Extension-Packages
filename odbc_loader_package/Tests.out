@@ -61,6 +61,13 @@ CREATE TABLE
 (20 rows)
 
 DROP TABLE
+vsql: ERROR 5861:  Error calling process() in User Function UDParser at [...], error code: 0, message: Error parsing Numeric: '9999999999999999.9999' (...)
+vsql: ERROR 5861:  Error calling process() in User Function UDParser at [...], error code: 0, message: Error parsing TimestampTz: 'June 1, 2000 03:2X EST' (...)
+vsql: ERROR 5861:  Error calling process() in User Function UDParser at [...], error code: 0, message: Error parsing TimeTz: '1:2:A EST' (...)
+ i | b | f | v | c | lv | bn | vb | lvb | d | t | ts | tz | tsz | n 
+---+---+---+---+---+----+----+----+-----+---+---+----+----+-----+---
+(0 rows)
+
 vsql: ERROR 5861:  Error calling setup() in User Function UDParser at [...], error code: 0, message: ODBC Error: SQLDriverConnect() failed with error code IM002, native code 0 [[unixODBC][Driver Manager]Data source name not found, and no default driver specified]
 vsql: ERROR 5861:  Error calling setup() in User Function UDParser at [...], error code: 0, message: ODBC Error: SQLExecDirect() failed with error code 42000, native code 1064 [[MySQL][...][...]You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'hi!' at line 1]
 DROP TABLE
