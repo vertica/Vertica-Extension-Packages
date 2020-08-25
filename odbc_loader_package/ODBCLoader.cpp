@@ -289,20 +289,23 @@ public:
                         // Date/Time functions that work in reasonably direct ways
                     case DateOID: {
                         SQL_DATE_STRUCT &s = *(SQL_DATE_STRUCT*)data.buf;
-                        struct tm d = {0,0,0,s.day,s.month-1,s.year-1900};
-                        writer->setDate(i, getDateFromUnixTime(mktime(&d)));
+                        struct tm d = {0,0,0,s.day,s.month-1,s.year-1900,0,0,-1};
+                        time_t unixtime = mktime(&d);
+                        writer->setDate(i, getDateFromUnixTime(unixtime + d.tm_gmtoff));
                         break;
                     }
                     case TimeOID: {
                         SQL_TIME_STRUCT &s = *(SQL_TIME_STRUCT*)data.buf;
-                        writer->setTime(i, getTimeFromHMS(s.second, s.minute, s.hour));
+                        writer->setTime(i, getTimeFromHMS(s.hour, s.minute, s.second));
                         break;
                     }
                     case TimestampOID: {
                         SQL_TIMESTAMP_STRUCT &s = *(SQL_TIMESTAMP_STRUCT*)data.buf;
-                        struct tm d = {s.second,s.minute,s.hour,s.day,s.month-1,s.year-1900};
+                        struct tm d = {s.second,s.minute,s.hour,s.day,s.month-1,s.year-1900,0,0,-1};
+                        time_t unixtime = mktime(&d);
                         // s.fraction is in nanoseconds; Vertica only does microsecond resolution
-                        writer->setTimestamp(i, getTimestampFromUnixTime(mktime(&d)) + s.fraction/1000);
+                        // setTimestamp() wants time since epoch localtime.
+                        writer->setTimestamp(i, getTimestampFromUnixTime(unixtime + d.tm_gmtoff) + s.fraction/1000);
                         break;
                     }
                         

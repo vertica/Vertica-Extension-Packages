@@ -22,8 +22,13 @@ test:
 	## Try uninstalling first, just in case we have a stale version around
 	-@$(MAKE) uninstall
 	@$(MAKE) install
-	-diff -u Tests.out <($(VSQL) -f examples/sample_usage.sql 2>&1)
-	@$(MAKE) uninstall
+	@trap '$(MAKE) uninstall' EXIT; $(MAKE) test_impl
+
+test_impl:
+	$(VSQL) -f examples/sample_usage.sql 2>&1  | perl -pe 's/^vsql:[\/_:\w\.]* /vsql: /; s/\[ODBC[^\]]*\]/[...]/g; s/\[mysql[^\]]*\]/[...]/g; s/mariadb/MySQL/ig; ' > Tests.actual
+	diff -u Tests.out <($(VSQL) -f examples/sample_usage.sql 2>&1 \
+	  | perl -pe 's/^vsql:[\/_:\w\.]* /vsql: /; s/\[ODBC[^\]]*\]/[...]/g; s/\[mysql[^\]]*\]/[...]/g; s/mariadb/MySQL/ig; ')
+	@echo ALL TESTS SUCCESSFUL
 
 .PHONY: build clean install uninstall test
 

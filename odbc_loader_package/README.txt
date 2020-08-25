@@ -50,6 +50,47 @@ Please make sure that you are compiling on your Vertica cluster (or at least on 
 
 
 -------------------------------
+TESTING
+-------------------------------
+
+To test this library after building it:
+
+$ make test
+
+Unfortunately, this requires a lot of configuration to work.
+
+1) Access to a mysql server is requried.  One way to do that is to install mariadb-server.  Follow the instructions and ensure that "mysql -u root" connects to mysql and can create a database.
+2) Access to Vertica is required.  The community edition RPM can be downloaded for free and run on a single node (localhost).  The requirement is that /opt/vertica/bin/vsql connects to vertica and can create a table.
+3) A mysql ODBC connector must be installed such as mysql-connector-odbc
+4) An ODBC driver manager must be installed and configured on the vertica server such as unixODBC.  It needs a MySQL section in odbcinst.ini that lists the mysql odbc connector library.
+5) /etc/odbc.ini should have a "Default" section to connect to mysql and a VerticaDCN section to connect to vertica.  Here is an example:
+-------odbc.ini------------------------------------
+[Default]
+Driver       = /usr/lib64/libmyodbc5.so
+Description  = UnixODBC
+SERVER       = localhost
+PORT         =
+USER         = root
+Password     =
+Database     =
+OPTION       =
+SOCKET       =
+
+[VerticaDSN]
+Description = Vertica Data Source
+Driver = /opt/vertica/lib64/libverticaodbc.so
+Database = dbadmin
+Servername = localhost
+UID = dbadmin
+Port = 5433
+---------------------------------------------------
+6) Optional: /etc/vertica.ini needs a "Driver" section for localized error messages
+[Driver]
+ErrorMessagesPath=/opt/vertica
+LogLevel=4
+LogPath=/tmp
+
+-------------------------------
 USAGE
 -------------------------------
 
