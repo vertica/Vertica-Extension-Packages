@@ -10,7 +10,7 @@ set time zone to 'EST';
 -- Create the timezone-based entries as varchar's; MySQL doesn't do timezones at all AFAICT...
 -- MySQL Timestamps automagically rewrite 'null' to CURRENT_TIMESTAMP() unless the column in question explicitly allows null values.  (Older MySQL's have other nonstandard behavior re: timestamps.)
 \! echo "CREATE TABLE test_mysql (i integer, b boolean, f float, v varchar(32), c char(32), lv varchar(9999), bn binary(32), vb varbinary(32), lvb varbinary(9999), d date, t time, ts timestamp null, tz varchar(80), tsz varchar(80), n numeric(20,4));" | mysql -u root testdb
-\! (echo "INSERT INTO test_mysql VALUES (null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);"; for i in `seq 1 9`; do echo "INSERT INTO test_mysql VALUES ($i, 1, $i.5, 'test $i', 'test $i', 'test $i', 'test $i', 'test $i', 'test $i', '2000/1/$i', '4:0$i', '2038-01-0$i 03:14:07 EST', '1:2$i:00', 'June 1, 2000 03:2$i EST', '123456.7890');"; done) | mysql -u root testdb
+\! (echo "INSERT INTO test_mysql VALUES (null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);"; for i in `seq 1 9`; do echo "INSERT INTO test_mysql VALUES ($i, 1, $i.5, 'test $i', 'test $i', 'test $i', 'test $i', 'test $i', 'test $i', '$(($i+11))00/1/$i', '4:0$i', '2038-01-0$i 03:14:07 EST', '1:2$i:00', 'June 1, $(($i+11))00 03:2$i EST', '123456.7890');"; done) | mysql -u root testdb
 
 -- Create the corresponding table in Vertica
 CREATE TABLE test_vertica (i integer, b boolean, f float, v varchar(32), c char(32), lv varchar(9999), bn binary(32), vb varbinary(32), lvb varbinary(999), d date, t time, ts timestamp, tz timetz, tsz timestamptz, n numeric(18,4));
