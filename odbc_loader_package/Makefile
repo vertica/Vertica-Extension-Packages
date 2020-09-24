@@ -4,7 +4,7 @@ SDK_HOME ?= /opt/vertica/sdk
 SHELL = /bin/bash
 VSQL ?= /opt/vertica/bin/vsql
 
-ALL_CXXFLAGS := $(CXXFLAGS) -I $(SDK_HOME)/include -I $(SDK_HOME)/examples/HelperLibraries -fPIC -shared -Wall -g
+ALL_CXXFLAGS := $(CXXFLAGS) -I $(SDK_HOME)/include -I $(SDK_HOME)/examples/HelperLibraries -fPIC -shared -Wall -g -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0
 
 build: build/ODBCLoader.so
 ## See targets below for actual build logic
@@ -13,17 +13,30 @@ clean:
 	rm build/ODBCLoader.so
 
 install: build
-	$(VSQL) -f ddl/install.sql
+	# install ODBCLoader
+	@$(VSQL) -f ddl/install.sql
 
 uninstall:
-	$(VSQL) -f ddl/uninstall.sql
+	# uninstall ODBCLoader
+	@$(VSQL) -f ddl/uninstall.sql
 
 test:
-	## Try uninstalling first, just in case we have a stale version around
-	-@$(MAKE) uninstall
-	@$(MAKE) install
-	-diff -u Tests.out <($(VSQL) -f examples/sample_usage.sql 2>&1)
-	@$(MAKE) uninstall
+	@# Try uninstalling first, just in case we have a stale version around
+	-@$(MAKE) -s uninstall >/dev/null 2>&1
+	@$(MAKE) --no-print-dir install
+	@# Use bash's "trap" to uninstall and still return an error
+	@trap '$(MAKE) --no-print-dir uninstall' EXIT; $(MAKE) --no-print-dir test_impl
+
+test_impl:
+	# run tests
+	@$(VSQL) -f examples/sample_usage.sql >Tests.actual 2>&1
+	@# filter out variable messages (i.e., mariadb vs mysql)
+	@diff -u Tests.out <(perl -pe 's/^vsql:[\/_:\w\.]* /vsql: /; \
+	              s/\[ODBC[^\]]*\]/[...]/g; \
+		      s/\[mysql[^\]]*\]/[...]/g; \
+		      s/(Error parsing .* )\(.*\)$$/$$1(...)/; \
+		      s/mariadb/MySQL/ig; ' Tests.actual)
+	@echo ALL TESTS SUCCESSFUL
 
 .PHONY: build clean install uninstall test
 

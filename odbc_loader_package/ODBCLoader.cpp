@@ -17,6 +17,13 @@
 // (Ew...)
 #include "StringParsers.h"
 
+// To support Vertica SDK before 9.3:
+#ifndef SDK_BUILD_ASSERTIONS_H // conveniently doesn't exist before 9.3
+#define parseTimeTz(a,b,c,d,e,f) parseTimeTz(a,b,c,d,e)
+#define parseTimestampTz(a,b,c,d,e,f) parseTimestampTz(a,b,c,d,e)
+#define parseNumeric(a,b,c,d,e,f) parseNumeric(a,b,c,d,e)
+#endif
+
 using namespace Vertica;
 
 static inline TimeADT getTimeFromHMS(uint32 hour, uint8 min, uint8 sec) {
@@ -251,6 +258,7 @@ public:
             for (SQLUSMALLINT i = 0; i < numcols; i++) {
 
                 Buf data = col_data_bufs[i];
+                std::string rejectReason = "unrecognized syntax from remote database";
                 
                 // Null's are easy
                 // except when they're not due to typecast mismatch fun
@@ -289,20 +297,23 @@ public:
                         // Date/Time functions that work in reasonably direct ways
                     case DateOID: {
                         SQL_DATE_STRUCT &s = *(SQL_DATE_STRUCT*)data.buf;
-                        struct tm d = {0,0,0,s.day,s.month-1,s.year-1900};
-                        writer->setDate(i, getDateFromUnixTime(mktime(&d)));
+                        struct tm d = {0,0,0,s.day,s.month-1,s.year-1900,0,0,-1};
+                        time_t unixtime = mktime(&d);
+                        writer->setDate(i, getDateFromUnixTime(unixtime + d.tm_gmtoff));
                         break;
                     }
                     case TimeOID: {
                         SQL_TIME_STRUCT &s = *(SQL_TIME_STRUCT*)data.buf;
-                        writer->setTime(i, getTimeFromHMS(s.second, s.minute, s.hour));
+                        writer->setTime(i, getTimeFromHMS(s.hour, s.minute, s.second));
                         break;
                     }
                     case TimestampOID: {
                         SQL_TIMESTAMP_STRUCT &s = *(SQL_TIMESTAMP_STRUCT*)data.buf;
-                        struct tm d = {s.second,s.minute,s.hour,s.day,s.month-1,s.year-1900};
+                        struct tm d = {s.second,s.minute,s.hour,s.day,s.month-1,s.year-1900,0,0,-1};
+                        time_t unixtime = mktime(&d);
                         // s.fraction is in nanoseconds; Vertica only does microsecond resolution
-                        writer->setTimestamp(i, getTimestampFromUnixTime(mktime(&d)) + s.fraction/1000);
+                        // setTimestamp() wants time since epoch localtime.
+                        writer->setTimestamp(i, getTimestampFromUnixTime(unixtime + d.tm_gmtoff) + s.fraction/1000);
                         break;
                     }
                         
@@ -311,8 +322,9 @@ public:
                         // Hacky workaround:  Some databases (ie., us) send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
                         TimeADT t = 0;
-                        if (!parser.parseTimeTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i))) {
-                            vt_report_error(0, "Error parsing TimeTz: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
+                        
+                        if (!parser.parseTimeTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i), rejectReason)) {
+                            vt_report_error(0, "Error parsing TimeTz: '%s' (%s)", (char*)data.buf, rejectReason.c_str());  // No rejected-rows for us!  Die on failure.
                         }
                         writer->setTimeTz(i,t);
                         break;
@@ -322,8 +334,8 @@ public:
                         // Hacky workaround:  Some databases (ie., us) send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
                         TimestampTz t = 0;
-                        if (!parser.parseTimestampTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i))) {
-                            vt_report_error(0, "Error parsing TimestampTz: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
+                        if (!parser.parseTimestampTz((char*)data.buf, (size_t)data.len, i, t, getVerticaTypeOfCol(i), rejectReason)) {
+                            vt_report_error(0, "Error parsing TimestampTz: '%s' (%s)", (char*)data.buf, rejectReason.c_str());  // No rejected-rows for us!  Die on failure.
                         }
                         writer->setTimestampTz(i,t);
                         break;
@@ -372,8 +384,8 @@ public:
                     case NumericOID: {
                         // Hacky workaround:  Some databases may send the empty string instead of NULL here
                         if (((char*)data.buf)[0] == '\0') { writer->setNull(i); break; }
-                        if (!parser.parseNumeric((char*)data.buf, (size_t)data.len, i, writer->getNumericRef(i), getVerticaTypeOfCol(i))) {
-                            vt_report_error(0, "Error parsing Numeric: '%s' (unrecognized syntax from remote database)", (char*)data.buf);  // No rejected-rows for us!  Die on failure.
+                        if (!parser.parseNumeric((char*)data.buf, (size_t)data.len, i, writer->getNumericRef(i), getVerticaTypeOfCol(i), rejectReason)) {
+                            vt_report_error(0, "Error parsing Numeric: '%s' (%s)", (char*)data.buf, rejectReason.c_str());  // No rejected-rows for us!  Die on failure.
                         }
                         break;
                     }
