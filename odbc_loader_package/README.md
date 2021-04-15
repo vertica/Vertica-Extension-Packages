@@ -1,7 +1,7 @@
 ﻿## INTRODUCTION
 This package contains two User-Defined Load functions, **ODBCSource()** and **ODBCLoader()**, that can be used to:
 - load data directly from a remote database
-- run queries against remote databases from Vertica (for example to join local Vertica-managed tables with MySQL, PostgreSQL, Oracle, etc.)
+- run queries against remote databases from Vertica (for example to join local Vertica-managed tables with MySQL, PostgreSQL, etc.)
 
 Data retrieved from external databases is neither converted into an intermediate file formats nor landed to disk; the data is fetched over the network via ODBC and copied directly into Vertica as it is received. When used with Vertica versions 10.1 and above *predicate pushdown* and *column filtering* is applied to the remote database data extraction process. 
 
