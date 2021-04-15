@@ -8,7 +8,7 @@ Data retrieved from external databases is neither converted into an intermediate
 ## INSTALLING / UNINSTALLING
 ### Preprequisites
 In order to install the ODBCLoader package you need to install on **all nodes of your Vertica cluster**:
-- an ODBC Driver Manager (it has been tested with unixODBC)
+- an ODBC Driver Manager (this library has been tested with unixODBC)
 - the ODBC Drivers to interface the remote databases
 - configure the ODBC configuration files (see the examples here below)
 
@@ -20,6 +20,7 @@ This operation has to be executed as ``dbadmin`` from **one of the node of the c
 $ make
 $ make install
 ```
+Please check/modify ``ddl/install.sql`` to build the library "FENCED" or "UNFENCED"
 
 ### Uninstalling the library
 To remove the ODBCLoader library from your cluster: 
@@ -144,8 +145,16 @@ When pushing predicates down to the external database, ODBCLoader performs the f
 1. Vertica specific data type casting ``::<data type>`` will be removed
 2. ``~~`` will be converted to ``LIKE``
 3. ``ANY(ARRAY)`` will be converted to ``IN()``. For example ``ID = ANY(ARRAY[1,2,3])`` will be converted to ``ID IN(1,2,3)``
- 
-## How to debug the ODBC layer
+
+### Database Specific Notes
+**ORACLE**.  All integers in Vertica are 64-bit integers.  Oracle doesn't support 64-bit integers; their ODBC driver can't even cast to them on request.  This code contains a quirk/workaround for Oracle that retrieves integers as C strings and re-parses them.  However, the quirk doesn't reliably detect Oracle database servers right now. You can force Oracle with an obvious modification to the setQuirksMode() function in ODBCLoader.cpp.  If you know of a more-reliable way to detect Oracle, or a better workaround, patches welcome :-)                                                                              
+
+**MYSQL**. The MySQL ODBC driver comes in both a thread-safe and thread-unsafe build and configuration. The thread-unsafe version is KNOWN TO CRASH VERTICA if used in multiple COPY statements concurrently! (Vertica is, after all, highly multithreaded). Linux distributions aren't consistently careful to package thread-safe defaults. So if you're connecting to MySQL, be very careful to set up a thread-safe configuration.
+
+**VERTICA**. If you have to COPY data from one Vertica cluster to another use the Vertica's built-in IMPORT/EXPORT capabilities which are dramaticaly faster
+
+## How to debug 
+### ODBC layer tracing
 The simpler way to check how the ODBCLoader rewrite the query sent to the external database is to enable ODBC traces in odbcinst.ini. For example:
 ```
 [ODBC]
@@ -157,6 +166,13 @@ And then grep the SQL from the trace file:
 $ tail -f /tmp/uodbc.trc | grep 'SQL = '
 ```
 Please remember to switch ODBC traces off at the end of your debug session because they will slowdown everything and create huge log files...
+
+### Library DEBUG
+If the ODBC tracing was not enough you can (re)compie this library with LOADER_DEBUG flag set to 1 as shown here:
+```
+$ rm -rf build && make install LOADER_DEBUG=1
+```
+this will print extra messages in the Vertica log files (either ``UDxLogs/UDxFencedProcesses.log`` or ``vertica.log`` depending if the library was "FENCED" or "UNFENCED"). **Caution:** don't do this in production because it will flood your logs with debug messages and slowdown everything.
 
 ## Sample ODBC Configurations
 The following two configuration files ```odbc.ini``` and ```odbcinst.ini``` have been used to define two data sources: **pmf** to connect to PostgreSQL and **mmf** to connect to MySQL:
