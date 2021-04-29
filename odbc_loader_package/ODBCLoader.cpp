@@ -1,4 +1,5 @@
 /* Copyright (c) 2005 - 2012 Vertica, an HP company -*- C++ -*- */
+// vim:ru:sm:ts=4:et:tw=0
 
 #include "Vertica.h"
 #include "StringParsers.h"
@@ -10,6 +11,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <pcrecpp.h>
 
 // To deal with TimeTz and TimestampTz.
 // No standard native-SQL representation for these,
@@ -23,6 +26,19 @@
 #define parseTimestampTz(a,b,c,d,e,f) parseTimestampTz(a,b,c,d,e)
 #define parseNumeric(a,b,c,d,e,f) parseNumeric(a,b,c,d,e)
 #endif
+
+#define MIN_ROWSET  1       // Min rowset value
+#define MAX_ROWSET  10000   // Max rowset value
+#define DEF_ROWSET  100     // Default rowset
+#define MAX_PRELEN  2048    // Max predicate length
+#define MAX_PRENUM  10      // Max predicate number
+#define REG_CASTRM  R"(::\w+(\(.*?\))*)"
+#define REG_ANYMTC  R"(\s*=\s*ANY\s*\(ARRAY\[(.*)\])"
+#define REG_ANYREP  R"( IN(\1)"
+#define REG_TILDEM  R"(\s*~~\s*)"
+#define REG_TILDER  R"( LIKE )"
+#define REG_ENDSCO  R"(\s*;\s*$)"
+#define REG_QUERYP  R"(^\s*\(*\s*override_query\s*<\s*'\s*(.*)\s*'.*$)"
 
 using namespace Vertica;
 
@@ -64,6 +80,8 @@ private:
     SQLHDBC dbc;
     SQLHSTMT stmt;
     SQLSMALLINT numcols;
+    SQLULEN nfrows;		// Number of fetched rows
+    size_t rowset;
 
     enum PerDBQuirks {
         NoQuirks = 0,
@@ -72,12 +90,24 @@ private:
 
     PerDBQuirks quirks;
 
+    // MF keeping this to re-use the code in the Fetch loop...
     struct Buf {
         SQLLEN len;
         SQLPOINTER buf;
     };
 
-    std::vector<Buf> col_data_bufs;
+    //std::vector<Buf> col_data_bufs;
+    // MF we're going to use rowset in "column binding format" so we need
+    //    for each retrieved column two arrays:
+    //    one containing "rowset" results
+    //    one containing "rowset" length indicators
+    //    resp and len are the pointers to the pointers array.
+    SQLPOINTER *resp ;     // result array pointers pointer
+    SQLLEN **lenp ;        // length array pointers pointer
+
+    // MF we want to determine Vertica/ODBC types & sizes once and for all...
+    BaseDataOID *vtype ;  // Vertica types pointer
+    uint32      *stype ;  // Vertica data type size
 
     StringParsers parser;
 
@@ -255,15 +285,28 @@ public:
 
         SQLRETURN fetchRet;
         while (SQL_SUCCEEDED(fetchRet = SQLFetch(stmt))) {
-            for (SQLUSMALLINT i = 0; i < numcols; i++) {
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG Number of fetched rows/columns = %lu/%d", nfrows, numcols);
+#endif
+          for (uint32 j = 0; j < (uint32)nfrows; j++) {         // for each fetched row...
+            for (SQLUSMALLINT i = 0; i < numcols; i++) {        // for each column...
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG nfrows=%u j=%u i=%d lenp[%d][%d]=%ld", (uint32)nfrows, j, i, i, j, lenp[i][j]);
+#endif
 
-                Buf data = col_data_bufs[i];
+                // MF allocate & set Buf struct so we can re-use the original code in the Fetch loop...
+                Buf data ;
+
+                // MF SQLPOINTER is a (void *) so it would generate an arithmetic warning if not casted
+                data.buf = (SQLPOINTER)( (uint8_t *)resp[i] + stype[i] * j ) ;
+                data.len = lenp[i][j] ;
+
                 std::string rejectReason = "unrecognized syntax from remote database";
                 
                 // Null's are easy
                 // except when they're not due to typecast mismatch fun
                 if ((int)data.len == (int)SQL_NULL_DATA) { writer->setNull(i); }
-                else switch (getVerticaTypeOfCol(i).getTypeOid()) {
+                else switch (vtype[i]) {
                         
                         // Simple fixed-length types
                         // Let C++ figure out how to convert from, ie., SQLBIGINT to vint.
@@ -287,7 +330,7 @@ public:
                     case VarcharOID: case VarbinaryOID:
 
 #ifndef NO_LONG_OIDS
-		    case LongVarcharOID: case LongVarbinaryOID:
+                    case LongVarcharOID: case LongVarbinaryOID:
 #endif // NO_LONG_OIDS
 
                         if (data.len == SQL_NTS) { data.len = strnlen((char*)data.buf, getFieldSizeForCol(i)); }
@@ -400,6 +443,7 @@ public:
                 // Periodically yield and let upstream do its thing
                 return KEEP_GOING;
             }
+          }
         }
 
         // If SQLFetch() failed for some reason, report it
@@ -432,12 +476,143 @@ public:
     virtual void setup(ServerInterface &srvInterface, SizedColumnTypes &returnType) {
         // Capture our column types
         colInfo = returnType;
+		bool src_rfilter = true ;       // Rows filtering flag
+        bool src_cfilter = true ;       // Column filtering flag
+        bool oq_flag = false ;          // Query Ovverride flag
+        std::string connect = "" ;      // Connect string
+        std::string query = "" ;        // Remote system query string
+        std::string predicates = "" ;   // Predicates
 
-        // Connection string, passed in as an argument
-        std::string connect = srvInterface.getParamReader().getStringRef("connect").str();
-        std::string query = srvInterface.getParamReader().getStringRef("query").str();
+        // Read User defined Session parameters 
+        if (srvInterface.getUDSessionParamReader("library").containsParameter("src_rfilter")) {
+            src_rfilter = ( srvInterface.getUDSessionParamReader("library").getStringRef("src_rfilter").str() == "f" ) ? false : true ;
+        } else if (srvInterface.getParamReader().containsParameter("src_rfilter")) {
+            src_rfilter = srvInterface.getParamReader().getBoolRef("src_rfilter") ;
+        }
+        if (srvInterface.getUDSessionParamReader("library").containsParameter("override_query")) {
+            query = srvInterface.getUDSessionParamReader("library").getStringRef("override_query").str() ;
+        } else {
+            query = srvInterface.getParamReader().getStringRef("query").str();
+        }
+        if (srvInterface.getUDSessionParamReader("library").containsParameter("src_cfilter")) {
+            src_cfilter = ( srvInterface.getUDSessionParamReader("library").getStringRef("src_cfilter").str() == "f" ) ? false : true ;
+        } else if (srvInterface.getParamReader().containsParameter("src_cfilter")) {
+            src_cfilter = srvInterface.getParamReader().getBoolRef("src_cfilter") ;
+        }
+        connect = srvInterface.getParamReader().getStringRef("connect").str();
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG Initial connect=<%s>", connect.c_str());
+  srvInterface.log("DEBUG Initial query=<%s>", query.c_str());
+  srvInterface.log("DEBUG SETUP src_rfilter is %s", src_rfilter ? "true" : "false" );
+  srvInterface.log("DEBUG SETUP src_cfilter is %s", src_cfilter ? "true" : "false" );
+#endif
 
+        // Check Connection string, Query and Rowset "public" parameters
+
+        // Check "rowset" parameter
+        if (srvInterface.getParamReader().containsParameter("rowset")) {
+            vint rowset_param = srvInterface.getParamReader().getIntRef("rowset") ;
+            if ( rowset_param < MIN_ROWSET || rowset_param > MAX_ROWSET ) 
+                vt_report_error(0, "Error:  Invalid rowset=%zd. Permitted values between %d and %d", rowset_param, MIN_ROWSET, MAX_ROWSET);
+            else
+                rowset = (size_t) rowset_param ;
+        } else {
+                rowset = DEF_ROWSET ;	// use default if not set
+        }
+  
+        // Check "hidden" parameters __pred_#__ to filter out rows
+        char pred[16] ;
+        for ( unsigned int k = 0, l = 0 ; k < MAX_PRENUM ; k++ ) {
+            snprintf(pred, sizeof(pred), "__pred_%u__", k ) ;
+            if (srvInterface.getParamReader().containsParameter(pred)) {
+                std::string mpred = srvInterface.getParamReader().getStringRef(pred).str() ;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG predicate [%s] length=%zu, string=<%s>", pred, strlen(mpred.c_str()), mpred.c_str());
+#endif
+                if ( pcrecpp::RE(REG_QUERYP, pcrecpp::RE_Options(PCRE_DOTALL)).FullMatch(mpred) ) {
+                    pcrecpp::RE(REG_QUERYP, pcrecpp::RE_Options(PCRE_DOTALL)).GlobalReplace("\\1", &mpred) ;
+                    query = mpred ;
+                    oq_flag = true ;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG new query length=%zu, new query string=<%s>",query.length(),  query.c_str());
+#endif
+                } else if ( src_rfilter ) {
+                        pcrecpp::RE(REG_ANYMTC).GlobalReplace(REG_ANYREP, &mpred) ;     // to replace ANY(ARRAY()) with IN()
+                        pcrecpp::RE(REG_TILDEM).GlobalReplace(REG_TILDER, &mpred) ;     // to replace ~~ with LIKE
+                        if ( l++ ) 
+                            predicates += " AND " + mpred ;
+                        else
+                            predicates += " WHERE " + mpred ;
+                }
+            } else {
+                break ;
+            }
+        }
+
+        // Remove ending semicolon from "query" (if any)
+        pcrecpp::RE(REG_ENDSCO).GlobalReplace("", &query) ;
+
+        // Check "hidden" parameters __query_col_name__ and __query_col_idx__ to filter out columns
+        if ( src_cfilter ) {
+           if (srvInterface.getParamReader().containsParameter("__query_col_name__")) {
+               if (srvInterface.getParamReader().containsParameter("__query_col_idx__")) {
+                   int ncols = (int)colInfo.getColumnCount() ;
+                   std::stringstream ss_cols(srvInterface.getParamReader().getStringRef("__query_col_name__").str());
+                   std::stringstream ss_idx(srvInterface.getParamReader().getStringRef("__query_col_idx__").str());
+                   std::string tk_col, tk_idx, slist="" ;
+                   int k = 0;
+       
+                   while (std::getline(ss_idx, tk_idx, ',')) {
+                       std::getline(ss_cols, tk_col, ',');
+                       for (  ; k < atoi(tk_idx.c_str()) ; k++ )
+                           slist += k ? ", NULL" : "NULL" ;
+                       if ( k )
+                           slist += "," ;
+                       slist += ( tk_col == "override_query" ) ? "'.' AS override_query" : tk_col ;
+                       k++ ;
+                   }
+                   // MF to remove Vertica casts (::<data_type>)
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG BEFORE GlobalReplace slist=<%s>", slist.c_str());
+#endif
+                   pcrecpp::RE(REG_CASTRM).GlobalReplace("", &slist) ;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG AFTER GlobalReplace slist=<%s> (length=%zu)", slist.c_str(), slist.length());
+#endif
+
+                   // Add NULLs for the remaining columns (if select list is not empty)
+                   if ( slist.length() ) {
+                       for (  ; k < ncols ; k++ ) {
+                           slist += k ? ", NULL" : "NULL" ;
+                       }
+                   } else {
+                       slist = "*" ;
+                   }
+                   query = "SELECT " + slist + " FROM ( " + query + " ) sq" ;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG FINAL slist=%s", slist.c_str());
+#endif
+               } else {
+                   query = "SELECT " +
+                           srvInterface.getParamReader().getStringRef("__query_col_name__").str() +
+                           " FROM ( " +
+                           query  +
+                           " ) sq" ;
+               }
+            }
+        } else {
+            query = oq_flag ? "SELECT '.' AS override_query, sq.* FROM ( " + query + " ) sq" : "SELECT  * FROM ( " + query + " ) sq" ;
+        }
+
+        // Append predicates to outer SELECT
+        if ( src_rfilter )
+            query += predicates ;
+  
         SQLRETURN r;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG query=%s", query.c_str());
+  srvInterface.log("DEBUG rowset=%zu", rowset);
+#endif
 
         // Establish an ODBC connection
         r = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
@@ -459,6 +634,18 @@ public:
         r = SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
         handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLAllocHandle(SQL_HANDLE_STMT)");
 
+        // Set bind by column statement attribute:
+        r = SQLSetStmtAttr(stmt, SQL_ATTR_ROW_BIND_TYPE, (SQLPOINTER)SQL_BIND_BY_COLUMN, 0) ;
+        handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLSetStmtAttr(SQL_ATTR_ROW_BIND_TYPE)");
+
+        // Set ROW_ARRAY_SIZE statement attribute:
+        r = SQLSetStmtAttr(stmt, SQL_ATTR_ROW_ARRAY_SIZE, (SQLPOINTER)rowset, 0) ;
+        handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLSetStmtAttr(SQL_ATTR_ROW_ARRAY_SIZE)");
+
+        // Set ROWS_FETCHED_PTR statement attribute:
+        r = SQLSetStmtAttr(stmt, SQL_ATTR_ROWS_FETCHED_PTR, &nfrows, 0) ;
+        handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLSetStmtAttr(SQL_ATTR_ROWS_FETCHED_PTR)");
+
         r = SQLExecDirect(stmt, (SQLCHAR*)query.c_str(), SQL_NTS);
         handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLExecDirect()");
 
@@ -469,20 +656,26 @@ public:
             vt_report_error(0, "Expected %d columns; got %d from the remote database", (int)colInfo.getColumnCount(), (int)numcols);
         }
 
+        // Allocate space for result & length array pointers
+        resp = (SQLPOINTER *)srvInterface.allocator->alloc(numcols * sizeof(SQLPOINTER)) ;
+        lenp = (SQLLEN **)srvInterface.allocator->alloc(numcols * sizeof(SQLLEN *)) ;
+
+        // Allocate space for Vertica data types OID and size
+        vtype = (BaseDataOID *)srvInterface.allocator->alloc(numcols * sizeof(BaseDataOID)) ;
+        stype = (uint32 *)srvInterface.allocator->alloc(numcols * sizeof(uint32)) ;
+
         // Set up column-data buffers
         // Bind to the columns in question
-        col_data_bufs.reserve(numcols);  // So that push_back() doesn't move things around
         for (SQLSMALLINT i = 0; i < numcols; i++) {
-            uint32 col_size = getFieldSizeForCol(i);
-            SQLPOINTER buf = srvInterface.allocator->alloc(col_size);
+            vtype[i] = getVerticaTypeOfCol(i).getTypeOid();
+            stype[i] = getFieldSizeForCol(i) ;
+#if LOADER_DEBUG
+  srvInterface.log("DEBUG i=%d rowset=%zu stype[i]=%d", i, rowset, stype[i]);
+#endif
+            resp[i] = (SQLPOINTER)srvInterface.allocator->alloc(stype[i] * rowset);
+            lenp[i] = (SQLLEN *)srvInterface.allocator->alloc(sizeof(SQLLEN) * rowset);
 
-            // This allocator may already guarantee zero'ed pages, but we really care; let's guarantee it
-            memset(buf, '\0', col_size);
-
-            col_data_bufs.push_back((Buf){0, buf});
-            r = SQLBindCol(stmt, i+1, getCTypeOfCol(i),
-                           buf, col_size-1, &col_data_bufs.back().len);
-
+            r = SQLBindCol(stmt, i+1, getCTypeOfCol(i), resp[i], stype[i], lenp[i]);
             handleReturnCode(srvInterface, r, SQL_HANDLE_STMT, stmt, "SQLBindCol()");
         }
     }
@@ -525,6 +718,16 @@ public:
                                   SizedColumnTypes &parameterTypes) {
         parameterTypes.addVarchar(65000, "connect");
         parameterTypes.addVarchar(65000, "query");
+        parameterTypes.addVarchar(65000, "__query_col_name__");
+        parameterTypes.addVarchar(65000, "__query_col_idx__");
+        char pred[16] ;
+	    for ( unsigned int k = 0 ; k < MAX_PRENUM ; k++ ) {
+                snprintf(pred, sizeof(pred), "__pred_%u__", k ) ;
+                parameterTypes.addVarchar(MAX_PRELEN, pred);
+        }
+        parameterTypes.addInt("rowset");
+        parameterTypes.addBool("src_rfilter");
+        parameterTypes.addBool("src_cfilter");
     }
 };
 
@@ -563,3 +766,14 @@ public:
 };
 RegisterFactory(ODBCSourceFactory);
 
+// Library Metadata
+RegisterLibrary (
+    "Vertica Team",
+    __DATE__,
+    "0.10.6",
+    "v11.x.x",
+    "TBD",
+    "With this loader Vertica can COPY and SELECT from any ODBC data source",
+    "", 
+    ""  
+);      
