@@ -17,7 +17,7 @@ THIRD_PARTY_INCLUDE = $(THIRD_PARTY)/include
 
 # Add in your source files below
 BUILD_FILES      = build/Vertica.o \
-		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o AnagramLib.o GroupConcat.o)
+		   $(addprefix build/, EditDist.o PorterStemmer.o StringTokenizerDelim.o NGrams.o StringTokenizer.o WordCount.o AnagramLib.o GroupConcat.o GroupConcatDelim.o)
 
 # Define the .so name here (and update the references in ddl/install.sql and ddl/uninstall.sql)
 PACKAGE_LIBNAME   = lib/StringsLib.so
@@ -73,6 +73,8 @@ test:
 	$(VSQL) -f examples/string_delim_tokenizer.sql
 	$(VSQL) -f examples/word_count.sql
 	$(VSQL) -f examples/gen_anagram.sql
+	$(VSQL) -f examples/group_concat.sql
+	$(VSQL) -f examples/group_concat_delim.sql
 
 clean:
 	rm -rf build
@@ -80,7 +82,7 @@ clean:
 	rm -f vsim*
 	rm -f test-data/wordlist_header.txt
 ##############
-# Advanced upsage: use simulator to debug and test
+# Advanced usage: use simulator to debug and test
 ##############
 
 # rule to make anagram data file with appropriate header for simulator
@@ -100,6 +102,8 @@ sim_test: all simulator test-data/wordlist_header.txt
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) FiveGramsFactory            test-data/strings.txt
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) WordCountFactory            test-data/strings.txt
 	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) AnagramFactory              test-data/wordlist_header.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) GroupConcatFactory          test-data/wordlist.txt
+	$(VALGRIND) ./vsim $(PACKAGE_LIBNAME) GroupConcatDelimFactory     test-data/wordlist.txt
 
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
