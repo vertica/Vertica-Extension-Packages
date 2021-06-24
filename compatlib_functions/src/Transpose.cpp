@@ -17,8 +17,7 @@ Function Signature: transpose (group_label, detail_label, separator)
 
 STEP 1: COMPILE
 
-g++ -D HAVE_LONG_LONG_INT_64 -I /opt/vertica/sdk/include -g -Wall -Wno-unused-value -shared -fPIC  -o TransposeFunctions.so Transpose.cpp /opt/vertica/sdk/include/Vertica.cpp
-
+g++ -D HAVE_LONG_LONG_INT_64 -I /opt/vertica/sdk/include -g -Wall -Wno-unused-value -shared -fPIC -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -o TransposeFunctions.so Transpose.cpp /opt/vertica/sdk/include/Vertica.cpp
 
 STEP 2: LOAD INTO VERTICA
 
@@ -89,11 +88,11 @@ class Transpose : public TransformFunction
         	detail_list = detail_list + input_reader.getStringRef(2).str() + input_reader.getStringRef(1).str() ;
         }
 
-		VString &word = output_writer.getStringRef(0);
-		word.copy(group_name);
+		VString &word0 = output_writer.getStringRef(0);
+		word0.copy(group_name);
 
-		word = output_writer.getStringRef(1);
-		word.copy(detail_list);
+		VString &word1 = output_writer.getStringRef(1);
+		word1.copy(detail_list);
 
 		output_writer.next();
     }
