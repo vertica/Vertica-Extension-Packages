@@ -1,0 +1,3 @@
+[submodule "generate_series_package"]
+	path = generate_series_package
+	url = https://github.com/tensquaregames/Vertica-GenerateSeries-Extension
