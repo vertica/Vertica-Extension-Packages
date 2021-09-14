@@ -8,6 +8,8 @@
 #include "Vertica.h"
 
 #include <cmath>
+#include <locale> 
+#include <codecvt>
 
 using namespace Vertica;
 
@@ -36,8 +38,16 @@ public:
         // While we have inputs to process
         do {
             // Get a copy of the input string
-            const std::string& patternStr = arg_reader.getStringRef(0).str();
-            const std::string& inStr = arg_reader.getStringRef(1).str();
+            const std::string prePatternStr = arg_reader.getStringRef(0).str();
+            const std::string preInStr = arg_reader.getStringRef(1).str();
+            
+            //setup converter
+            using convert_type = std::codecvt_utf8<wchar_t>;
+            std::wstring_convert<convert_type, wchar_t> converter;
+
+            //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
+            std::wstring patternStr = converter.from_bytes(prePatternStr);
+            std::wstring inStr = converter.from_bytes(preInStr);
 
             size_t m = patternStr.size();
             size_t n = inStr.size();
