@@ -1,16 +1,15 @@
 
 Note:
 
-The reason these are in a singular package is because they all rely on one another.
+These are in a single package because they all rely on one another.
 
 Installation:
-You can install this library by running the SQL commands in
+Once compiled, you can install this library by running the SQL commands in
  ddl/install.sql
 Or, to uninstall,
  ddl/uninstall.sql
 Note that the SQL statements assume that you have copied this package to a
 node in your cluster and are running them from there.
-
 
 
 Submissions:
@@ -46,12 +45,10 @@ Submissions:
   
   -- Get Analytics
   Lists the hits and longitude/latitude for a given date range
-  
 
 
 Bugs:
 - The representation of getDate from the input_reader is inconsistent(?) with the output_writer.
-
 
 
 Enhancement Requests:
