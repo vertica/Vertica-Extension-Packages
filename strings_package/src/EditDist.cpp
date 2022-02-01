@@ -51,9 +51,12 @@ public:
 
             size_t m = patternStr.size();
             size_t n = inStr.size();
-            size_t d[m+1][n+1];
-            for (size_t i = 0; i <= m; ++i)
+            // size_t d[m+1][n+1]; // Bad: huge stack
+            size_t **d = new size_t*[m+1];
+            for (size_t i = 0; i <= m; ++i) {
+                d[i] = new size_t[n+1];
                 d[i][0] = i; // the distance of any first string to an empty second string
+            }
             for (size_t j = 0; j <= n; ++j)
                 d[0][j] = j; // the distance of any second string to an empty first string
 
@@ -72,6 +75,10 @@ public:
          
             res_writer.setInt(d[m][n]);
             res_writer.next();
+            for (size_t i = 0; i <= m; ++i) {
+                delete d[i];
+            }
+            delete d;
         } while (arg_reader.next());
     }
 };
