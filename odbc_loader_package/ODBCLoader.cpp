@@ -681,6 +681,10 @@ public:
     }
 
     virtual void destroy(ServerInterface &srvInterface, SizedColumnTypes &returnType) {
+        // Issue#66 Commit before calling SQLDisconnect to avoid HY010 error.
+        SQLRETURN r_end_tran = SQLEndTran(SQL_HANDLE_DBC, dbc, SQL_COMMIT);
+        handleReturnCode(srvInterface, r_end_tran, SQL_HANDLE_DBC, dbc, "SQLEndTran()");
+
         // Try to free even on error, to minimize the risk of memory leaks.
         // But do check for errors in the end.
         SQLRETURN r_disconnect = SQLDisconnect(dbc);
