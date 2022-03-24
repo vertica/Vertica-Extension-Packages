@@ -8,6 +8,7 @@
 
 SDK?=/opt/vertica/sdk
 VSQL?=vsql
+COMPATLIB_DEBUG = 0
 
 VERTICA_SDK_INCLUDE = $(SDK)/include
 SIMULATOR_PATH = $(SDK)/simulator
@@ -23,7 +24,7 @@ BUILD_FILES      = build/Vertica.o \
 PACKAGE_LIBNAME   = lib/CompatLib.so
 
 CXX=g++
-CXXFLAGS=-g -D HAVE_LONG_LONG_INT_64 -c -I ../include -Wall -Wno-unused-value -fPIC -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
+CXXFLAGS=-g -DHAVE_LONG_LONG_INT_64 -D_GLIBCXX_USE_CXX11_ABI=0 -DCOMPATLIB_DEBUG=$(COMPATLIB_DEBUG) -c -I ../include -Wall -Wno-unused-value -fPIC -std=c++11 -I $(VERTICA_SDK_INCLUDE) -I $(THIRD_PARTY_INCLUDE)
 LDFLAGS=-shared
 
 # add optimization if not a debug build
@@ -37,9 +38,9 @@ endif
 all: $(PACKAGE_LIBNAME)
 
 # Main target that builds the package library
-$(PACKAGE_LIBNAME): $(BUILD_FILES) 
+$(PACKAGE_LIBNAME): $(BUILD_FILES)
 	mkdir -p lib
-	$(CXX) $(LDFLAGS) -o $@ $(BUILD_FILES) 
+	$(CXX) $(LDFLAGS) -o $@ $(BUILD_FILES)
 
 # rule to make build/XXX.so from src/XXX.so
 build/%.o: src/%.cpp
@@ -54,7 +55,7 @@ build/Vertica.o: $(VERTICA_SDK_INCLUDE)/Vertica.cpp
 # example rule to make build/XX.o from third-party/src/*.c
 #build/%.o: $(THIRD_PARTY)/src/%.c
 #	@mkdir -p build
-#	$(CXX) $(CXXFLAGS) $< -o $@ 
+#	$(CXX) $(CXXFLAGS) $< -o $@
 
 
 # Targets to install and uninstall the library and functions
@@ -88,5 +89,4 @@ sim_test: all simulator
 # build the simulator (in SIMULATOR_PATH) and simlink it here
 simulator:
 	$(MAKE) -C $(SIMULATOR_PATH)
-	ln -f -s $(SIMULATOR_PATH)/vsim 
-
+	ln -f -s $(SIMULATOR_PATH)/vsim
