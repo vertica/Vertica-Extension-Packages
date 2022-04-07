@@ -10,8 +10,6 @@ const int WIDTH = 65000;
 
 class ConnectBy : public TransformFunction
 {
-    BaseDataOID argTypeOID;  // data type OID of parent ID and child ID
-
     virtual void setup(ServerInterface &srvInterface, const SizedColumnTypes &argTypes)
     {
         // Get data type OID of parent ID and child ID
@@ -23,46 +21,112 @@ class ConnectBy : public TransformFunction
                                   PartitionReader &input_reader,
                                   PartitionWriter &output_writer)
     {
-    	map<string, string> parent;
-    	map<string, string> label;
-    	map<string, string> separator;
-
     	if (input_reader.getNumCols() != 4)
             vt_report_error(0, "Function only accepts 4 argument, but %zu provided", input_reader.getNumCols());
 
-        string childValue = "";
+        switch(argTypeOID) {
+        case VarcharOID:
+            internalProcessPartition<string>(srvInterface, input_reader, output_writer);
+            break;
+        case Int8OID:
+            internalProcessPartition<vint>(srvInterface, input_reader, output_writer);
+            break;
+        default:
+            break;
+        }
+    }
 
-        do {
-            childValue = getArgValueAsString(input_reader, 1);
-            if (childValue == "")
-                continue;
+private:
 
-            parent[childValue] = getArgValueAsString(input_reader, 0);
-            label[childValue] = input_reader.getStringRef(2).str();
-            separator[childValue] = input_reader.getStringRef(3).str();
+    BaseDataOID argTypeOID;  // data type OID of parent ID and child ID
 
-            //std::string inString = input_reader.getStringRef(2).str();
-            //srvInterface.log(" adding %s ", inString.c_str());
-        } while (input_reader.next());
-        //srvInterface.log("1");
-        // exit(0);
+    bool isEndValue(vint value)
+    {
+        return value == vint_null;
+    }
 
-        map<string, string> cache;
-        map<string, vint> depth;
-        map<string, string>::iterator p;
+    bool isEndValue(string value)
+    {
+        return value == "";
+    }
 
-        for (p = label.begin(); p != label.end(); ++p) {
-        	if (cache.count(p->first) == 0) {
+    void getValueFromReader(vint &output, PartitionReader &input_reader, size_t idx)
+    {
+        output = input_reader.getIntRef(idx);
+    }
 
-        		string output = p->second;
-        		vint current_depth = 0;
-        		string current = parent[p->first];
-        		while (current != "") {
+    void getValueFromReader(string &output, PartitionReader &input_reader, size_t idx)
+    {
+        output = input_reader.getStringRef(idx).str();
+    }
+
+    void setValueToWriter(vint value, PartitionWriter &output_writer, size_t idx)
+    {
+        output_writer.setInt(idx, value);
+    }
+
+    void setValueToWriter(string value, PartitionWriter &output_writer, size_t idx)
+    {
+        VString &word = output_writer.getStringRef(idx);
+        word.copy(value);
+    }
 
 #if COMPATLIB_DEBUG
-        	        srvInterface.log("working on %s", current.c_str());
+    void log(ServerInterface &srvInterface, const char *format, string value)
+    {
+        srvInterface.log(format, value.c_str());
+    }
+
+    void log(ServerInterface &srvInterface, const char *format, vint value)
+    {
+        log(srvInterface, format, to_string(value));
+    }
 #endif
 
+    template <typename T>
+    void internalProcessPartition(ServerInterface &srvInterface,
+                                  PartitionReader &input_reader,
+                                  PartitionWriter &output_writer)
+    {
+    	map<T, T> parent;
+    	map<T, string> label;
+    	map<T, string> separator;
+
+        do {
+            T childValue;
+            // If child ID is null, skip it
+            if (input_reader.isNull(1)) {
+                continue;
+            } else {
+                getValueFromReader(childValue, input_reader, 1);
+                getValueFromReader(parent[childValue], input_reader, 0);
+            }
+
+            getValueFromReader(label[childValue], input_reader, 2);
+            getValueFromReader(separator[childValue], input_reader, 3);
+        } while (input_reader.next());
+
+        map<T, string> cache;
+        map<T, vint> depth;
+        typename map<T, string>::iterator p;
+
+        for (p = label.begin(); p != label.end(); ++p) {
+
+#if COMPATLIB_DEBUG
+            log(srvInterface, "working on [%s]", p->first);
+#endif
+
+        	if (cache.count(p->first) == 0) {
+        		string output = p->second;
+        		vint current_depth = 0ull;
+        		T current = parent[p->first];
+
+
+#if COMPATLIB_DEBUG
+                log(srvInterface, "  parent: [%s]", current);
+#endif
+
+        		while (!isEndValue(current)) {
 					if (cache.count(current) > 0 ) {
         				// Found the parent's path in the cache
         				output = cache[current] + separator[current] + output;
@@ -78,51 +142,20 @@ class ConnectBy : public TransformFunction
 
         		cache[p->first] = output;
         		depth[p->first] = current_depth;
-        	}
 
 #if COMPATLIB_DEBUG
-            srvInterface.log("attempting to output %s", p->first.c_str());
+                log(srvInterface, "    output: [%s]", output);
+                log(srvInterface, "    depth : [%s]", current_depth);
 #endif
 
-            switch(argTypeOID) {
-            case VarcharOID: {
-                VString &word = output_writer.getStringRef(0);
-                word.copy(p->first);
-                break;
-            }
-            case Int8OID:
-                output_writer.setInt(0, stoll(p->first));
-                break;
-            default:
-                break;
-            }
-        	output_writer.setInt(1, depth[p->first]);
-			VString &word = output_writer.getStringRef(2);
-			word.copy(cache[p->first]);
+        	}
+
+            setValueToWriter(p->first, output_writer, 0);
+            setValueToWriter(depth[p->first], output_writer, 1);
+            setValueToWriter(cache[p->first], output_writer, 2);
 			output_writer.next();
         }
 
-    }
-
-private:
-    string getArgValueAsString(PartitionReader &input_reader, size_t idx)
-    {
-        string value = "";
-        if (!input_reader.isNull(idx)) {
-            switch(argTypeOID) {
-            case VarcharOID:
-                value = input_reader.getStringRef(idx).str();
-                break;
-            case Int8OID: {
-                vint intValue = input_reader.getIntRef(idx);
-                value = to_string(intValue);
-                break;
-            }
-            default:
-                break;
-            }
-        }
-        return value;
     }
 };
 
