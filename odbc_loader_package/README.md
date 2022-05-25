@@ -1,4 +1,6 @@
-﻿## INTRODUCTION
+## !!! This package here has been moved to https://github.com/vertica/ODBC-Loader as an separate project, please send issues and PR to the new location.
+
+## INTRODUCTION
 This package contains two User-Defined Load functions, **ODBCSource()** and **ODBCLoader()**, that can be used to:
 - load data directly from a remote database
 - run queries against remote databases from Vertica (for example to join local Vertica-managed tables with MySQL, PostgreSQL, etc.)
