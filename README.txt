@@ -57,6 +57,9 @@ encryption_package:
 
 shell_load_package:
   Description: Have COPY fetch data by running commands rather than opening files
+  
+bandpass package:
+  Bandpass filters implemented as Python UDxes.
 
 template_package: 
   Description: template for new packages
