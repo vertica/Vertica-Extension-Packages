@@ -1,3 +1,14 @@
+"""
+An implementation of the low-pass filter as described by
+https://en.wikipedia.org/wiki/Low-pass_filter 
+
+For setup and installation, see the README.
+
+(This is called p_lowpass for "parameterized lowpass", replacing
+an earlier lowpass library and function which only used alpha (no
+frequency option).)
+"""
+
 import math
 import vertica_sdk
 

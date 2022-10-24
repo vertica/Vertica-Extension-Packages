@@ -42,7 +42,7 @@ discrete-time versions described in Wikipedia:
 ## Execute the following scripts from the source directory
 
 The following scripts use `pwd` to set the absolute pathname of
-`lowpass_data.csv`, `highpass_data.csv`,the `lowpass.py` library, and
+`lowpass_data.csv`, `highpass_data.csv`,the `p_lowpass.py` library, and
 the `highpass.py` library.  Please execute them in the directory where
 those files are located.
 
@@ -130,7 +130,7 @@ Run these commands in the directory containing `p_lowpass.py`:
 The commands for loading the highpass library are similar to those
 used to load the lowpass library.  
 
-Run these commands in the directory containing `lowpass.py`:
+Run these commands in the directory containing `p_lowpass.py`:
 
     \set library highpasslib
     \set libfile ''''`pwd`'/highpass.py'''

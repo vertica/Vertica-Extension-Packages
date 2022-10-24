@@ -1,3 +1,20 @@
+"""
+A quick script to read the results from
+ - lowpass_out
+ - highpass_out
+To get the results of the discrete lowpass and highpass filters.
+
+Do an FFT on the "raw data", takes two copies of the resulting
+spectrum, discards the high frequencies from one spectrum, and the low
+frequencies from the other spectrum.
+
+Do inverse FFTs on the transformed spectra, and you've got another way
+to do lowpass and highpass filters.
+
+Plot the results to compare the behavior of the discrete filters to
+the FFT filter approximations.
+"""
+
 import numpy as np
 import numpy.fft as fft
 import matplotlib
@@ -39,6 +56,11 @@ with vertica_python.connect(**conn_info) as conn:
     cur = conn.cursor()
     # put row_n last so we can use enumerate(cols) later
     cur.execute(f'SELECT {cols_for_sql}, row_n FROM {table} ORDER BY row_n');
+    # Why two loops over more-or-less the same table?  Cut-and-paste
+    # hold-over from other code.  Could add the reading column to the
+    # other SELECT and just do one.  But for now, it works, is
+    # still reasonably fast on my data-set, and it's just a quick
+    # sanity check, so I'm not going to bother fixing it.
     for row in cur.iterate():
         rows.append([float(x) for x in row])
     cur = conn.cursor()
@@ -62,6 +84,10 @@ low = spectrum.copy()
 # but "high" is a clearer name for it in what follows
 high = spectrum
 
+# In the following "10" is just a number I tried and got decent
+# results with, there's no more to the choice of what to discard than
+# that.
+
 # low-pass: discard all but the low freqs
 low[10:] = 0
 low_ifft = fft.irfft(low)
@@ -70,10 +96,14 @@ low_ifft = fft.irfft(low)
 high[0:10] = 0
 high_ifft = fft.irfft(high)
 
-# plot
+# plot the FFT-derived highpass and lowpass
 plt.plot(high_ifft, color='blue', label='FFT high-pass', alpha=0.3)
 plt.plot(low_ifft, color='red', label='FFT low-pass', alpha=0.3)
+
+# plot the raw data
 plt.plot(rowarray[:,0], color='gray', label='signal', alpha=0.3)
+
+# plot the results of the discrete filters
 # deliberately switch red and blue around so can distinguish
 # the fft-version from the discrete-filter version even when they
 # overlap  
