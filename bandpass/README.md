@@ -187,13 +187,13 @@ The interface for the lowpass function is:
 
 Where:
 
--   **<float-delta-time>:** the time-interval between this sensor
+-   **float-delta-time:** the time-interval between this sensor
     reading and the previous one in seconds (e.g., 0.01)
--   **<float-sensor-reading>:** the sensor reading in whatever units
+-   **float-sensor-reading:** the sensor reading in whatever units
     you're measuring
--   **<float-frequency-in-hz>:** the cutoff frequency for the filter in
+-   **float-frequency-in-hz:** the cutoff frequency for the filter in
     hertz
--   **<float-alpha>:** 0 < alpha < 1
+-   **float-alpha:** 0 < alpha < 1
 
 The function returns a single column float value for each row
 representing the output of the lowpass filter at that point, that is,
@@ -241,10 +241,10 @@ The interface for the highpass function is:
 
 Where:
 
--   **<float-frequency>:** the cutoff frequency in hertz
--   **<float-delta-time>:** the time-interval between this sensor reading
+-   **float-frequency:** the cutoff frequency in hertz
+-   **float-delta-time:** the time-interval between this sensor reading
     and the previous one, in seconds, e.g., 0.01.
--   **<float-sensor-reading>:** the sensor reading in whatever units
+-   **float-sensor-reading:** the sensor reading in whatever units
     you're measuring.
 
 The function returns a single column float value for each row
