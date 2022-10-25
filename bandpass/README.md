@@ -12,9 +12,8 @@
         1.  [p_lowpass](#org9632d7d)
         2.  [highpass](#org5135c50)
     4.  [Plotting the result](#org58092cc)
-3.  [High pass filter](#orgfb758bf)
-    1.  [Running the highpass filter on the low-pass data](#orgb4c7aff)
-    2.  [Running the highpass filter on the highpass data](#org12f0c5c)
+        1.  [Running the highpass filter on the highpass data](#org12f0c5c)
+        2.  [Running the highpass filter on the lowpass data](#orgb4c7aff)
 4.  [Comparison of these filters to filtering with Fourier Transforms](#orgfd8a3a1)
 
 
@@ -24,6 +23,13 @@
 
 This repository contains Python user-defined functions (UDFs) for
 highpass and low-pass filters on time-series data.
+
+A highpass filter takes the time-series data and discards
+low-frequency parts of the "signal", passing through the
+high-frequency components.  A lowpass filter passes the low-frequency
+part of the signal (including the 0-hz bias (offset of the signal from
+0) and discards the high-frequency components.  One might use a
+lowpass filter to smooth out noise in the data.
 
 The algorithms implemented are drawn from the descriptions of the
 discrete-time versions described in Wikipedia: 
@@ -61,6 +67,10 @@ algorithms can be run on either dataset, of course.
     vsql -f lowpass_load.sql
     vsql -f highpass_load.sql
 
+Since these commands use relative pathnames to find components (the
+data files and the UDx libraries), they need to be run in the
+directory containing `p_lowpass.py` and `highpass.py`.
+
 `lowpass_load.sql` will load the data from `lowpass_data.csv` into a flextable,
 `lowpass_data`.  It then derives a standard Vertica table,
 `lowpass_data_with_deltas`, which has columns:
@@ -78,8 +88,8 @@ algorithms can be run on either dataset, of course.
 
 `highpass_load.sql` does the same thing for the highpass data in
 `highpass.csv`, creating:
-`lowpass_data`.  It then derives a standard Vertica table,
-`highpass_data_with_deltas`, which has similar columns to
+`highpass_data`.  It then derives a standard Vertica table,
+`highpass_data_with_deltas`, which has the same columns as
 `lowpass_data_with_deltas`: 
 
 -   **row_n:** The row number of the data
@@ -111,7 +121,7 @@ We inform Vertica about the file to load the library from by giving it
 an absolute pathname to the library, then informing Vertica how to
 find the function-factory within the library.
 
-Run these commands in the directory containing `p_lowpass.py`:
+These commands appear at the beginning of the `lowpass_load.sql` script:
 
     \set library lowpasslib
     \set libfile ''''`pwd`'/p_lowpass.py'''
@@ -122,31 +132,46 @@ Run these commands in the directory containing `p_lowpass.py`:
         AS LANGUAGE 'Python' NAME 'p_lowpass_factory' 
         LIBRARY :library fenced;
 
+The first two lines define some symbols used in the subsequent lines. 
+
+`DROP LIBRARY IF EXISTS :library CASCADE;` is there to clean up any
+earlier version of the library that may be present.
+
+`CREATE LIBRARY :library AS :libfile LANGUAGE 'Python';` informs
+Vertica where on the filesystem to find the text of the library, and
+what name (`lowpasslib`) will be used to refer to it.
+
+`CREATE FUNCTION lowpass ...` tells Vertica what "function" (it's
+actually a class with methods to setup, invoke, and tear down the
+functionality) to find in the library and how to query the library to
+find out the interface the function provides.
 
 <a id="org23719b7"></a>
 
 ### Loading the highpass library
 
 The commands for loading the highpass library are similar to those
-used to load the lowpass library.  
-
-Run these commands in the directory containing `p_lowpass.py`:
+used to load the lowpass library and are found in
+`highpass_load.sql`.
 
     \set library highpasslib
     \set libfile ''''`pwd`'/highpass.py'''
     
-    drop library :library cascade;
+    DROP LIBRARY IF EXISTS :library CASCADE;
     CREATE LIBRARY :library AS :libfile LANGUAGE 'Python';
-    CREATE FUNCTION highpass AS LANGUAGE 'Python' NAME 'highpass_factory' LIBRARY :library fenced;
+    CREATE FUNCTION highpass
+        AS LANGUAGE 'Python' NAME 'highpass_factory'
+        LIBRARY :library fenced;
 
+See the explanation for loading the lowpass library for an explanation
+of what these lines do.
 
 <a id="org39510f2"></a>
 
 ## Running the functions
 
 There are two files, `highpass_run.sql` and `lowpass_run.sql` which
-can be used to run the libraries.
-
+can be used to run the libraries on the data-sets provided.
 
 <a id="org9632d7d"></a>
 
@@ -171,9 +196,6 @@ The interface for the lowpass function is:
         USING PARAMETERS "alpha" = <float-alpha>
     ) ORDER BY timestamp;
 
-It returns a float value for each row representing the output of the
-lowpass filter at that point.
-
 Where:
 
 -   **<float-delta-time>:** the time-interval between this sensor
@@ -183,6 +205,10 @@ Where:
 -   **<float-frequency-in-hz>:** the cutoff frequency for the filter in
     hertz
 -   **<float-alpha>:** 0 < alpha < 1
+
+The function returns a single column float value for each row
+representing the output of the lowpass filter at that point, that is,
+the value of the sensor-reading without the high-frequency noise.
 
 **alpha** can be defined in terms of frequency, **f** and **delta_T**:
 
@@ -194,6 +220,22 @@ Similarly, **f** can ge defined in terms of **alpha** and **delta_T**:
 
 f = alpha/((1-alpha)\*2\*pi\*delta_T)
 
+The script `lowpass_run.sql` runs the function on the
+`lowpass_data_with_deltas` table created by `lowpass_load.sql`
+producing a table, `lowpass_out`, with columns:
+
+-   **row_n:** the row-number from `lowpass_data_with_deltas`
+-   **tstamp:** the timestamp from `lowpass_data_with_deltas`
+-   **reading:** the sensor reading from `lowpass_data_with_deltas`
+-   **dt:** the "delta-t", i.e., the change in timestamp from the
+    previous row
+-   **f001:** output of lowpass with frequency 0.001 hz
+-   **f0016:** output of lowpass with frequency 0.0016 hz
+-   **f002:** output of lowpass with frequency 0.002 hz
+-   **f01:** output of lowpass with frequency 0.01 hz
+-   **f1:**  output of lowpass with frequency 1 hz
+-   **f5:**  output of lowpass with frequency 5 hz
+-   several columns using different values of alpha
 
 <a id="org5135c50"></a>
 
@@ -216,13 +258,36 @@ Where:
 -   **<float-sensor-reading>:** the sensor reading in whatever units
     you're measuring.
 
+The function returns a single column float value for each row
+representing the output of the highpass filter at that point, that is,
+the value of the sensor-reading without the low-frequency component of
+the time-series signal.
+
+The script `highpass_run.sql` runs the function on the
+`highpass_data_with_deltas` table created by `highpass_load.sql`
+producing a table, `highpass_out`, with columns:
+
+-   **row_n:** the row-number from `highpass_data_with_deltas`
+-   **tstamp:** the timestamp from `highpass_data_with_deltas`
+-   **reading:** the sensor reading from `highpass_data_with_deltas`
+-   **dt:** the "delta-t", i.e., the change in timestamp from the
+    previous row
+-   **f5:**  output of highpass with frequency 5 hz
+-   **f10:**  output of highpass with frequency 10 hz
+-   **f100:**  output of highpass with frequency 100 hz
+-   **f1000:**  output of highpass with frequency 1000hz
+-   **f10000:**  output of highpass with frequency 10000 hz
 
 <a id="org58092cc"></a>
 
 ## Plotting the result
 
-`plot_parallel.py` uses the `vertica_python` python module to read the data from
-Vertica.  
+As a sanity check, this repository includes several programs for
+plotting data output by these functions.
+
+`plot_parallel.py` uses the `vertica_python` python module to read the
+data from Vertica tables created by `highpass_run.sql` and
+`lowpass_run.sql`.
 
 It takes as arguments a list of column names and a table name, e.g., 
 
@@ -237,8 +302,9 @@ Will create (separate) plots of the `reading`, `f001`, `f0016`,
 created by `lowpass_run.sql`.
 
 It puts its output into a PNG file with a name constructed from the
-table and column names, as well as running an interactive display
-which can be manipulated.  Note that the vertical scales may differ.
+table and column names (overwriting any file that was there before),
+as well as running an interactive display which can be manipulated.
+Note that the vertical scales on the several plots may differ.
 
 Here is an example of the output:
 
@@ -248,10 +314,10 @@ Here is an example of the output:
 happening at 0.01 second in the lowpass dataset.)
 
 Stacking the plots as `plot_parallel.py` does is useful when comparing
-things with radically different ranges in the vertical axis.  For
-things like the lowpass output, which cover the same range in the
-vertical axis, you can also use `plot_overlay.py` to look at three
-columns on one plot:
+things with radically different ranges in the vertical axis (which is
+why the vertical axes may differ).  For things like the lowpass
+output, which cover the same range in the vertical axis, you can also
+use `plot_overlay.py` to look at multiple columns on one plot:
 
     python3 plot_overlay.py reading f001 f002 f01 lowpass_out
 
@@ -263,17 +329,35 @@ This plot shows a problem with this implementation of a low-pass
 filter: namely, as the critical frequency decreases the system has
 more "inertia" responding to changes in the signal more slowly.  The
 curve gets smoother, but part of that smoothness comes at a cost in
-delay.
-
-
-<a id="orgfb758bf"></a>
-
-# High pass filter
+delay of the signal representing the data.
 
 
 <a id="orgb4c7aff"></a>
 
-## Running the highpass filter on the low-pass data
+### Running the highpass filter on the highpass data
+
+The script `highpass_run.sql` runs the highpass filter on the highpass
+dataset loaded by `highpass_load.sql`.
+
+Plotted with 
+
+    python3 plot_overlay.py reading f5 f100 f10000 highpass_out
+
+(which ignores some of the columns) produces the following results:
+
+![img](./highpass_out_overlay_reading_f5_f100_f10000_cols.png)
+
+
+<a id="orgfd8a3a1"></a>
+
+
+### Running the highpass filter on the lowpass data
+
+In order to produce a plot comparing the discrete highpass and
+lowpass filters to the output of using Fouriet Transforms to do the
+filtering, one needs to run the highpass filter on the lowpass data.
+There's no included script for this, but the Vertica SQL commands to
+do this are pretty simple.
 
 The first argument in the `highpass` UDF is frequency in hertz.  In
 this data-set, a one-hertz signal takes 100 units on the **x** axis.
@@ -296,29 +380,14 @@ Surprise!  The highpass signal is down around 0!  It doesn't follow
 the offset of the signal.  Why?  The offset is **low-frequency data**
 that gets filtered out.
 
-If we set aside the raw input, we can see more detail in the highpass
-output: 
+If we set aside the raw input (i.e., don't plot the `reading` column
+with its distortion of the vertical scale), we can see more detail in
+the highpass output: 
 
 ![img](./highpass_on_lpd_out_overlay_f1_f5_f10_f100_cols.png)
 
 
 <a id="org12f0c5c"></a>
-
-## Running the highpass filter on the highpass data
-
-The script `highpass_run.sql` runs the highpass filter on the highpass
-dataset loaded by `highpass_load.sql`.
-
-Plotted with 
-
-    python3 plot_overlay.py reading f5 f100 f10000 highpass_out
-
-(which ignores some of the columns) produces the following results:
-
-![img](./highpass_out_overlay_reading_f5_f100_f10000_cols.png)
-
-
-<a id="orgfd8a3a1"></a>
 
 # Comparison of these filters to filtering with Fourier Transforms
 
