@@ -29,7 +29,7 @@ LDFLAGS=-shared
 # add optimization if not a debug build
 # (make DEBUG=true" will make a non-optimized build)
 ifndef DEBUG
-CXXFLAGS+= -O3 -DNDEBUG
+CXXFLAGS+= -O3 -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=0
 CFLAGS+= -O3 -DNDEBUG
 endif
 

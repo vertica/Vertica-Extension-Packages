@@ -19,7 +19,7 @@ GROUP_GENERATOR - use to build ROLLUP, CUBE, GROUPING_SETS, MULTIPLE DISTINCT AG
 INSTALLING / UNINSTALLING
 -------------------------------
 
-You can install this package by running the SQL commands in:
+Once compiled, you can install this package by running the SQL commands in:
  src/ddl/install.sql 
 or, to uninstall,
  src/ddl/uninstall.sql
