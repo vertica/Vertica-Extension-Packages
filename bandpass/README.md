@@ -12,8 +12,8 @@
         1.  [p_lowpass](#org9632d7d)
         2.  [highpass](#org5135c50)
     4.  [Plotting the result](#org58092cc)
-        1.  [Running the highpass filter on the highpass data](#org12f0c5c)
-        2.  [Running the highpass filter on the lowpass data](#orgb4c7aff)
+        1.  [Running the highpass filter on the highpass data](#orgb4c7aff)
+        2.  [Running the highpass filter on the lowpass data](#org12f0c5c)
 4.  [Comparison of these filters to filtering with Fourier Transforms](#orgfd8a3a1)
 
 
@@ -27,8 +27,8 @@ highpass and low-pass filters on time-series data.
 A highpass filter takes the time-series data and discards
 low-frequency parts of the "signal", passing through the
 high-frequency components.  A lowpass filter passes the low-frequency
-part of the signal (including the 0-hz bias (offset of the signal from
-0) and discards the high-frequency components.  One might use a
+part of the signal --- including the 0-hz bias (offset of the signal from
+0) --- and discards the high-frequency components.  One might use a
 lowpass filter to smooth out noise in the data.
 
 The algorithms implemented are drawn from the descriptions of the
@@ -87,22 +87,11 @@ directory containing `p_lowpass.py` and `highpass.py`.
     low- and highpass filter algorithms.
 
 `highpass_load.sql` does the same thing for the highpass data in
-`highpass.csv`, creating:
-`highpass_data`.  It then derives a standard Vertica table,
-`highpass_data_with_deltas`, which has the same columns as
-`lowpass_data_with_deltas`: 
+`highpass.csv` creating `highpass_data_with_deltas` with the same
+columns.
 
--   **row_n:** The row number of the data
--   **tstamp:** The timestamp from the data (`row_n` and `tstamp` may be
-    redundant, as they have the same ordering).
--   **dt:** the "delta" of this row's timestamp from the previous row's
-    timestamp.  Used as the "delta-t" in the discrete low- and
-    highpass filter algorithms.
--   **reading:** the sensor reading for this time
--   **dreading:** the "delta" of this reading from the previous row's
-    reading.  Used as the "delta-signal" in the discrete
-    low- and highpass filter algorithms.
-
+These scripts begin by cleaning up from previous executions ---
+subsequent runs replace the output of previous runs.
 
 <a id="org51c3bd0"></a>
 
@@ -142,7 +131,7 @@ Vertica where on the filesystem to find the text of the library, and
 what name (`lowpasslib`) will be used to refer to it.
 
 `CREATE FUNCTION lowpass ...` tells Vertica what "function" (it's
-actually a class with methods to setup, invoke, and tear down the
+actually a class with methods for setup, invocation, and tear down the
 functionality) to find in the library and how to query the library to
 find out the interface the function provides.
 
