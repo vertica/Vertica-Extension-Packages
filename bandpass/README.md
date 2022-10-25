@@ -336,9 +336,7 @@ Plotted with
 
 ![img](./highpass_out_overlay_reading_f5_f100_f10000_cols.png)
 
-
-<a id="orgfd8a3a1"></a>
-
+<a id="org12f0c5c"></a>
 
 ### Running the highpass filter on the lowpass data
 
@@ -376,7 +374,8 @@ the highpass output:
 ![img](./highpass_on_lpd_out_overlay_f1_f5_f10_f100_cols.png)
 
 
-<a id="org12f0c5c"></a>
+
+<a id="orgfd8a3a1"></a>
 
 # Comparison of these filters to filtering with Fourier Transforms
 
