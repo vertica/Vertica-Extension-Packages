@@ -73,6 +73,8 @@ test:
 	$(VSQL) -f examples/string_delim_tokenizer.sql
 	$(VSQL) -f examples/word_count.sql
 	$(VSQL) -f examples/gen_anagram.sql
+	$(VSQL) -f examples/jaro_distance.sql
+	$(VSQL) -f examples/jaro_winkler_distance.sql
 
 clean:
 	rm -rf build

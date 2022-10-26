@@ -23,6 +23,11 @@ permutation of every subset of letters. (doc/Anagramarama.pdf)
 
 GroupConcat: Concatenates strings in a partition into a comma-separated list.
 
+JaroDistance: Percentage of string's matching characters and their transpositions
+
+JaroWinklerDistance: JaroDistance with an emphasis on matching prefixes
+(https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+
 -------------------------------
 INSTALLING / UNINSTALLING
 -------------------------------
