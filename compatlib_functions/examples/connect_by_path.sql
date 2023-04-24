@@ -9,4 +9,6 @@ commit;
 
 select connect_by_path(supervisor_id, id, name, ' >> ') over () from company;
 
+select connect_by_path(supervisor_id::VARCHAR, id::VARCHAR, name, ' >> ') over () from company;
+
 drop table company;
