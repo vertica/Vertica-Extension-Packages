@@ -1,0 +1,3 @@
+[submodule "json_package"]
+	path = json_package
+	url = https://github.com/tensquaregames/Vertica-JSON-Extensions
