@@ -14,3 +14,4 @@ CREATE TRANSFORM FUNCTION FiveGrams            AS LANGUAGE 'C++' NAME 'FiveGrams
 CREATE FUNCTION WordCount                      AS LANGUAGE 'C++' NAME 'WordCountFactory'            LIBRARY StringsLib NOT FENCED;
 CREATE TRANSFORM FUNCTION gen_anagram          AS LANGUAGE 'C++' NAME 'AnagramFactory'              LIBRARY StringsLib NOT FENCED;
 CREATE TRANSFORM FUNCTION group_concat         AS LANGUAGE 'C++' NAME 'GroupConcatFactory'          LIBRARY StringsLib NOT FENCED;
+CREATE TRANSFORM FUNCTION group_concat_delim   AS LANGUAGE 'C++' NAME 'GroupConcatDelimFactory'     LIBRARY StringsLib NOT FENCED;
